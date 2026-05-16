@@ -19,7 +19,6 @@ const Youtube = ({ size = 24, className = "" }) => (
 );
 
 const COMPANY_INFO = {
-// ... keep the rest of your file exactly the same from here down!
   name: "Tours Coach Charters",
   phone: "(416) 269-9555",
   email: "info@tourscoachcharter.com",
@@ -72,7 +71,7 @@ const FLEET_DATA = {
     pax: "56 Passengers",
     desc: "Experience ultimate comfort for long-distance group travel. Our luxury coaches are equipped with premium amenities to ensure a smooth and enjoyable ride across Canada.",
     features: ["Reclining seats", "Climate control", "Onboard restroom", "Entertainment systems", "Ample luggage space", "Wi-Fi enabled"],
-    img: "https://placehold.co/1000x600/e31837/FFFFFF/png?text=fleet-luxury.jpg%5Cn(1000x600)",
+    img: "/fleet-luxury.jpg",
     reviews: [
       { author: "Sarah Jenkins, Corporate Events", rating: 5, text: "Absolutely pristine coach! We rented this for a multi-day corporate tour from Toronto to Ottawa. The Wi-Fi and comfortable seats made all the difference for our team." },
       { author: "Mark D.", rating: 5, text: "Smooth ride all the way. The onboard restroom was very clean and the driver was incredibly professional. Highly recommended for large groups." },
@@ -84,7 +83,7 @@ const FLEET_DATA = {
     pax: "24 - 36 Passengers",
     desc: "Perfect for corporate retreats, medium-sized groups, and regional travel. The mini coach offers the amenities of a larger bus in a more compact, agile package.",
     features: ["Comfortable seating", "Overhead storage", "Climate control", "PA System", "Reading lights"],
-    img: "https://placehold.co/1000x600/e31837/FFFFFF/png?text=fleet-mini.jpg%5Cn(1000x600)",
+    img: "/fleet-mini.jpg",
     reviews: [
       { author: "David T.", rating: 5, text: "The perfect size for our department's offsite meeting in Niagara. Easy to board, surprisingly spacious, and the overhead storage handled all our gear." },
       { author: "Jessica Wong", rating: 4, text: "Great vehicle for a mid-sized group. The PA system was very helpful for our tour guide. Would definitely book the mini coach again." },
@@ -96,7 +95,7 @@ const FLEET_DATA = {
     pax: "Up to 14 Passengers",
     desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services. Easy to board and surprisingly spacious.",
     features: ["High-roof design", "Air conditioning", "Tinted windows", "Rear luggage area", "Easy access steps"],
-    img: "https://placehold.co/1000x600/e31837/FFFFFF/png?text=fleet-van.jpg%5Cn(1000x600)",
+    img: "/fleet-van.jpg",
     reviews: [
       { author: "Michael C.", rating: 5, text: "Booked this van for a family airport transfer to Pearson. Plenty of room for 12 of us plus all our heavy luggage. Took away all the pre-flight stress!" },
       { author: "Amanda L., Executive Assistant", rating: 5, text: "We use these vans for executive shuttles between our Mississauga and downtown Toronto offices. The high roof makes a big difference for comfort." }
@@ -107,7 +106,7 @@ const FLEET_DATA = {
     pax: "48-56 Children / 30-40 Adults",
     desc: "The most cost-effective transportation solution for large groups, school field trips, and local events. Safe, reliable, and straightforward.",
     features: ["High passenger capacity", "Economical rates", "Safety certified", "Professional drivers", "Local route specialists"],
-    img: "https://placehold.co/1000x600/e31837/FFFFFF/png?text=fleet-school.jpg%5Cn(1000x600)",
+    img: "/fleet-school.jpg",
     reviews: [
       { author: "Principal Harding", rating: 5, text: "Tours Coach Charters is our go-to for all field trips. The drivers are great with the kids, safety is always top priority, and the buses are very clean." },
       { author: "Tom S., Camp Director", rating: 4, text: "Very affordable and reliable. We used three of these school buses to transport our summer campers to Wonderland. Everything went flawlessly." },
@@ -149,7 +148,7 @@ const DESTINATION_DATA = {
     city: "Toronto",
     title: "Charter Coach Bus Service in Toronto",
     subtitle: "Reliable group transportation for the GTA. From corporate events at the Metro Convention Centre to airport transfers at YYZ.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=toronto-banner.jpg%5Cn(1920x1080)",
+    img: "/toronto-banner.jpg",
     highlights: [
       { icon: Building2, title: "Corporate Shuttles", desc: "Downtown & Financial District" },
       { icon: Landmark, title: "School Trips", desc: "ROM, Zoo & Science Centre" },
@@ -171,7 +170,7 @@ const DESTINATION_DATA = {
     city: "Scarborough",
     title: "Charter Coach Bus Service in Scarborough",
     subtitle: "Dependable group travel throughout Scarborough and the eastern GTA. Ideal for local events, university shuttles, and private tours.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=scarborough-banner.jpg%5Cn(1920x1080)",
+    img: "/scarborough-banner.jpg",
     highlights: [
       { icon: Landmark, title: "University Charters", desc: "UofT Scarborough & Centennial College" },
       { icon: Building2, title: "Corporate Events", desc: "East GTA Business Parks" },
@@ -192,7 +191,7 @@ const DESTINATION_DATA = {
     city: "Ajax",
     title: "Charter Coach Bus Service in Ajax",
     subtitle: "Premium group transportation serving Ajax and the broader Durham Region. Ideal for corporate outings, school trips, and private travel.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=ajax-banner.jpg%5Cn(1920x1080)",
+    img: "/ajax-banner.jpg",
     highlights: [
       { icon: Building2, title: "Corporate Travel", desc: "Business meetings and retreats" },
       { icon: Trophy, title: "Sports Teams", desc: "Ajax Community Centre events" },
@@ -211,7 +210,7 @@ const DESTINATION_DATA = {
     city: "Pickering",
     title: "Charter Coach Bus Service in Pickering",
     subtitle: "Reliable coach and minibus rentals based in Pickering. Perfect for casino trips, weddings, and regional transportation.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=pickering-banner.jpg%5Cn(1920x1080)",
+    img: "/pickering-banner.jpg",
     highlights: [
       { icon: Landmark, title: "Entertainment", desc: "Pickering Casino Resort Trips" },
       { icon: Users, title: "Private Events", desc: "Weddings and family reunions" },
@@ -230,7 +229,7 @@ const DESTINATION_DATA = {
     city: "Hamilton",
     title: "Charter Coach Bus Service in Hamilton",
     subtitle: "Expert charter bus rentals for Hamilton and the surrounding areas. Servicing universities, sports teams, and large events.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=hamilton-banner.jpg%5Cn(1920x1080)",
+    img: "/hamilton-banner.jpg",
     highlights: [
       { icon: Landmark, title: "University Shuttles", desc: "McMaster University" },
       { icon: Trophy, title: "Major Events", desc: "FirstOntario Centre & Tim Hortons Field" },
@@ -249,7 +248,7 @@ const DESTINATION_DATA = {
     city: "North York",
     title: "Charter Coach Bus Service in North York",
     subtitle: "Premium group transportation in North York. Specializing in corporate shuttles, school trips, and private group travel.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=northyork-banner.jpg%5Cn(1920x1080)",
+    img: "/northyork-banner.jpg",
     highlights: [
       { icon: Building2, title: "Corporate Transport", desc: "North York business districts" },
       { icon: Landmark, title: "Educational Trips", desc: "York University & Aga Khan Museum" },
@@ -268,7 +267,7 @@ const DESTINATION_DATA = {
     city: "Aurora",
     title: "Charter Coach Bus Service in Aurora",
     subtitle: "Dependable charter bus and minibus rentals for Aurora and York Region. Ideal for golf outings, weddings, and local events.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=aurora-banner.jpg%5Cn(1920x1080)",
+    img: "/aurora-banner.jpg",
     highlights: [
       { icon: Trophy, title: "Golf Tournaments", desc: "Local country clubs and resorts" },
       { icon: Users, title: "Weddings", desc: "Banquet halls and private venues" },
@@ -287,14 +286,14 @@ const DESTINATION_DATA = {
     city: "Woodbridge",
     title: "Charter Coach Bus Service in Woodbridge",
     subtitle: "Specialized group transportation for Woodbridge. Your top choice for wedding shuttles, corporate events, and shopping tours.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=woodbridge-banner.jpg%5Cn(1920x1080)",
+    img: "/woodbridge-banner.jpg",
     highlights: [
       { icon: Users, title: "Wedding Transportation", desc: "Woodbridge banquet halls" },
       { icon: Map, title: "Shopping Excursions", desc: "Vaughan Mills and local centers" },
       { icon: Building2, title: "Corporate Events", desc: "Local business centers" }
     ],
     content: [
-      "Woodbridge is renowned for its stunning banquet halls and event spaces. We are the preferred charter bus partner for countless weddings and large social gatherings in the area, ensuring guests travel safely and stylishly.",
+      "Woodbridge is renowned for stunning banquet halls and event spaces. We are the preferred charter bus partner for countless weddings and large social gatherings in the area, ensuring guests travel safely and stylishly.",
       "In addition to private events, we provide reliable transportation for corporate groups and offer specialized shopping tour charters for groups visiting local retail hubs like Vaughan Mills."
     ],
     faqs: [
@@ -306,7 +305,7 @@ const DESTINATION_DATA = {
     city: "Vaughan",
     title: "Charter Coach Bus Service in Vaughan",
     subtitle: "Comprehensive charter rentals for Vaughan. Servicing Canada's Wonderland, Vaughan Metro Centre, and corporate parks.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=vaughan-banner.jpg%5Cn(1920x1080)",
+    img: "/vaughan-banner.jpg",
     highlights: [
       { icon: Landmark, title: "Theme Park Trips", desc: "Canada's Wonderland" },
       { icon: Building2, title: "Corporate Shuttles", desc: "Vaughan Metropolitan Centre" },
@@ -325,7 +324,7 @@ const DESTINATION_DATA = {
     city: "Brampton",
     title: "Charter Coach Bus Service in Brampton",
     subtitle: "Dependable group travel for Brampton. Perfect for sports tournaments, corporate events, and large family gatherings.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=brampton-banner.jpg%5Cn(1920x1080)",
+    img: "/brampton-banner.jpg",
     highlights: [
       { icon: Trophy, title: "Sports Travel", desc: "CAA Centre & local arenas" },
       { icon: Users, title: "Family Events", desc: "Large weddings and reunions" },
@@ -344,7 +343,7 @@ const DESTINATION_DATA = {
     city: "Milton",
     title: "Charter Coach Bus Service in Milton",
     subtitle: "Expert group transportation serving Milton. Ideal for outdoor excursions, sporting events, and corporate travel.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=milton-banner.jpg%5Cn(1920x1080)",
+    img: "/milton-banner.jpg",
     highlights: [
       { icon: Navigation, title: "Outdoor Excursions", desc: "Conservation areas & Kelso" },
       { icon: Trophy, title: "Sports Travel", desc: "Mattamy National Cycling Centre" },
@@ -363,7 +362,7 @@ const DESTINATION_DATA = {
     city: "Mississauga",
     title: "Charter Coach Bus Service in Mississauga",
     subtitle: "Premium charter rentals for Mississauga and Peel Region. Perfect for Pearson Airport transfers, corporate meetings, and sports travel.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=mississauga-banner.jpg%5Cn(1920x1080)",
+    img: "/mississauga-banner.jpg",
     highlights: [
       { icon: Plane, title: "Airport Transfers", desc: "Toronto Pearson International (YYZ)" },
       { icon: Building2, title: "Corporate Shuttles", desc: "Mississauga Business District & Square One" },
@@ -384,7 +383,7 @@ const DESTINATION_DATA = {
     city: "Oshawa",
     title: "Charter Coach Bus Service in Oshawa",
     subtitle: "Reliable coach rentals for Oshawa and Durham Region. Servicing universities, arenas, and local corporate events.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=oshawa-banner.jpg%5Cn(1920x1080)",
+    img: "/oshawa-banner.jpg",
     highlights: [
       { icon: Landmark, title: "University Travel", desc: "Ontario Tech University & Durham College" },
       { icon: Trophy, title: "Event Transportation", desc: "Tribute Communities Centre" },
@@ -403,7 +402,7 @@ const DESTINATION_DATA = {
     city: "Burlington",
     title: "Charter Coach Bus Service in Burlington",
     subtitle: "Premium group transportation for Burlington. Ideal for lakefront festivals, botanical garden tours, and corporate events.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=burlington-banner.jpg%5Cn(1920x1080)",
+    img: "/burlington-banner.jpg",
     highlights: [
       { icon: Map, title: "Sightseeing", desc: "Royal Botanical Gardens & Lakefront" },
       { icon: Users, title: "Festivals", desc: "Sound of Music Festival shuttles" },
@@ -422,7 +421,7 @@ const DESTINATION_DATA = {
     city: "Guelph",
     title: "Charter Coach Bus Service in Guelph",
     subtitle: "Expert group travel solutions for Guelph. Servicing university events, agricultural tours, and sports teams.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=guelph-banner.jpg%5Cn(1920x1080)",
+    img: "/guelph-banner.jpg",
     highlights: [
       { icon: Landmark, title: "University Charters", desc: "University of Guelph" },
       { icon: Navigation, title: "Local Tours", desc: "Agricultural & brewery tours" },
@@ -441,7 +440,7 @@ const DESTINATION_DATA = {
     city: "Brantford",
     title: "Charter Coach Bus Service in Brantford",
     subtitle: "Reliable coach rentals in Brantford. Perfect for local sports tournaments, theater outings, and corporate travel.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=brantford-banner.jpg%5Cn(1920x1080)",
+    img: "/brantford-banner.jpg",
     highlights: [
       { icon: Trophy, title: "Sports Tournaments", desc: "Wayne Gretzky Sports Centre" },
       { icon: Users, title: "Arts & Culture", desc: "Sanderson Centre for the Performing Arts" },
@@ -460,7 +459,7 @@ const DESTINATION_DATA = {
     city: "Bolton",
     title: "Charter Coach Bus Service in Bolton",
     subtitle: "Dedicated group transportation for Bolton and Caledon. Ideal for equestrian events, weddings, and nature retreats.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=bolton-banner.jpg%5Cn(1920x1080)",
+    img: "/bolton-banner.jpg",
     highlights: [
       { icon: Map, title: "Equestrian Events", desc: "Caledon Equestrian Park" },
       { icon: Users, title: "Weddings", desc: "Rustic venues and retreats" },
@@ -479,7 +478,7 @@ const DESTINATION_DATA = {
     city: "Barrie",
     title: "Charter Coach Bus Service in Barrie",
     subtitle: "Premium group transportation for Barrie and Simcoe County. The best choice for ski trips, college events, and waterfront festivals.",
-    img: "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=barrie-banner.jpg%5Cn(1920x1080)",
+    img: "/barrie-banner.jpg",
     highlights: [
       { icon: Navigation, title: "Winter Sports", desc: "Mount St. Louis & Snow Valley" },
       { icon: Landmark, title: "Educational Trips", desc: "Georgian College" },
@@ -805,7 +804,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-black/60 z-10"></div>
           <img 
-            src="https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=home-hero.jpg%5Cn(1920x1080)" 
+            src="/home-hero.jpg" 
             alt="Coach bus on road" 
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -868,12 +867,12 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: BusFront, title: "School Bus Rental", img: "https://placehold.co/400x300/0033a0/FFFFFF/png?text=service-school.jpg%5Cn(400x300)" },
-              { icon: Users, title: "Wedding & Engagements", img: "https://placehold.co/400x300/0033a0/FFFFFF/png?text=service-wedding.jpg%5Cn(400x300)" },
-              { icon: Briefcase, title: "Corporate Travel", img: "https://placehold.co/400x300/0033a0/FFFFFF/png?text=service-corporate.jpg%5Cn(400x300)" },
-              { icon: Trophy, title: "Sports Groups", img: "https://placehold.co/400x300/0033a0/FFFFFF/png?text=service-sports.jpg%5Cn(400x300)" },
-              { icon: Navigation, title: "Tours & Excursions", img: "https://placehold.co/400x300/0033a0/FFFFFF/png?text=service-tours.jpg%5Cn(400x300)" },
-              { icon: Car, title: "Private Travel", img: "https://placehold.co/400x300/0033a0/FFFFFF/png?text=service-private.jpg%5Cn(400x300)" }
+              { icon: BusFront, title: "School Bus Rental", img: "/service-school.jpg" },
+              { icon: Users, title: "Wedding & Engagements", img: "/service-wedding.jpg" },
+              { icon: Briefcase, title: "Corporate Travel", img: "/service-corporate.jpg" },
+              { icon: Trophy, title: "Sports Groups", img: "/service-sports.jpg" },
+              { icon: Navigation, title: "Tours & Excursions", img: "/service-tours.jpg" },
+              { icon: Car, title: "Private Travel", img: "/service-private.jpg" }
             ].map((service, i) => (
               <div key={i} className="group rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white hover:-translate-y-1 transition duration-300">
                 <div className="h-48 overflow-hidden relative">
@@ -1059,7 +1058,7 @@ const GenericPage = ({ title, subtitle, bgImage, setPage, setIsQuoteModalOpen })
     <div className="relative py-24 bg-blue-800 text-center">
        <div className="absolute inset-0 bg-black/50 z-10"></div>
         <img 
-          src={bgImage || "https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=destination-default.jpg%5Cn(1920x1080)"} 
+          src={bgImage || "/destination-default.jpg"} 
           alt="Banner" 
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -1228,7 +1227,7 @@ const FifaPage = ({ setIsQuoteModalOpen }) => {
       <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
         <div className="absolute inset-0 bg-black/60 z-10"></div>
         <img 
-          src="https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=fifa-banner.jpg%5Cn(1920x1080)" 
+          src="/fifa-banner.jpg" 
           alt="FIFA World Cup 2026 Banner" 
           className="absolute inset-0 w-full h-full object-cover animate-ken-burns"
         />
@@ -1439,7 +1438,7 @@ export default function App() {
         return <GenericPage 
                   title="Winter Destinations" 
                   subtitle="Dedicated charter services to Whistler, Blue Mountain, and Banff." 
-                  bgImage="https://placehold.co/1920x1080/0033a0/FFFFFF/png?text=winter-banner.jpg%5Cn(1920x1080)" 
+                  bgImage="/winter-banner.jpg" 
                   setPage={setCurrentPage}
                   setIsQuoteModalOpen={setIsQuoteModalOpen}
                 />;

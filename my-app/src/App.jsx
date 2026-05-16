@@ -3,7 +3,7 @@ import {
   Phone, Mail, Facebook, Twitter, Youtube, ChevronDown, Menu, X, 
   ShieldCheck, CalendarCheck, Map, Headphones, BusFront, Users, 
   Briefcase, Trophy, Navigation, Car, Star, CheckCircle, ArrowRight,
-  Plane, Landmark, Building2, ChevronUp, ChevronLeft, ChevronRight,
+  Plane, Landmark, Building2, ChevronLeft, ChevronRight,
   Award, Route
 } from 'lucide-react';
 
@@ -508,12 +508,10 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
 
       <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div 
-          className="text-2xl font-black cursor-pointer flex items-center group"
+          className="cursor-pointer"
           onClick={() => setPage('home')}
         >
-          <span className="italic mr-1 text-blue-800">Tours</span>
-          <span className="text-red-600">Coach Charters</span>
-          <BusFront className="text-red-600 ml-2 transform -skew-x-12 group-hover:translate-x-1 transition-transform" size={32} />
+          <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 md:h-12 w-auto object-contain" />
         </div>
 
         <div className="hidden lg:flex items-center space-x-8 font-semibold text-gray-700">
@@ -730,7 +728,6 @@ const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
       if (!start) start = timestamp;
       const progress = timestamp - start;
       const percentage = Math.min(progress / duration, 1);
-      // Easing function for smooth deceleration
       const easeOut = 1 - Math.pow(1 - percentage, 3);
       setCount(Math.floor(easeOut * value));
       
@@ -748,7 +745,6 @@ const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
 
 const TrustStatsBanner = () => (
   <div className="bg-[#2442a8] rounded-xl py-12 px-6 shadow-md relative overflow-hidden w-full max-w-6xl mx-auto border border-blue-900/30">
-    {/* Exact cluster of dots in the center */}
     <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
       <div className="relative w-[300px] h-full">
         <div className="absolute top-[10%] left-[25%] w-6 h-6 bg-white/[0.07] rounded-full"></div>
@@ -1048,7 +1044,6 @@ const FleetTemplate = ({ data, setPage, setIsQuoteModalOpen }) => (
 
 const GenericPage = ({ title, subtitle, bgImage, setPage, setIsQuoteModalOpen }) => (
   <div className="w-full min-h-screen pt-24 bg-gray-50 flex flex-col">
-    {/* Hero Banner for internal pages */}
     <div className="relative py-24 bg-blue-800 text-center">
        <div className="absolute inset-0 bg-black/50 z-10"></div>
         <img 
@@ -1298,7 +1293,6 @@ const FifaPage = ({ setIsQuoteModalOpen }) => {
 
           <div className="lg:w-1/3">
             <div className="bg-blue-800 rounded-xl shadow-2xl border border-blue-700 p-8 sticky top-32 text-white relative overflow-hidden">
-              {/* Subtle background glow */}
               <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-red-600 rounded-full blur-[60px] opacity-40 pointer-events-none"></div>
               
               <Trophy size={56} className="text-red-500 mb-6 animate-float drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)]" />
@@ -1336,10 +1330,8 @@ const Footer = () => (
   <footer className="bg-gray-900 text-gray-300 py-12 border-t-4 border-red-600">
     <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
-        <div className="text-2xl font-black mb-4 flex items-center group">
-          <span className="italic mr-1 text-white">Tours</span>
-          <span className="text-red-500">Coach Charters</span>
-          <BusFront className="text-red-500 ml-2 transform -skew-x-12 group-hover:translate-x-1 transition-transform" size={28} />
+        <div className="mb-6 bg-white inline-block p-2 rounded-lg">
+          <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 w-auto object-contain" />
         </div>
         <p className="text-sm mb-4">Canada's Premier Charter Bus Rentals. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
       </div>
@@ -1382,7 +1374,6 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
-  // Handle browser back/forward buttons & initial load
   useEffect(() => {
     const handlePopState = (e) => {
       if (e.state && e.state.page) {
@@ -1400,7 +1391,6 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Update Document Title, Meta Description, and URL on page change for SEO
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -1415,19 +1405,16 @@ export default function App() {
     }
     metaDesc.content = seo.desc;
 
-    // Push new URL to history (simulating separate pages for Googlebot to crawl)
     try {
       const newUrl = currentPage === 'home' ? '/' : `/${currentPage}`;
       if (window.location.pathname !== newUrl) {
         window.history.pushState({ page: currentPage }, seo.title, newUrl);
       }
     } catch (err) {
-      // Safely ignore history API restrictions in some preview environments
       console.warn("History API restricted in this environment.");
     }
   }, [currentPage]);
 
-  // Simple Router Switch
   const renderPage = () => {
     if (currentPage === 'home') return <Home setPage={setCurrentPage} setIsQuoteModalOpen={setIsQuoteModalOpen} />;
     if (FLEET_DATA[currentPage]) return <FleetTemplate data={FLEET_DATA[currentPage]} setPage={setCurrentPage} setIsQuoteModalOpen={setIsQuoteModalOpen} />;
@@ -1457,7 +1444,6 @@ export default function App() {
       </main>
       <Footer />
 
-      {/* Quote Modal Overlay */}
       {isQuoteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6 overflow-y-auto">
           <div 

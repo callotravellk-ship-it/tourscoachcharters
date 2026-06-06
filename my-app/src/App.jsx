@@ -618,13 +618,11 @@ const QuoteForm = ({ onClose }) => {
     e.preventDefault();
     setIsSending(true);
     
-    // Automatically grab all the data from the form inputs
     const form = e.target;
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
     try {
-      // Send the data to our new Vercel backend function
       const response = await fetch('/api/send-quote', {
         method: 'POST',
         headers: {
@@ -1404,6 +1402,27 @@ const Footer = () => (
   </footer>
 );
 
+const ChatWidget = () => {
+  return (
+    <iframe 
+      src="https://multi-agent-chat-rho.vercel.app/?mode=embed" 
+      title="Live Support"
+      allowTransparency={true}
+      style={{
+        position: 'fixed', 
+        bottom: '0', 
+        right: '0', 
+        width: '400px', 
+        height: '600px', 
+        border: 'none', 
+        zIndex: 999999, 
+        background: 'transparent', 
+        pointerEvents: 'auto'
+      }}
+    />
+  );
+};
+
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
@@ -1473,10 +1492,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans selection:bg-red-600 selection:text-white relative">
       <Header currentPage={currentPage} setPage={setCurrentPage} setIsQuoteModalOpen={setIsQuoteModalOpen} />
+      
       <main className="flex-grow w-full overflow-x-hidden">
         {renderPage()}
       </main>
+      
       <Footer />
+      
+      <ChatWidget />
 
       {isQuoteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6 overflow-y-auto">

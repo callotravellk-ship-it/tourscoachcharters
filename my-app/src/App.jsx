@@ -542,16 +542,18 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
               </button>
 
               {link.dropdown && activeDropdown === link.id && (
-                <div className={`absolute top-full left-0 mt-2 ${link.dropdown.length > 5 ? 'w-96 grid grid-cols-2 p-2 gap-1' : 'w-48 py-2'} bg-white shadow-xl rounded-md border border-gray-100`}>
-                  {link.dropdown.map(drop => (
-                    <button
-                      key={drop.id}
-                      onClick={() => setPage(drop.id)}
-                      className="block w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-800 transition text-sm rounded-md"
-                    >
-                      {drop.title}
-                    </button>
-                  ))}
+                <div className="absolute top-full left-0 pt-2">
+                  <div className={`${link.dropdown.length > 5 ? 'w-96 grid grid-cols-2 p-2 gap-1' : 'w-48 py-2'} bg-white shadow-xl rounded-md border border-gray-100`}>
+                    {link.dropdown.map(drop => (
+                      <button
+                        key={drop.id}
+                        onClick={() => setPage(drop.id)}
+                        className="block w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-800 transition text-sm rounded-md"
+                      >
+                        {drop.title}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

@@ -1,10 +1,8 @@
 import { Resend } from 'resend';
 
-// This grabs the secure key you just put into Vercel
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -16,11 +14,11 @@ export default async function handler(req, res) {
       passengers, vehicle, info 
     } = req.body;
 
-    // Send the email via Resend
-    const data = await resend.emails.send({
-      from: 'Quotes <quotes@tourscoachcharter.com>', // The domain you verified in Resend
-      to: ['acmrickaaz@gmail.com'], // Where you want to receive the quote alerts
-      reply_to: email, // This allows you to hit "Reply" and email the customer directly
+    // 1. Email to YOU (The Admin Alert)
+    const adminEmail = resend.emails.send({
+      from: 'Quotes <quotes@tourscoachcharter.com>',
+      to: ['acmrickaaz@gmail.com'], 
+      reply_to: email, 
       subject: `New Quote Request from ${firstName} ${lastName}`,
       html: `
         <h2>New Charter Quote Request</h2>
@@ -37,7 +35,29 @@ export default async function handler(req, res) {
       `
     });
 
-    res.status(200).json({ success: true, data });
+    // 2. Email to the CUSTOMER (The Auto-Reply)
+    const customerEmail = resend.emails.send({
+      from: 'Tours Coach Charters <quotes@tourscoachcharter.com>',
+      to: [email], // This dynamically grabs whatever email they typed into the form
+      subject: 'We received your quote request!',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+          <h2 style="color: #1e3a8a;">Hi ${firstName},</h2>
+          <p>Thank you for reaching out to <strong>Tours Coach Charters</strong>!</p>
+          <p>This is a quick automated message to let you know that our logistics team has successfully received your quote request for the trip from <strong>${pickup}</strong> to <strong>${destination}</strong>.</p>
+          <p>We are currently reviewing your passenger count and vehicle preferences to calculate the best possible rate. One of our booking specialists will be in touch with you shortly to discuss the details.</p>
+          <br/>
+          <p>Best regards,</p>
+          <p><strong>The Tours Coach Charters Team</strong></p>
+          <p><a href="https://tourscoachcharter.com" style="color: #dc2626; text-decoration: none; font-weight: bold;">tourscoachcharter.com</a> | (416) 269-9555</p>
+        </div>
+      `
+    });
+
+    // Send both emails at the exact same time
+    await Promise.all([adminEmail, customerEmail]);
+
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

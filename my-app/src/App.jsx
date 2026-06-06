@@ -1405,7 +1405,7 @@ const Footer = () => (
 const ChatWidget = () => {
   return (
     <iframe 
-      src="https://multi-agent-chat-rho.vercel.app/?mode=embed" 
+      src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Coach+Charter" 
       title="Live Support"
       allowTransparency={true}
       style={{

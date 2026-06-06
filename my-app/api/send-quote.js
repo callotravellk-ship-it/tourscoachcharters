@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     // Send the email via Resend
     const data = await resend.emails.send({
       from: 'Quotes <quotes@tourscoachcharter.com>', // The domain you verified in Resend
-      to: ['info@tourscoachcharter.com'], // Where you want to receive the quote alerts
+      to: ['acmrickaaz@gmail.com'], // Where you want to receive the quote alerts
       reply_to: email, // This allows you to hit "Reply" and email the customer directly
       subject: `New Quote Request from ${firstName} ${lastName}`,
       html: `

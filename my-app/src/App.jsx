@@ -1403,14 +1403,13 @@ const Footer = () => (
 );
 
 const ChatWidget = () => {
-  // State to track if the widget is open or closed
-  const [isOpen, setIsOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
-    // Listener function to catch the message from the Chat App
     const handleMessage = (event) => {
+      // Listen for the broadcast from your Vercel Chat App
       if (event.data && event.data.type === 'CHAT_WIDGET_STATE') {
-        setIsOpen(event.data.isOpen);
+        setIsChatOpen(event.data.isOpen);
       }
     };
 
@@ -1427,14 +1426,14 @@ const ChatWidget = () => {
         position: 'fixed', 
         bottom: '0', 
         right: '0', 
-        // DYNAMIC RESIZING: Shrinks to 100px when closed to prevent overlap
-        width: isOpen ? '400px' : '100px', 
-        height: isOpen ? '600px' : '100px', 
+        // FIX: Increased to 150px so the custom button doesn't get cut off!
+        width: isChatOpen ? '400px' : '150px', 
+        height: isChatOpen ? '600px' : '150px', 
         border: 'none', 
         zIndex: 999999, 
         background: 'transparent', 
         pointerEvents: 'auto',
-        transition: 'width 0.3s ease, height 0.3s ease' // Smooth expanding animation
+        transition: 'all 0.3s ease-in-out' // Smooth growing animation
       }}
     />
   );

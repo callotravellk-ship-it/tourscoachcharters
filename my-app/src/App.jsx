@@ -1040,6 +1040,26 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
             />
             <img 
+              src="/amadeus.png" 
+              alt="Amadeus" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/humber.png" 
+              alt="Humber" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/scotiabank.png" 
+              alt="Scotia Bank" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/peel.png" 
+              alt="Peel" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
               src="/rogers.png" 
               alt="Rogers" 
               className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 

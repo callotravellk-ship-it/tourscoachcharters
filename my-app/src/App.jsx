@@ -182,7 +182,7 @@ const DESTINATION_DATA = {
       "Our commitment to safety and customer satisfaction makes us the trusted choice for Scarborough residents and businesses. Let us handle the traffic and logistics while you sit back and enjoy the ride."
     ],
     faqs: [
-      { q: "Do you offer daily or weekly shuttle services in Scarborough?", a: "Yes, we provide ongoing shuttle contracts for universities, corporate offices, and construction sites throughout Scarborough and the surrounding eastern GTA." },
+      { q: "Do you offer daily or weekly shuttle services in Scarborough?", a: "Yes, we provide ongoing shuttle contracts for universities, corporate offices, and construction sites throughout Scarborough and the eastern GTA." },
       { q: "Can we book a bus for a trip from Scarborough to downtown Toronto?", a: "Absolutely. We frequently handle trips from Scarborough to downtown Toronto for sporting events, theater outings, corporate conferences, and nightlife." },
       { q: "What amenities are included on your buses?", a: "Our luxury coaches feature Wi-Fi, reclining seats, climate control, and onboard restrooms. Mini-coaches and vans offer comfortable seating, AC, and plenty of luggage space." }
     ]
@@ -995,7 +995,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
         <TrustStatsBanner />
       </section>
 
-<section className="py-12 bg-gray-50 border-b border-gray-200 overflow-hidden">
+      <section className="py-12 bg-gray-50 border-b border-gray-200 overflow-hidden">
         <div className="container mx-auto px-4 mb-8 text-center">
           <h3 className="text-gray-500 font-semibold uppercase tracking-widest text-sm">Trusted by Industry Leaders</h3>
         </div>
@@ -1003,7 +1003,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
         {/* Logo Container */}
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-70">
-            {/* Replace the src="" paths with your actual image filenames from the public folder */}
+            {/* Make sure these images exist in your public/ folder */}
             <img 
               src="/accenture.png" 
               alt="Accenture" 
@@ -1040,26 +1040,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
             />
             <img 
-              src="/amadeus.png" 
-              alt="Amadeus" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/humber.png" 
-              alt="Humber" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/scotiabank.png" 
-              alt="Scotia Bank" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/peel.png" 
-              alt="Peel" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
               src="/rogers.png" 
               alt="Rogers" 
               className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
@@ -1072,62 +1052,92 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
 };
 
 const FleetTemplate = ({ data, setPage, setIsQuoteModalOpen }) => (
-  <div className="pt-32 pb-20 w-full bg-gray-50 min-h-screen">
+  <div className="pt-32 pb-24 w-full bg-slate-50 min-h-screen">
     <div className="container mx-auto px-4">
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col lg:flex-row mb-16">
-        <div className="lg:w-1/2">
-          <img src={data.img} alt={data.name} className="w-full h-full object-cover min-h-[400px]" />
-        </div>
-        <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
-          <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold mb-4 w-fit">
-            <Users size={16} className="mr-2" /> Capacity: {data.pax}
+      
+      {/* Main Vehicle Card - Modernized */}
+      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col lg:flex-row mb-16 border border-slate-100 transform transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] relative">
+        
+        {/* Image Section with Overlay & Hover Zoom */}
+        <div className="lg:w-1/2 relative min-h-[400px] lg:min-h-[500px] group overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent z-10 opacity-60"></div>
+          <img 
+            src={data.img} 
+            alt={data.name} 
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+          />
+          {/* Floating Frosted Glass Capacity Badge */}
+          <div className="absolute top-6 left-6 z-20">
+            <span className="bg-white/90 backdrop-blur-md text-blue-900 px-5 py-2.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-2 border border-white/20">
+              <Users size={18} className="text-red-600" /> 
+              {data.pax}
+            </span>
           </div>
-          <h1 className="text-4xl font-black text-gray-900 mb-4">{data.name}</h1>
-          <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+        </div>
+
+        {/* Content Section */}
+        <div className="lg:w-1/2 p-8 lg:p-14 flex flex-col justify-center relative bg-white">
+          {/* Decorative background glow */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
+
+          <h1 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">
+            {data.name}
+          </h1>
+          
+          <p className="text-lg text-slate-600 mb-10 leading-relaxed">
             {data.desc}
           </p>
           
-          <h3 className="text-xl font-bold text-gray-900 mb-4 border-b pb-2">Vehicle Features</h3>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-            {data.features.map((feat, i) => (
-              <li key={i} className="flex items-center text-gray-700">
-                <CheckCircle size={18} className="text-green-500 mr-2 flex-shrink-0" />
-                {feat}
-              </li>
-            ))}
-          </ul>
+          <div className="mb-12">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Premium Features</h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {data.features.map((feat, i) => (
+                <li key={i} className="flex items-center bg-slate-50 border border-slate-100 p-3.5 rounded-xl hover:bg-blue-50 hover:border-blue-200 transition-colors group cursor-default">
+                  <div className="bg-white p-1.5 rounded-full shadow-sm mr-3 group-hover:scale-110 transition-transform">
+                    <CheckCircle size={16} className="text-green-500" />
+                  </div>
+                  <span className="text-slate-700 font-medium text-sm">{feat}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <button 
             onClick={() => setIsQuoteModalOpen(true)}
-            className="bg-red-600 text-white font-bold py-4 px-8 rounded-lg hover:bg-red-700 transition shadow-lg text-lg text-center"
+            className="w-full sm:w-auto mt-auto bg-gradient-to-r from-red-600 to-red-700 text-white font-bold py-4 px-8 rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2"
           >
-            Request a Quote for this Vehicle
+            Request a Quote <ArrowRight size={20} />
           </button>
         </div>
       </div>
 
-      <div className="mb-16">
+      <div className="mb-20">
         <TrustStatsBanner />
       </div>
 
+      {/* Modernized Reviews Section */}
       {data.reviews && data.reviews.length > 0 && (
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-black text-blue-800 mb-4">What Our Clients Say</h2>
-            <p className="text-gray-600">Read reviews from groups who have traveled on our {data.name}s.</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-black text-blue-900 mb-4 tracking-tight">Client Experiences</h2>
+            <p className="text-slate-600 text-lg">Hear directly from groups who have traveled aboard the {data.name}.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {data.reviews.map((review, i) => (
-              <div key={i} className="bg-white p-8 rounded-xl shadow-md border border-gray-100 flex flex-col h-full hover:-translate-y-1 transition duration-300">
+              <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-800 to-blue-600"></div>
                 <div className="flex text-yellow-400 mb-6">
                   {[...Array(review.rating)].map((_, j) => (
-                    <Star key={j} size={20} className="fill-current" />
+                    <Star key={j} size={18} className="fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-700 italic mb-6 flex-grow leading-relaxed">"{review.text}"</p>
-                <div className="border-t border-gray-100 pt-4 mt-auto">
-                  <p className="font-bold text-blue-800">- {review.author}</p>
+                <p className="text-slate-700 mb-8 flex-grow leading-relaxed font-medium">"{review.text}"</p>
+                <div className="flex items-center pt-4 border-t border-slate-100 mt-auto">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold mr-3">
+                    {review.author.charAt(0)}
+                  </div>
+                  <p className="font-bold text-sm text-slate-900">{review.author}</p>
                 </div>
               </div>
             ))}
@@ -1466,12 +1476,12 @@ const Footer = () => (
   </footer>
 );
 
+// The Newly Updated Chat Widget with dynamic resize logic
 const ChatWidget = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     const handleMessage = (event) => {
-      // Listen for the broadcast from your Vercel Chat App
       if (event.data && event.data.type === 'CHAT_WIDGET_STATE') {
         setIsChatOpen(event.data.isOpen);
       }
@@ -1490,14 +1500,13 @@ const ChatWidget = () => {
         position: 'fixed', 
         bottom: '0', 
         right: '0', 
-        // FIX: Increased to 150px so the custom button doesn't get cut off!
         width: isChatOpen ? '400px' : '150px', 
         height: isChatOpen ? '600px' : '150px', 
         border: 'none', 
         zIndex: 999999, 
         background: 'transparent', 
         pointerEvents: 'auto',
-        transition: 'all 0.3s ease-in-out' // Smooth growing animation
+        transition: 'all 0.3s ease-in-out'
       }}
     />
   );
@@ -1579,6 +1588,7 @@ export default function App() {
       
       <Footer />
       
+      {/* Dynamic Chat Widget rendered on every page */}
       <ChatWidget />
 
       {isQuoteModalOpen && (

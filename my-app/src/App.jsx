@@ -1403,6 +1403,21 @@ const Footer = () => (
 );
 
 const ChatWidget = () => {
+  // State to track if the widget is open or closed
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // Listener function to catch the message from the Chat App
+    const handleMessage = (event) => {
+      if (event.data && event.data.type === 'CHAT_WIDGET_STATE') {
+        setIsOpen(event.data.isOpen);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   return (
     <iframe 
       src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Coach+Charter" 
@@ -1412,12 +1427,14 @@ const ChatWidget = () => {
         position: 'fixed', 
         bottom: '0', 
         right: '0', 
-        width: '400px', 
-        height: '600px', 
+        // DYNAMIC RESIZING: Shrinks to 100px when closed to prevent overlap
+        width: isOpen ? '400px' : '100px', 
+        height: isOpen ? '600px' : '100px', 
         border: 'none', 
         zIndex: 999999, 
         background: 'transparent', 
-        pointerEvents: 'auto'
+        pointerEvents: 'auto',
+        transition: 'width 0.3s ease, height 0.3s ease' // Smooth expanding animation
       }}
     />
   );

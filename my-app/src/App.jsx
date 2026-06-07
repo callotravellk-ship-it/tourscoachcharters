@@ -995,12 +995,56 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
         <TrustStatsBanner />
       </section>
 
-      <section className="py-12 bg-gray-50 border-b border-gray-200 overflow-hidden">
-        <div className="container mx-auto px-4 mb-6 text-center">
+<section className="py-12 bg-gray-50 border-b border-gray-200 overflow-hidden">
+        <div className="container mx-auto px-4 mb-8 text-center">
           <h3 className="text-gray-500 font-semibold uppercase tracking-widest text-sm">Trusted by Industry Leaders</h3>
         </div>
-        <div className="flex space-x-12 animate-pulse whitespace-nowrap overflow-x-auto pb-4 justify-center items-center text-xl font-bold text-gray-400">
-          <span>Accenture</span> • <span>UofT</span> • <span>YorkU</span> • <span>Deloitte</span> • <span>Loblaws</span> • <span>Shoppers Drug Mart</span> • <span>TD Bank</span> • <span>Rogers</span>
+        
+        {/* Logo Container */}
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-70">
+            {/* Replace the src="" paths with your actual image filenames from the public folder */}
+            <img 
+              src="/accenture.png" 
+              alt="Accenture" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/uoft.png" 
+              alt="UofT" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/yorku.png" 
+              alt="YorkU" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/deloitte.png" 
+              alt="Deloitte" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/loblaws.png" 
+              alt="Loblaws" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/shoppers.png" 
+              alt="Shoppers Drug Mart" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/td.png" 
+              alt="TD Bank" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+            <img 
+              src="/rogers.png" 
+              alt="Rogers" 
+              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
+            />
+          </div>
         </div>
       </section>
     </div>

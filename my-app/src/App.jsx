@@ -4,7 +4,7 @@ import {
   ShieldCheck, CalendarCheck, Map, Headphones, BusFront, Users, 
   Briefcase, Trophy, Navigation, Car, Star, CheckCircle, ArrowRight,
   Plane, Landmark, Building2, ChevronLeft, ChevronRight,
-  Award, Route, Send, MapPin, RefreshCw, HelpCircle, Trash2, Plus, Check, Paperclip
+  Award, Route, Send
 } from 'lucide-react';
 
 // Custom Brand Icons
@@ -614,6 +614,174 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
   );
 };
 
+const QuoteForm = ({ onClose }) => {
+  const [submitted, setSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [tripType, setTripType] = useState('return'); // State for One Way / Round Trip
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSending(true);
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/send-quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        form.reset();
+        setTripType('return'); // Reset the toggle back to default
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        alert("There was a problem sending your quote. Please try calling us instead.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Network error. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  return (
+    <div className="bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 max-h-[600px] overflow-y-auto custom-scrollbar">
+      {onClose && (
+        <button 
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors z-20"
+        >
+          <X size={24} />
+        </button>
+      )}
+      <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Quote</h3>
+      <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
+      
+      {submitted ? (
+        <div className="bg-green-50 border border-green-200 text-green-700 p-8 rounded-lg text-center my-12 animate-fade-in-up">
+          <CheckCircle className="mx-auto mb-4" size={56} />
+          <h4 className="font-bold text-xl">Request Received!</h4>
+          <p className="text-sm mt-2">Our logistics team is calculating your quote and will contact you via email or phone shortly.</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">First Name *</label>
+              <input required name="firstName" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Last Name *</label>
+              <input required name="lastName" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Email Address *</label>
+              <input required name="email" type="email" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Phone Number *</label>
+              <input required name="phone" type="tel" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pickup Location *</label>
+              <input required name="pickup" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Destination *</label>
+              <input required name="destination" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
+            </div>
+          </div>
+
+          {/* NEW: Trip Type Toggle Radio Buttons */}
+          <div className="flex space-x-6 py-1">
+            <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
+              <input 
+                type="radio" 
+                name="tripType" 
+                value="return" 
+                checked={tripType === 'return'}
+                onChange={() => setTripType('return')}
+                className="mr-2 w-4 h-4 text-blue-800 focus:ring-blue-800 border-gray-300"
+              />
+              Round Trip
+            </label>
+            <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
+              <input 
+                type="radio" 
+                name="tripType" 
+                value="oneway" 
+                checked={tripType === 'oneway'}
+                onChange={() => setTripType('oneway')}
+                className="mr-2 w-4 h-4 text-blue-800 focus:ring-blue-800 border-gray-300"
+              />
+              One Way
+            </label>
+          </div>
+
+          {/* DYNAMIC DATES: Layout changes based on the toggle */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Departure Date *</label>
+              <input required name="departDate" type="date" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+            </div>
+            
+            {/* The Return Date field only renders if 'return' is selected */}
+            {tripType === 'return' && (
+              <div className="animate-fade-in-up">
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Return Date *</label>
+                <input required name="returnDate" type="date" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Passengers *</label>
+              <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Vehicle Preference</label>
+              <select name="vehicle" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm">
+                <option value="any">No Preference</option>
+                <option value="luxury">Luxury Coach (56 pax)</option>
+                <option value="mini">Mini Coach (24-36 pax)</option>
+                <option value="van">Passenger Van (14 pax)</option>
+                <option value="school">School Bus</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Additional Information</label>
+            <textarea name="info" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="3" placeholder="Any specific requirements, stops, or itinerary details?"></textarea>
+          </div>
+
+          <button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-4 flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>
+            {isSending ? 'Sending Request...' : <>Submit Quote Request <ArrowRight className="ml-2" size={18} /></>}
+          </button>
+          <p className="text-xs text-center text-gray-500 mt-2">
+            <ShieldCheck size={12} className="inline mr-1 text-green-600" /> Your information is secure.
+          </p>
+        </form>
+      )}
+    </div>
+  );
+};
+
 const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
@@ -654,6 +822,7 @@ const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
 
 const TrustStatsBanner = () => (
   <div className="relative w-full max-w-6xl mx-auto rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl py-16 px-6 md:px-12 my-8">
+    {/* Cinematic Ambient Glow Effects in Background */}
     <div className="absolute inset-0 z-0 pointer-events-none">
       <div className="absolute top-[-30%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-[-30%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full"></div>
@@ -667,6 +836,8 @@ const TrustStatsBanner = () => (
         { value: 24, suffix: "/7", label: "Client Support", icon: Headphones }
       ].map((stat, i) => (
         <div key={i} className="flex flex-col items-center group cursor-default">
+          
+          {/* Frosted Glass Icon Container with Hover Glow */}
           <div className="relative mb-6">
             <div className="absolute inset-0 bg-red-600 rounded-full blur opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
             <div className="relative bg-slate-800/80 backdrop-blur-sm border border-slate-700 w-16 h-16 rounded-2xl flex items-center justify-center text-slate-300 group-hover:bg-red-600 group-hover:border-red-500 group-hover:text-white group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 shadow-xl">
@@ -674,354 +845,23 @@ const TrustStatsBanner = () => (
             </div>
           </div>
           
+          {/* Gradient Animated Numbers */}
           <div className="text-5xl md:text-5xl lg:text-6xl font-black bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent mb-3 leading-none tracking-tight group-hover:scale-105 transition-transform duration-500">
             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
           </div>
           
+          {/* Refined Label */}
           <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300 transition-colors duration-300">
             {stat.label}
           </div>
+          
         </div>
       ))}
     </div>
   </div>
 );
 
-const MultiStepQuoteForm = ({ onClose }) => {
-  const [step, setStep] = useState(1);
-  const [isSending, setIsSending] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const [formData, setFormData] = useState({
-    tripType: 'round-trip',
-    passengers: 5,
-    itinerary: [
-      { id: 1, type: 'pickup', address: '', date: '', time: '' },
-      { id: 2, type: 'dropoff', address: '', date: '', time: '' }
-    ],
-    vehicleType: 'Luxury Coach Bus',
-    vehicleCount: 1,
-    notes: '',
-    contact: { firstName: '', lastName: '', email: '', phone: '', company: '' }
-  });
-
-  const updateFormData = (key, value) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
-  };
-
-  const addStop = () => {
-    const newItinerary = [...formData.itinerary];
-    newItinerary.splice(newItinerary.length - 1, 0, { 
-      id: Date.now(), type: 'stop', address: '', date: '', time: '' 
-    });
-    updateFormData('itinerary', newItinerary);
-  };
-
-  const removeStop = (idToRemove) => {
-    updateFormData('itinerary', formData.itinerary.filter(stop => stop.id !== idToRemove));
-  };
-
-  const handleItineraryChange = (id, field, value) => {
-    const updated = formData.itinerary.map(stop => 
-      stop.id === id ? { ...stop, [field]: value } : stop
-    );
-    updateFormData('itinerary', updated);
-  };
-
-  const handleContactChange = (field, value) => {
-    updateFormData('contact', { ...formData.contact, [field]: value });
-  };
-
-  const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
-  const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
-
-  const handleSubmit = async () => {
-    setIsSending(true);
-    console.log("Submitting payload:", formData);
-    
-    setTimeout(() => {
-      setIsSending(false);
-      setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        if(onClose) onClose();
-      }, 4000);
-    }, 1500);
-  };
-
-  const renderProgressBar = () => (
-    <div className="flex items-center justify-center mb-10 px-4">
-      {[1, 2, 3, 4].map((num, idx) => (
-        <React.Fragment key={num}>
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${step >= num ? 'bg-blue-800 text-white' : 'bg-slate-100 text-slate-400 border border-slate-200'}`}>
-            {step > num ? <Check size={16} /> : num}
-          </div>
-          {idx < 3 && (
-            <div className={`flex-1 h-px mx-2 transition-colors ${step > num + 0 ? 'bg-blue-800' : 'bg-slate-200 border-t border-dashed border-slate-300'}`}></div>
-          )}
-        </React.Fragment>
-      ))}
-    </div>
-  );
-
-  const renderStep1 = () => (
-    <div className="animate-soft-fade">
-      <h2 className="text-2xl font-black text-slate-900 mb-6 text-center">Let's get started!</h2>
-      <p className="font-bold text-slate-800 mb-4">What type of trip are you planning?</p>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {[
-          { id: 'one-way', icon: MapPin, title: 'One Way', desc: 'Going from point A to point B.' },
-          { id: 'round-trip', icon: RefreshCw, title: 'Round Trip', desc: "We'll drop you off back at the pickup." },
-          { id: 'shuttle', icon: BusFront, title: 'Shuttle', desc: 'Continuous route between stops.' },
-          { id: 'other', icon: HelpCircle, title: 'Other', desc: 'Not sure? No problem.' }
-        ].map(type => (
-          <button
-            key={type.id}
-            onClick={() => updateFormData('tripType', type.id)}
-            className={`p-6 rounded-xl border-2 text-center transition-all ${formData.tripType === type.id ? 'border-blue-800 bg-blue-50' : 'border-slate-100 bg-white hover:border-blue-200 hover:bg-slate-50'}`}
-          >
-            <type.icon className={`mx-auto mb-3 ${formData.tripType === type.id ? 'text-blue-800' : 'text-slate-400'}`} size={32} />
-            <h3 className="font-bold text-slate-900 mb-1">{type.title}</h3>
-            <p className="text-xs text-slate-500">{type.desc}</p>
-          </button>
-        ))}
-      </div>
-
-      <p className="font-bold text-slate-800 mb-2">How many passengers do you have?</p>
-      <input 
-        type="number" 
-        min="1"
-        value={formData.passengers}
-        onChange={(e) => updateFormData('passengers', e.target.value)}
-        className="w-full md:w-1/2 px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none"
-      />
-    </div>
-  );
-
-  const renderStep2 = () => (
-    <div className="animate-soft-fade">
-      <div className="flex items-center mb-6">
-        <button onClick={prevStep} className="text-slate-500 hover:text-blue-800 mr-4 flex items-center font-semibold text-sm"><ChevronLeft size={16}/> Back</button>
-        <h2 className="text-xl font-black text-slate-900 mx-auto">Enter your itinerary</h2>
-        <div className="w-16"></div>
-      </div>
-
-      <div className="space-y-6 relative before:absolute before:inset-0 before:ml-3 before:-translate-x-px md:before:ml-4 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
-        {formData.itinerary.map((stop, index) => (
-          <div key={stop.id} className="relative pl-10 md:pl-12">
-            <div className="absolute left-0 w-6 h-6 md:w-8 md:h-8 rounded-full bg-white border-2 border-slate-300 flex items-center justify-center top-0">
-              {stop.type === 'pickup' && <div className="w-2 h-2 rounded-full bg-green-500"></div>}
-              {stop.type === 'stop' && <div className="w-2 h-2 rounded-full bg-blue-500"></div>}
-              {stop.type === 'dropoff' && <MapPin size={14} className="text-red-500" />}
-            </div>
-            
-            <div className="flex justify-between items-center mb-2">
-              <h4 className="font-bold text-slate-800 capitalize">
-                {stop.type === 'pickup' ? 'Initial Pickup' : stop.type === 'dropoff' ? 'Final Drop-off' : `Stop ${index}`}
-              </h4>
-              {stop.type === 'stop' && (
-                <button onClick={() => removeStop(stop.id)} className="text-slate-400 hover:text-red-500"><Trash2 size={16} /></button>
-              )}
-            </div>
-            
-            <input 
-              type="text" 
-              placeholder="Enter Address or Location" 
-              value={stop.address}
-              onChange={(e) => handleItineraryChange(stop.id, 'address', e.target.value)}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg mb-3 focus:ring-2 focus:ring-blue-800 outline-none text-sm"
-            />
-            
-            <div className="grid grid-cols-2 gap-4">
-              <input 
-                type="date" 
-                value={stop.date}
-                onChange={(e) => handleItineraryChange(stop.id, 'date', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm text-slate-600"
-              />
-              <input 
-                type="time" 
-                value={stop.time}
-                onChange={(e) => handleItineraryChange(stop.id, 'time', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm text-slate-600"
-              />
-            </div>
-            
-            {stop.type !== 'dropoff' && (
-              <div className="my-6 text-center relative">
-                <hr className="border-slate-200" />
-                {index === formData.itinerary.length - 2 && (
-                  <button onClick={addStop} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-blue-600 hover:text-blue-800 font-bold text-sm flex items-center">
-                    <Plus size={16} className="mr-1" /> Add Stop
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-8 pt-6 border-t border-slate-200">
-        <p className="text-sm font-bold text-slate-800 mb-2">Already have an itinerary? Upload it here.</p>
-        <button className="border border-slate-300 text-slate-600 px-4 py-2 rounded-lg text-sm font-semibold flex items-center hover:bg-slate-50">
-          <Paperclip size={16} className="mr-2 text-blue-800" /> Attach Itinerary
-        </button>
-      </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div className="animate-soft-fade">
-      <div className="flex items-center mb-6">
-        <button onClick={prevStep} className="text-slate-500 hover:text-blue-800 mr-4 flex items-center font-semibold text-sm"><ChevronLeft size={16}/> Back</button>
-        <h2 className="text-xl font-black text-slate-900 mx-auto">Add optional selections</h2>
-        <div className="w-16"></div>
-      </div>
-
-      <div className="mb-8">
-        <p className="font-bold text-slate-800 mb-3">Do you need a specific vehicle type?</p>
-        <div className="flex items-center gap-4">
-          <select 
-            value={formData.vehicleType}
-            onChange={(e) => updateFormData('vehicleType', e.target.value)}
-            className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none"
-          >
-            <option value="No Preference">No Preference</option>
-            <option value="Luxury Coach Bus">Luxury Coach Bus</option>
-            <option value="Mini Coach Bus">Mini Coach Bus</option>
-            <option value="14 Passenger Van">14 Passenger Van</option>
-            <option value="School Bus">School Bus</option>
-          </select>
-          
-          <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden h-12">
-            <button onClick={() => updateFormData('vehicleCount', Math.max(1, formData.vehicleCount - 1))} className="px-4 text-slate-500 hover:bg-slate-100 font-bold">-</button>
-            <div className="w-10 text-center font-bold text-slate-800">{formData.vehicleCount}</div>
-            <button onClick={() => updateFormData('vehicleCount', formData.vehicleCount + 1)} className="px-4 text-slate-500 hover:bg-slate-100 font-bold">+</button>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <p className="font-bold text-slate-800 mb-3">Anything else we should know?</p>
-        <textarea 
-          rows="4" 
-          value={formData.notes}
-          onChange={(e) => updateFormData('notes', e.target.value)}
-          placeholder="Please provide a detailed description of your needs."
-          className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none"
-        ></textarea>
-      </div>
-    </div>
-  );
-
-  const renderStep4 = () => (
-    <div className="animate-soft-fade">
-      <div className="flex items-center mb-6">
-        <button onClick={prevStep} className="text-slate-500 hover:text-blue-800 mr-4 flex items-center font-semibold text-sm"><ChevronLeft size={16}/> Back</button>
-        <h2 className="text-xl font-black text-slate-900 mx-auto">Review and confirm</h2>
-        <div className="w-16"></div>
-      </div>
-
-      <div className="border border-slate-200 rounded-xl overflow-hidden mb-8 flex flex-col md:flex-row">
-        <div className="p-6 md:w-1/2 bg-slate-50">
-          <h3 className="font-black text-slate-900 capitalize mb-4">{formData.tripType.replace('-', ' ')}</h3>
-          <div className="flex flex-wrap gap-4 text-sm text-slate-600 font-medium mb-6">
-            <span className="flex items-center"><Users size={16} className="mr-1 text-slate-400"/> {formData.passengers} Pax</span>
-            <span className="flex items-center"><BusFront size={16} className="mr-1 text-slate-400"/> {formData.vehicleCount}x {formData.vehicleType}</span>
-          </div>
-          
-          <div className="space-y-4">
-            {formData.itinerary.map((stop, idx) => (
-               <div key={stop.id} className="flex items-start">
-                 <div className="w-2 h-2 mt-1.5 rounded-full bg-blue-800 mr-3 flex-shrink-0"></div>
-                 <div className="text-sm">
-                   <p className="font-bold text-slate-800">{stop.address || 'Address not provided'}</p>
-                   <p className="text-slate-500">{stop.date} {stop.time}</p>
-                 </div>
-               </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Mock Map Placeholder */}
-        <div className="md:w-1/2 bg-slate-200 min-h-[200px] flex items-center justify-center relative">
-          <div className="absolute inset-0 bg-blue-100 opacity-50"></div>
-          <div className="text-center z-10 text-slate-500 flex flex-col items-center">
-            <Map size={32} className="mb-2 opacity-50" />
-            <span className="text-sm font-bold uppercase tracking-widest">Route Map Preview</span>
-          </div>
-        </div>
-      </div>
-
-      <h3 className="font-bold text-slate-900 mb-4">Your Contact Info</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <input required type="text" placeholder="First Name *" value={formData.contact.firstName} onChange={(e) => handleContactChange('firstName', e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
-        <input required type="text" placeholder="Last Name *" value={formData.contact.lastName} onChange={(e) => handleContactChange('lastName', e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
-      </div>
-      <input required type="email" placeholder="Email Address *" value={formData.contact.email} onChange={(e) => handleContactChange('email', e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm mb-4" />
-      <input required type="tel" placeholder="Phone Number *" value={formData.contact.phone} onChange={(e) => handleContactChange('phone', e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm mb-4" />
-      <input type="text" placeholder="Company Name (Optional)" value={formData.contact.company} onChange={(e) => handleContactChange('company', e.target.value)} className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
-
-    </div>
-  );
-
-  return (
-    <div className="bg-white rounded-2xl shadow-2xl relative z-10 overflow-hidden max-w-3xl w-full mx-auto flex flex-col max-h-[85vh]">
-      
-      {/* Header */}
-      <div className="bg-slate-50 border-b border-slate-100 p-6 flex justify-between items-center shrink-0">
-        <h3 className="text-xl md:text-2xl font-black text-blue-900">Request a Quote</h3>
-        {onClose && (
-          <button onClick={onClose} className="text-slate-400 hover:text-red-600 transition-colors">
-            <X size={24} />
-          </button>
-        )}
-      </div>
-
-      {/* Scrollable Body */}
-      <div className="p-6 md:p-10 overflow-y-auto custom-scrollbar flex-1">
-        {submitted ? (
-          <div className="text-center py-12 animate-soft-fade">
-            <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Check size={40} />
-            </div>
-            <h2 className="text-3xl font-black text-slate-900 mb-4">Request Sent Successfully!</h2>
-            <p className="text-slate-600 text-lg max-w-md mx-auto">Our logistics team at Tours Coach Charters is reviewing your itinerary and will reach out with pricing shortly.</p>
-          </div>
-        ) : (
-          <>
-            {renderProgressBar()}
-            {step === 1 && renderStep1()}
-            {step === 2 && renderStep2()}
-            {step === 3 && renderStep3()}
-            {step === 4 && renderStep4()}
-          </>
-        )}
-      </div>
-
-      {/* Footer / Actions */}
-      {!submitted && (
-        <div className="bg-slate-50 border-t border-slate-100 p-6 flex justify-end shrink-0">
-          {step < 4 ? (
-            <button onClick={nextStep} className="bg-blue-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-900 transition-colors shadow-md">
-              Next Step
-            </button>
-          ) : (
-            <button 
-              onClick={handleSubmit} 
-              disabled={isSending}
-              className={`bg-red-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-700 transition-colors shadow-md flex items-center ${isSending ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              {isSending ? 'Sending...' : 'Confirm Request'}
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
-
+// New About Us Component
 const AboutUs = ({ setIsQuoteModalOpen }) => (
   <div className="w-full bg-slate-50 flex flex-col font-sans">
     <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
@@ -1030,7 +870,7 @@ const AboutUs = ({ setIsQuoteModalOpen }) => (
           src="/about-banner.jpg" 
           alt="About Canada Tours Coach" 
           className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => { e.target.src = "/home-hero.jpg" }} 
+          onError={(e) => { e.target.src = "/home-hero.jpg" }} // Fallback if no specific banner exists
         />
         <div className="relative z-20 container mx-auto px-4 animate-fade-in-up">
           <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">
@@ -1089,6 +929,7 @@ const AboutUs = ({ setIsQuoteModalOpen }) => (
   </div>
 );
 
+// New Contact Us Component
 const ContactUs = ({ setIsQuoteModalOpen }) => {
   const [submitted, setSubmitted] = useState(false);
 
@@ -1120,6 +961,7 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
       <div className="container mx-auto px-4 py-16 lg:py-24">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
           
+          {/* Contact Information Side */}
           <div className="lg:w-5/12">
             <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-blue-50 rounded-full blur-3xl -z-10 opacity-70"></div>
@@ -1179,6 +1021,7 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
             </div>
           </div>
 
+          {/* Simple Message Form Side */}
           <div className="lg:w-7/12">
              <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full">
                <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight">Send Us a Message</h2>
@@ -1266,13 +1109,8 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               </div>
             </div>
             
-            <div className="lg:w-1/2 w-full max-w-md lg:max-w-none text-center lg:text-right">
-              <button 
-                onClick={() => setIsQuoteModalOpen(true)}
-                className="w-full lg:w-auto inline-flex items-center justify-center bg-red-600 text-white font-black py-5 px-10 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-1 text-xl lg:text-2xl gap-3 animate-fade-in-up"
-              >
-                Get a Free Quote <ArrowRight size={24} />
-              </button>
+            <div className="lg:w-1/2 w-full max-w-md lg:max-w-none">
+              <QuoteForm />
             </div>
           </div>
         </div>
@@ -1320,30 +1158,37 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 className="group relative h-[360px] rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500"
                 onClick={() => setIsQuoteModalOpen(true)}
               >
+                {/* Full Background Image */}
                 <img 
                   src={service.img} 
                   alt={service.title} 
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                 />
                 
+                {/* Dark Gradient Overlay for Readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
                 
+                {/* Content Container positioned at the bottom */}
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   
+                  {/* Frosted Glass Icon that turns Red on hover */}
                   <div className="bg-white/20 backdrop-blur-md text-white w-14 h-14 rounded-full flex items-center justify-center mb-6 border border-white/30 transform group-hover:scale-110 group-hover:bg-red-600 group-hover:border-red-600 transition-all duration-500 shadow-lg">
                     <service.icon size={26} />
                   </div>
                   
+                  {/* Title */}
                   <h3 className="font-bold text-2xl text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-2">
                     {service.title}
                   </h3>
                   
+                  {/* Sliding Description (Hidden by default, slides up on hover) */}
                   <div className="overflow-hidden">
                      <p className="text-slate-200 text-sm mb-4 transform translate-y-[120%] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out leading-relaxed">
                        {service.desc}
                      </p>
                   </div>
 
+                  {/* Call to Action Link */}
                   <div className="flex items-center text-white font-bold text-sm uppercase tracking-wider group-hover:text-red-400 transition-colors duration-300">
                     Get a Quote <ArrowRight size={18} className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300" />
                   </div>
@@ -1356,6 +1201,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
       </section>
 
       <section className="py-24 bg-slate-50 border-t border-slate-200 overflow-hidden relative">
+        {/* Injecting a quick animation style for the slider transitions */}
         <style>{`
           @keyframes softFade {
             from { opacity: 0; transform: translateY(10px); }
@@ -1374,6 +1220,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
 
           <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col md:flex-row relative border border-slate-100 group/slider">
             
+            {/* Image Side with Hover Navigation */}
             <div className="md:w-1/2 relative min-h-[400px] md:min-h-[480px] overflow-hidden bg-slate-100">
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent z-10 pointer-events-none"></div>
               
@@ -1384,6 +1231,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 className="absolute inset-0 w-full h-full object-cover animate-soft-fade" 
               />
               
+              {/* Floating Frosted Navigation Arrows */}
               <button 
                 onClick={prevFleet} 
                 className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white hover:text-red-600 text-blue-900 p-3.5 rounded-full transition-all duration-300 hover:scale-110 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100"
@@ -1400,10 +1248,13 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               </button>
             </div>
 
+            {/* Content Side */}
             <div className="md:w-1/2 p-8 lg:p-14 flex flex-col justify-center relative bg-white">
+              {/* Decorative Background Blob */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
 
               <div key={`content-${currentFleetIdx}`} className="animate-soft-fade">
+                {/* Modern Pill Badge */}
                 <div className="inline-flex items-center bg-blue-50 border border-blue-100 text-blue-900 px-4 py-2 rounded-full text-sm font-bold mb-6 shadow-sm">
                   <Users size={16} className="mr-2 text-red-600" /> Capacity: {fleetList[currentFleetIdx][1].pax}
                 </div>
@@ -1417,6 +1268,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 </p>
                 
                 <div className="mt-auto">
+                  {/* Upgraded CTA Button */}
                   <button 
                     onClick={() => { setPage(fleetList[currentFleetIdx][0]); window.scrollTo(0,0); }} 
                     className="inline-flex items-center justify-center w-full sm:w-auto bg-slate-900 text-white font-bold py-3.5 px-7 rounded-xl hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 group/btn"
@@ -1424,6 +1276,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                     View Vehicle Details <ArrowRight size={18} className="ml-2 transform group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                   
+                  {/* Modern Slider Dots */}
                   <div className="flex space-x-3 mt-10 items-center">
                     {fleetList.map((_, idx) => (
                       <button 
@@ -1450,6 +1303,7 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
           <h3 className="text-gray-500 font-semibold uppercase tracking-widest text-sm">Trusted by Industry Leaders</h3>
         </div>
         
+        {/* Logo Container */}
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-70">
             <img src="/accenture.png" alt="Accenture" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
@@ -1789,8 +1643,8 @@ export default function App() {
 
       {isQuoteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6 overflow-y-auto">
-          <div className="w-full max-w-4xl my-auto animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
-            <MultiStepQuoteForm onClose={() => setIsQuoteModalOpen(false)} />
+          <div className="w-full max-w-2xl my-auto animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+            <QuoteForm onClose={() => setIsQuoteModalOpen(false)} />
           </div>
         </div>
       )}

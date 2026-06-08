@@ -465,36 +465,40 @@ const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
 };
 
 const TrustStatsBanner = () => (
-  <div className="bg-[#2442a8] rounded-xl py-12 px-6 shadow-md relative overflow-hidden w-full max-w-6xl mx-auto border border-blue-900/30">
-    <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-      <div className="relative w-[300px] h-full">
-        <div className="absolute top-[10%] left-[25%] w-6 h-6 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute top-[25%] left-[50%] w-4 h-4 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute bottom-[20%] left-[30%] w-5 h-5 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute top-[-10%] left-[40%] w-10 h-10 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute top-[40%] left-[65%] w-8 h-8 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute bottom-[10%] left-[55%] w-3 h-3 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute top-[15%] right-[25%] w-5 h-5 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute bottom-[25%] right-[15%] w-6 h-6 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute top-[65%] right-[25%] w-3 h-3 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute top-[30%] right-[10%] w-2 h-2 bg-white/[0.07] rounded-full"></div>
-        <div className="absolute bottom-[5%] right-[40%] w-4 h-4 bg-white/[0.07] rounded-full"></div>
-      </div>
+  <div className="relative w-full max-w-6xl mx-auto rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl py-16 px-6 md:px-12 my-8">
+    {/* Cinematic Ambient Glow Effects in Background */}
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute top-[-30%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-[-30%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full"></div>
     </div>
     
-    <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 text-center items-center">
+    <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-6 lg:gap-12 text-center">
       {[
-        { value: 15, suffix: "+", label: "Years", icon: Award },
-        { value: 5000, suffix: "+", label: "Trips", icon: Route },
-        { value: 100, suffix: "%", label: "Insured", icon: ShieldCheck },
-        { value: 24, suffix: "/7", label: "Support", icon: Headphones }
+        { value: 15, suffix: "+", label: "Years Experience", icon: Award },
+        { value: 5000, suffix: "+", label: "Successful Trips", icon: Route },
+        { value: 100, suffix: "%", label: "Fully Insured", icon: ShieldCheck },
+        { value: 24, suffix: "/7", label: "Client Support", icon: Headphones }
       ].map((stat, i) => (
-        <div key={i} className="flex flex-col items-center justify-center group">
-          <stat.icon size={36} className="text-white/80 mb-3 group-hover:scale-110 transition-transform duration-300" />
-          <div className="text-5xl md:text-[54px] font-black text-[#f24e4e] mb-2 leading-none tracking-tight">
+        <div key={i} className="flex flex-col items-center group cursor-default">
+          
+          {/* Frosted Glass Icon Container with Hover Glow */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 bg-red-600 rounded-full blur opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
+            <div className="relative bg-slate-800/80 backdrop-blur-sm border border-slate-700 w-16 h-16 rounded-2xl flex items-center justify-center text-slate-300 group-hover:bg-red-600 group-hover:border-red-500 group-hover:text-white group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 shadow-xl">
+              <stat.icon size={28} />
+            </div>
+          </div>
+          
+          {/* Gradient Animated Numbers */}
+          <div className="text-5xl md:text-5xl lg:text-6xl font-black bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent mb-3 leading-none tracking-tight group-hover:scale-105 transition-transform duration-500">
             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
           </div>
-          <div className="text-[13px] md:text-sm font-bold uppercase tracking-[0.2em] text-white">{stat.label}</div>
+          
+          {/* Refined Label */}
+          <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300 transition-colors duration-300">
+            {stat.label}
+          </div>
+          
         </div>
       ))}
     </div>

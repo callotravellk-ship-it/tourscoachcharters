@@ -1109,8 +1109,13 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               </div>
             </div>
             
-            <div className="lg:w-1/2 w-full max-w-md lg:max-w-none">
-              <QuoteForm />
+            <div className="lg:w-1/2 w-full max-w-md lg:max-w-none text-center lg:text-right">
+              <button 
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="w-full lg:w-auto inline-flex items-center justify-center bg-red-600 text-white font-black py-5 px-10 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-1 text-xl lg:text-2xl gap-3 animate-fade-in-up"
+              >
+                Get a Free Quote <ArrowRight size={24} />
+              </button>
             </div>
           </div>
         </div>
@@ -1158,37 +1163,30 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 className="group relative h-[360px] rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500"
                 onClick={() => setIsQuoteModalOpen(true)}
               >
-                {/* Full Background Image */}
                 <img 
                   src={service.img} 
                   alt={service.title} 
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                 />
                 
-                {/* Dark Gradient Overlay for Readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
                 
-                {/* Content Container positioned at the bottom */}
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   
-                  {/* Frosted Glass Icon that turns Red on hover */}
                   <div className="bg-white/20 backdrop-blur-md text-white w-14 h-14 rounded-full flex items-center justify-center mb-6 border border-white/30 transform group-hover:scale-110 group-hover:bg-red-600 group-hover:border-red-600 transition-all duration-500 shadow-lg">
                     <service.icon size={26} />
                   </div>
                   
-                  {/* Title */}
                   <h3 className="font-bold text-2xl text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-2">
                     {service.title}
                   </h3>
                   
-                  {/* Sliding Description (Hidden by default, slides up on hover) */}
                   <div className="overflow-hidden">
                      <p className="text-slate-200 text-sm mb-4 transform translate-y-[120%] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out leading-relaxed">
                        {service.desc}
                      </p>
                   </div>
 
-                  {/* Call to Action Link */}
                   <div className="flex items-center text-white font-bold text-sm uppercase tracking-wider group-hover:text-red-400 transition-colors duration-300">
                     Get a Quote <ArrowRight size={18} className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300" />
                   </div>
@@ -1201,7 +1199,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
       </section>
 
       <section className="py-24 bg-slate-50 border-t border-slate-200 overflow-hidden relative">
-        {/* Injecting a quick animation style for the slider transitions */}
         <style>{`
           @keyframes softFade {
             from { opacity: 0; transform: translateY(10px); }
@@ -1220,7 +1217,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
 
           <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col md:flex-row relative border border-slate-100 group/slider">
             
-            {/* Image Side with Hover Navigation */}
             <div className="md:w-1/2 relative min-h-[400px] md:min-h-[480px] overflow-hidden bg-slate-100">
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent z-10 pointer-events-none"></div>
               
@@ -1231,7 +1227,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 className="absolute inset-0 w-full h-full object-cover animate-soft-fade" 
               />
               
-              {/* Floating Frosted Navigation Arrows */}
               <button 
                 onClick={prevFleet} 
                 className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white hover:text-red-600 text-blue-900 p-3.5 rounded-full transition-all duration-300 hover:scale-110 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100"
@@ -1248,13 +1243,10 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               </button>
             </div>
 
-            {/* Content Side */}
             <div className="md:w-1/2 p-8 lg:p-14 flex flex-col justify-center relative bg-white">
-              {/* Decorative Background Blob */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
 
               <div key={`content-${currentFleetIdx}`} className="animate-soft-fade">
-                {/* Modern Pill Badge */}
                 <div className="inline-flex items-center bg-blue-50 border border-blue-100 text-blue-900 px-4 py-2 rounded-full text-sm font-bold mb-6 shadow-sm">
                   <Users size={16} className="mr-2 text-red-600" /> Capacity: {fleetList[currentFleetIdx][1].pax}
                 </div>
@@ -1268,7 +1260,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 </p>
                 
                 <div className="mt-auto">
-                  {/* Upgraded CTA Button */}
                   <button 
                     onClick={() => { setPage(fleetList[currentFleetIdx][0]); window.scrollTo(0,0); }} 
                     className="inline-flex items-center justify-center w-full sm:w-auto bg-slate-900 text-white font-bold py-3.5 px-7 rounded-xl hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 group/btn"
@@ -1276,7 +1267,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                     View Vehicle Details <ArrowRight size={18} className="ml-2 transform group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                   
-                  {/* Modern Slider Dots */}
                   <div className="flex space-x-3 mt-10 items-center">
                     {fleetList.map((_, idx) => (
                       <button 
@@ -1303,7 +1293,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
           <h3 className="text-gray-500 font-semibold uppercase tracking-widest text-sm">Trusted by Industry Leaders</h3>
         </div>
         
-        {/* Logo Container */}
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-70">
             <img src="/accenture.png" alt="Accenture" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />

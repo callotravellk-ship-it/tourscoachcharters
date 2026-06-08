@@ -631,64 +631,93 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50 border-t border-gray-200">
+      <section className="py-24 bg-slate-50 border-t border-slate-200 overflow-hidden relative">
+        {/* Injecting a quick animation style for the slider transitions */}
+        <style>{`
+          @keyframes softFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-soft-fade {
+            animation: softFade 0.5s ease-out forwards;
+          }
+        `}</style>
+
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-blue-800 mb-4">Meet Our Modern Fleet</h2>
-            <p className="text-gray-600">From luxury motorcoaches to efficient passenger vans, we have the perfect vehicle to accommodate your group size and travel needs safely and comfortably.</p>
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">Meet Our Modern Fleet</h2>
+            <p className="text-lg text-slate-600">From luxury motorcoaches to efficient passenger vans, we have the perfect vehicle to accommodate your group size and travel needs safely and comfortably.</p>
           </div>
 
-          <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row relative border border-gray-100">
-            <div className="md:w-1/2 relative h-72 md:h-auto">
-              <div className="absolute inset-0 bg-blue-800/10 z-10"></div>
+          <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col md:flex-row relative border border-slate-100 group/slider">
+            
+            {/* Image Side with Hover Navigation */}
+            <div className="md:w-1/2 relative min-h-[400px] md:min-h-[480px] overflow-hidden bg-slate-100">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent z-10 pointer-events-none"></div>
+              
               <img 
+                key={`img-${currentFleetIdx}`} 
                 src={fleetList[currentFleetIdx][1].img} 
                 alt={fleetList[currentFleetIdx][1].name} 
-                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" 
+                className="absolute inset-0 w-full h-full object-cover animate-soft-fade" 
               />
               
+              {/* Floating Frosted Navigation Arrows */}
               <button 
                 onClick={prevFleet} 
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-red-600 hover:text-white text-blue-800 p-2 rounded-full shadow-lg transition-all"
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white hover:text-red-600 text-blue-900 p-3.5 rounded-full transition-all duration-300 hover:scale-110 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100"
                 aria-label="Previous Vehicle"
               >
                 <ChevronLeft size={24} />
               </button>
               <button 
                 onClick={nextFleet} 
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-red-600 hover:text-white text-blue-800 p-2 rounded-full shadow-lg transition-all"
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white hover:text-red-600 text-blue-900 p-3.5 rounded-full transition-all duration-300 hover:scale-110 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100"
                 aria-label="Next Vehicle"
               >
                 <ChevronRight size={24} />
               </button>
             </div>
 
-            <div className="md:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
-              <div className="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold mb-4 w-fit">
-                <Users size={16} className="mr-2" /> Capacity: {fleetList[currentFleetIdx][1].pax}
-              </div>
-              <h3 className="text-3xl font-black text-gray-900 mb-4">{fleetList[currentFleetIdx][1].name}</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                {fleetList[currentFleetIdx][1].desc}
-              </p>
-              
-              <div className="mt-auto">
-                <button 
-                  onClick={() => { setPage(fleetList[currentFleetIdx][0]); window.scrollTo(0,0); }} 
-                  className="inline-flex items-center text-blue-600 font-bold hover:text-red-600 transition-colors"
-                >
-                  View Vehicle Details <ArrowRight size={16} className="ml-2" />
-                </button>
+            {/* Content Side */}
+            <div className="md:w-1/2 p-8 lg:p-14 flex flex-col justify-center relative bg-white">
+              {/* Decorative Background Blob */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
+
+              <div key={`content-${currentFleetIdx}`} className="animate-soft-fade">
+                {/* Modern Pill Badge */}
+                <div className="inline-flex items-center bg-blue-50 border border-blue-100 text-blue-900 px-4 py-2 rounded-full text-sm font-bold mb-6 shadow-sm">
+                  <Users size={16} className="mr-2 text-red-600" /> Capacity: {fleetList[currentFleetIdx][1].pax}
+                </div>
                 
-                <div className="flex space-x-2 mt-8">
-                  {fleetList.map((_, idx) => (
-                    <button 
-                      key={idx} 
-                      onClick={() => setCurrentFleetIdx(idx)} 
-                      className={`h-2 rounded-full transition-all duration-300 ${idx === currentFleetIdx ? 'w-8 bg-red-600' : 'w-2 bg-gray-300 hover:bg-gray-400'}`}
-                      aria-label={`Go to slide ${idx + 1}`}
-                    />
-                  ))}
+                <h3 className="text-3xl lg:text-4xl font-black text-slate-900 mb-5 tracking-tight">
+                  {fleetList[currentFleetIdx][1].name}
+                </h3>
+                
+                <p className="text-lg text-slate-600 mb-10 leading-relaxed">
+                  {fleetList[currentFleetIdx][1].desc}
+                </p>
+                
+                <div className="mt-auto">
+                  {/* Upgraded CTA Button */}
+                  <button 
+                    onClick={() => { setPage(fleetList[currentFleetIdx][0]); window.scrollTo(0,0); }} 
+                    className="inline-flex items-center justify-center w-full sm:w-auto bg-slate-900 text-white font-bold py-3.5 px-7 rounded-xl hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 group/btn"
+                  >
+                    View Vehicle Details <ArrowRight size={18} className="ml-2 transform group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                  
+                  {/* Modern Slider Dots */}
+                  <div className="flex space-x-3 mt-10 items-center">
+                    {fleetList.map((_, idx) => (
+                      <button 
+                        key={idx} 
+                        onClick={() => setCurrentFleetIdx(idx)} 
+                        className={`h-2.5 rounded-full transition-all duration-500 ease-out ${idx === currentFleetIdx ? 'w-10 bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.4)]' : 'w-2.5 bg-slate-200 hover:bg-slate-300'}`}
+                        aria-label={`Go to slide ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

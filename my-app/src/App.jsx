@@ -568,38 +568,62 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+<section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-blue-800 mb-4">Charter Services for Every Occasion</h2>
-            <p className="text-gray-600">No matter the size of your group or the destination, we have the perfect vehicle and service package to meet your specific needs.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">Charter Services for Every Occasion</h2>
+            <p className="text-lg text-slate-600">No matter the size of your group or the destination, we have the perfect vehicle and service package to meet your specific needs.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
-              { icon: BusFront, title: "School Bus Rental", img: "/service-school.jpg" },
-              { icon: Users, title: "Wedding & Engagements", img: "/service-wedding.jpg" },
-              { icon: Briefcase, title: "Corporate Travel", img: "/service-corporate.jpg" },
-              { icon: Trophy, title: "Sports Groups", img: "/service-sports.jpg" },
-              { icon: Navigation, title: "Tours & Excursions", img: "/service-tours.jpg" },
-              { icon: Car, title: "Private Travel", img: "/service-private.jpg" }
+              { icon: BusFront, title: "School Bus Rental", img: "/service-school.jpg", desc: "Safe, reliable, and cost-effective transportation for student field trips and local events." },
+              { icon: Users, title: "Wedding & Engagements", img: "/service-wedding.jpg", desc: "Elegant shuttles ensuring your guests arrive safely and on time to your special day." },
+              { icon: Briefcase, title: "Corporate Travel", img: "/service-corporate.jpg", desc: "Executive coaches equipped with Wi-Fi and power for meetings, events, and retreats." },
+              { icon: Trophy, title: "Sports Groups", img: "/service-sports.jpg", desc: "Spacious undercarriage storage for equipment and comfortable legroom for athletes." },
+              { icon: Navigation, title: "Tours & Excursions", img: "/service-tours.jpg", desc: "Panoramic windows and comfortable seating perfect for scenic sightseeing journeys." },
+              { icon: Car, title: "Private Travel", img: "/service-private.jpg", desc: "Customized itineraries and flexible scheduling for family reunions and private groups." }
             ].map((service, i) => (
-              <div key={i} className="group rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white hover:-translate-y-1 transition duration-300">
-                <div className="h-48 overflow-hidden relative">
-                  <div className="absolute inset-0 bg-blue-800/20 group-hover:bg-transparent transition duration-300 z-10"></div>
-                  <img src={service.img} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center mb-3">
-                    <service.icon className="text-red-600 mr-3" size={24} />
-                    <h3 className="font-bold text-xl text-gray-800">{service.title}</h3>
+              <div 
+                key={i} 
+                className="group relative h-[360px] rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500"
+                onClick={() => setIsQuoteModalOpen(true)}
+              >
+                {/* Full Background Image */}
+                <img 
+                  src={service.img} 
+                  alt={service.title} 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                />
+                
+                {/* Dark Gradient Overlay for Readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
+                
+                {/* Content Container positioned at the bottom */}
+                <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                  
+                  {/* Frosted Glass Icon that turns Red on hover */}
+                  <div className="bg-white/20 backdrop-blur-md text-white w-14 h-14 rounded-full flex items-center justify-center mb-6 border border-white/30 transform group-hover:scale-110 group-hover:bg-red-600 group-hover:border-red-600 transition-all duration-500 shadow-lg">
+                    <service.icon size={26} />
                   </div>
-                  <button 
-                    onClick={() => setIsQuoteModalOpen(true)}
-                    className="text-blue-600 font-semibold text-sm hover:text-blue-800 flex items-center"
-                  >
-                    Get a Quote <ArrowRight size={14} className="ml-1" />
-                  </button>
+                  
+                  {/* Title */}
+                  <h3 className="font-bold text-2xl text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-2">
+                    {service.title}
+                  </h3>
+                  
+                  {/* Sliding Description (Hidden by default, slides up on hover) */}
+                  <div className="overflow-hidden">
+                     <p className="text-slate-200 text-sm mb-4 transform translate-y-[120%] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out leading-relaxed">
+                       {service.desc}
+                     </p>
+                  </div>
+
+                  {/* Call to Action Link */}
+                  <div className="flex items-center text-white font-bold text-sm uppercase tracking-wider group-hover:text-red-400 transition-colors duration-300">
+                    Get a Quote <ArrowRight size={18} className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300" />
+                  </div>
+
                 </div>
               </div>
             ))}

@@ -4,7 +4,7 @@ import {
   ShieldCheck, CalendarCheck, Map, Headphones, BusFront, Users, 
   Briefcase, Trophy, Navigation, Car, Star, CheckCircle, ArrowRight,
   Plane, Landmark, Building2, ChevronLeft, ChevronRight,
-  Award, Route
+  Award, Route, Send
 } from 'lucide-react';
 
 // Custom Brand Icons
@@ -19,7 +19,7 @@ const Youtube = ({ size = 24, className = "" }) => (
 );
 
 const COMPANY_INFO = {
-  name: "Tours Coach Charters",
+  name: "Canada Tours Coach LTD",
   phone: "(416) 269-9555",
   email: "info@tourscoachcharter.com",
   address: "1315 Pickering Parkway, Suite 300, Pickering, ON L1V 7G5"
@@ -27,6 +27,7 @@ const COMPANY_INFO = {
 
 const NAV_LINKS = [
   { title: "Home", id: "home" },
+  { title: "About Us", id: "about" },
   { 
     title: "Our Fleet", 
     id: "fleet",
@@ -62,7 +63,8 @@ const NAV_LINKS = [
     ]
   },
   { title: "Winter", id: "winter-destinations" },
-  { title: "FIFA 2026", id: "fifa-world-cup-2026-charters" }
+  { title: "FIFA 2026", id: "fifa-world-cup-2026-charters" },
+  { title: "Contact Us", id: "contact" }
 ];
 
 const FLEET_DATA = {
@@ -117,6 +119,8 @@ const FLEET_DATA = {
 
 const SEO_DATA = {
   "home": { title: "Charter Bus Rentals Canada | Tours Coach Charters", desc: "Canada's Premier Charter Bus Rentals. From corporate retreats to school trips, we provide reliable transportation from coast to coast." },
+  "about": { title: "About Us | Tours Coach Charters", desc: "Learn about Canada Tours Coach LTD. We provide safe, reliable, and premium charter bus transportation across the country." },
+  "contact": { title: "Contact Us | Tours Coach Charters", desc: "Get in touch with Canada Tours Coach LTD for quotes, questions, and group transportation logistics." },
   "luxury-coach-bus-rental": { title: "Luxury Coach Bus Rental | Tours Coach Charters", desc: "Experience ultimate comfort for long-distance group travel with our 56 passenger luxury coaches." },
   "mini-coach-bus-rental": { title: "Mini Coach Bus Rental | Tours Coach Charters", desc: "Perfect for corporate retreats and medium-sized groups. Book a 24-36 passenger mini coach." },
   "14-passenger-van-rental": { title: "14 Passenger Van Rental | Tours Coach Charters", desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services." },
@@ -857,6 +861,215 @@ const TrustStatsBanner = () => (
   </div>
 );
 
+// New About Us Component
+const AboutUs = ({ setIsQuoteModalOpen }) => (
+  <div className="w-full bg-slate-50 flex flex-col font-sans">
+    <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
+       <div className="absolute inset-0 bg-black/50 z-10"></div>
+        <img 
+          src="/about-banner.jpg" 
+          alt="About Canada Tours Coach" 
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => { e.target.src = "/home-hero.jpg" }} // Fallback if no specific banner exists
+        />
+        <div className="relative z-20 container mx-auto px-4 animate-fade-in-up">
+          <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">
+            Our Story
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">Driven By Excellence</h1>
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+            Canada Tours Coach LTD has been the trusted partner for group transportation across the nation, delivering safety, comfort, and reliability on every journey.
+          </p>
+        </div>
+    </div>
+
+    <div className="container mx-auto px-4 py-16 lg:py-24">
+      <div className="flex flex-col lg:flex-row gap-16 items-center max-w-6xl mx-auto mb-20">
+        <div className="lg:w-1/2">
+          <h2 className="text-3xl lg:text-4xl font-black text-slate-900 mb-6 tracking-tight">Canada's Premier Transportation Partner</h2>
+          <p className="text-lg text-slate-600 mb-6 leading-relaxed">
+            At Canada Tours Coach LTD, we believe that the journey is just as important as the destination. For over 15 years, we have specialized in providing top-tier charter bus rentals, corporate shuttles, and specialized event transportation.
+          </p>
+          <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+            Headquartered in Pickering, Ontario, we proudly service the Greater Toronto Area and coordinate long-distance travel from coast to coast. From intimate family gatherings to massive corporate conventions and the upcoming FIFA 2026 World Cup, our logistics experts and professional drivers ensure your group moves effortlessly.
+          </p>
+          <button 
+            onClick={() => setIsQuoteModalOpen(true)}
+            className="inline-flex items-center justify-center bg-red-600 text-white font-bold py-3.5 px-8 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+          >
+            Book Your Journey <ArrowRight size={18} className="ml-2" />
+          </button>
+        </div>
+        <div className="lg:w-1/2 relative">
+          <div className="absolute inset-0 bg-blue-600 rounded-3xl translate-x-4 translate-y-4 -z-10 opacity-20"></div>
+          <img src="/home-hero.jpg" alt="Our Fleet on the road" className="rounded-3xl shadow-xl w-full object-cover h-[400px]" />
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          { title: "Safety First", icon: ShieldCheck, desc: "Every vehicle is rigorously maintained and every driver is fully certified. Your group's safety is our uncompromising priority." },
+          { title: "Premium Comfort", icon: Star, desc: "Modern amenities, spacious seating, and climate control ensure that your passengers can relax and enjoy the ride." },
+          { title: "Reliable Logistics", icon: Route, desc: "From multi-bus event coordination to simple airport transfers, our dispatch team ensures punctuality down to the minute." }
+        ].map((value, i) => (
+          <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center hover:-translate-y-1 hover:shadow-md transition-all">
+            <div className="w-16 h-16 bg-blue-50 text-blue-800 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <value.icon size={32} />
+            </div>
+            <h3 className="font-bold text-2xl mb-4 text-slate-900">{value.title}</h3>
+            <p className="text-slate-600 leading-relaxed">{value.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    <div className="mb-16">
+      <TrustStatsBanner />
+    </div>
+  </div>
+);
+
+// New Contact Us Component
+const ContactUs = ({ setIsQuoteModalOpen }) => {
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleMessageSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    e.target.reset();
+    setTimeout(() => setSubmitted(false), 5000);
+  };
+
+  return (
+    <div className="w-full bg-slate-50 flex flex-col font-sans">
+      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
+         <div className="absolute inset-0 bg-black/50 z-10"></div>
+          <img 
+            src="/contact-banner.jpg" 
+            alt="Contact Canada Tours Coach" 
+            className="absolute inset-0 w-full h-full object-cover"
+            onError={(e) => { e.target.src = "/home-hero.jpg" }}
+          />
+          <div className="relative z-20 container mx-auto px-4 animate-fade-in-up">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">Get In Touch</h1>
+            <p className="text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
+              Whether you need a quick quote, have a question about our fleet, or want to coordinate a massive event, our team is here to help 24/7.
+            </p>
+          </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-16 lg:py-24">
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
+          
+          {/* Contact Information Side */}
+          <div className="lg:w-5/12">
+            <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-blue-50 rounded-full blur-3xl -z-10 opacity-70"></div>
+              
+              <h2 className="text-3xl font-black text-slate-900 mb-8 tracking-tight">Contact Details</h2>
+              
+              <div className="space-y-8">
+                <div className="flex items-start group">
+                  <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800">
+                    <Map size={24} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-1">Head Office</h3>
+                    <p className="text-slate-600 leading-relaxed text-sm">
+                      <strong>Canada Tours Coach LTD</strong><br/>
+                      1315 Pickering Parkway, Suite 300<br/>
+                      Pickering, ON L1V 7G5
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start group">
+                  <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800">
+                    <Phone size={24} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-1">Phone Number</h3>
+                    <p className="text-slate-600 leading-relaxed text-sm">
+                      Call us anytime for immediate assistance or booking inquiries.<br/>
+                      <a href="tel:4162699555" className="text-blue-800 font-bold hover:text-red-600 transition-colors text-lg mt-1 block">(416) 269-9555</a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start group">
+                  <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800">
+                    <Mail size={24} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-1">Email Address</h3>
+                    <p className="text-slate-600 leading-relaxed text-sm">
+                      Send us an email and our logistics team will respond promptly.<br/>
+                      <a href="mailto:info@tourscoachcharter.com" className="text-blue-800 font-bold hover:text-red-600 transition-colors block mt-1">info@tourscoachcharter.com</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-12 pt-8 border-t border-slate-100">
+                <button 
+                  onClick={() => setIsQuoteModalOpen(true)}
+                  className="w-full bg-red-600 text-white font-bold py-4 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2"
+                >
+                  Get an Instant Quote <ArrowRight size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Simple Message Form Side */}
+          <div className="lg:w-7/12">
+             <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full">
+               <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight">Send Us a Message</h2>
+               <p className="text-slate-500 mb-8">Have a general question? Drop us a note below.</p>
+
+               {submitted ? (
+                  <div className="bg-green-50 border border-green-200 text-green-700 p-8 rounded-2xl text-center my-12 animate-fade-in-up">
+                    <CheckCircle className="mx-auto mb-4" size={56} />
+                    <h4 className="font-bold text-xl">Message Sent!</h4>
+                    <p className="text-sm mt-2">Thank you for reaching out. A member of our team will contact you shortly.</p>
+                  </div>
+                ) : (
+                 <form onSubmit={handleMessageSubmit} className="space-y-6">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div>
+                       <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Your Name</label>
+                       <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 focus:bg-white outline-none transition-all" placeholder="John Doe" />
+                     </div>
+                     <div>
+                       <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Email Address</label>
+                       <input required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 focus:bg-white outline-none transition-all" placeholder="john@example.com" />
+                     </div>
+                   </div>
+                   
+                   <div>
+                     <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Phone Number</label>
+                     <input type="tel" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 focus:bg-white outline-none transition-all" placeholder="(555) 123-4567" />
+                   </div>
+
+                   <div>
+                     <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">How can we help?</label>
+                     <textarea required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 focus:bg-white outline-none transition-all" rows="5" placeholder="Write your message here..."></textarea>
+                   </div>
+
+                   <button type="submit" className="w-full sm:w-auto bg-slate-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-blue-800 transition-colors shadow-md flex justify-center items-center group">
+                     Send Message <Send size={18} className="ml-3 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                   </button>
+                 </form>
+               )}
+             </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Home = ({ setPage, setIsQuoteModalOpen }) => {
   const [currentFleetIdx, setCurrentFleetIdx] = useState(0);
   const fleetList = Object.entries(FLEET_DATA);
@@ -1093,47 +1306,14 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
         {/* Logo Container */}
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-70">
-            {/* Make sure these images exist in your public/ folder */}
-            <img 
-              src="/accenture.png" 
-              alt="Accenture" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/uoft.png" 
-              alt="UofT" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/yorku.png" 
-              alt="YorkU" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/deloitte.png" 
-              alt="Deloitte" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/loblaws.png" 
-              alt="Loblaws" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/shoppers.png" 
-              alt="Shoppers Drug Mart" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/td.png" 
-              alt="TD Bank" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
-            <img 
-              src="/rogers.png" 
-              alt="Rogers" 
-              className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" 
-            />
+            <img src="/accenture.png" alt="Accenture" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
+            <img src="/uoft.png" alt="UofT" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
+            <img src="/yorku.png" alt="YorkU" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
+            <img src="/deloitte.png" alt="Deloitte" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
+            <img src="/loblaws.png" alt="Loblaws" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
+            <img src="/shoppers.png" alt="Shoppers Drug Mart" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
+            <img src="/td.png" alt="TD Bank" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
+            <img src="/rogers.png" alt="Rogers" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />
           </div>
         </div>
       </section>
@@ -1145,10 +1325,7 @@ const FleetTemplate = ({ data, setPage, setIsQuoteModalOpen }) => (
   <div className="pt-32 pb-24 w-full bg-slate-50 min-h-screen">
     <div className="container mx-auto px-4">
       
-      {/* Main Vehicle Card - Modernized */}
       <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col lg:flex-row mb-16 border border-slate-100 transform transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] relative">
-        
-        {/* Image Section with Overlay & Hover Zoom */}
         <div className="lg:w-1/2 relative min-h-[400px] lg:min-h-[500px] group overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent z-10 opacity-60"></div>
           <img 
@@ -1156,7 +1333,6 @@ const FleetTemplate = ({ data, setPage, setIsQuoteModalOpen }) => (
             alt={data.name} 
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           />
-          {/* Floating Frosted Glass Capacity Badge */}
           <div className="absolute top-6 left-6 z-20">
             <span className="bg-white/90 backdrop-blur-md text-blue-900 px-5 py-2.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-2 border border-white/20">
               <Users size={18} className="text-red-600" /> 
@@ -1165,18 +1341,11 @@ const FleetTemplate = ({ data, setPage, setIsQuoteModalOpen }) => (
           </div>
         </div>
 
-        {/* Content Section */}
         <div className="lg:w-1/2 p-8 lg:p-14 flex flex-col justify-center relative bg-white">
-          {/* Decorative background glow */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
 
-          <h1 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">
-            {data.name}
-          </h1>
-          
-          <p className="text-lg text-slate-600 mb-10 leading-relaxed">
-            {data.desc}
-          </p>
+          <h1 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">{data.name}</h1>
+          <p className="text-lg text-slate-600 mb-10 leading-relaxed">{data.desc}</p>
           
           <div className="mb-12">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Premium Features</h3>
@@ -1205,14 +1374,12 @@ const FleetTemplate = ({ data, setPage, setIsQuoteModalOpen }) => (
         <TrustStatsBanner />
       </div>
 
-      {/* Modernized Reviews Section */}
       {data.reviews && data.reviews.length > 0 && (
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-black text-blue-900 mb-4 tracking-tight">Client Experiences</h2>
             <p className="text-slate-600 text-lg">Hear directly from groups who have traveled aboard the {data.name}.</p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {data.reviews.map((review, i) => (
               <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 relative overflow-hidden">
@@ -1242,17 +1409,12 @@ const GenericPage = ({ title, subtitle, bgImage, setPage, setIsQuoteModalOpen })
   <div className="w-full min-h-screen pt-24 bg-gray-50 flex flex-col">
     <div className="relative py-24 bg-blue-800 text-center">
        <div className="absolute inset-0 bg-black/50 z-10"></div>
-        <img 
-          src={bgImage || "/destination-default.jpg"} 
-          alt="Banner" 
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src={bgImage || "/destination-default.jpg"} alt="Banner" className="absolute inset-0 w-full h-full object-cover" />
         <div className="relative z-20 container mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4">{title}</h1>
           <p className="text-xl text-gray-200 max-w-2xl mx-auto">{subtitle}</p>
         </div>
     </div>
-
     <div className="container mx-auto px-4 py-16 flex-grow">
       <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
         <h2 className="text-2xl font-bold text-blue-800 mb-6">Plan Your Group Transportation</h2>
@@ -1264,10 +1426,7 @@ const GenericPage = ({ title, subtitle, bgImage, setPage, setIsQuoteModalOpen })
             <h3 className="font-bold text-lg mb-1">Ready to book your trip to {title}?</h3>
             <p className="text-sm text-gray-700">Fill out our quote form or call us directly at <strong>{COMPANY_INFO.phone}</strong>.</p>
           </div>
-          <button 
-            onClick={() => setIsQuoteModalOpen(true)}
-            className="bg-blue-800 text-white px-6 py-3 rounded hover:bg-blue-900 transition font-bold shadow-md whitespace-nowrap"
-          >
+          <button onClick={() => setIsQuoteModalOpen(true)} className="bg-blue-800 text-white px-6 py-3 rounded hover:bg-blue-900 transition font-bold shadow-md whitespace-nowrap">
             Get a Free Quote
           </button>
         </div>
@@ -1283,15 +1442,9 @@ const DestinationTemplate = ({ data, setIsQuoteModalOpen }) => {
     <div className="w-full bg-gray-50 flex flex-col font-sans">
       <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center">
          <div className="absolute inset-0 bg-black/60 z-10"></div>
-          <img 
-            src={data.img} 
-            alt={`${data.city} Banner`} 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+          <img src={data.img} alt={`${data.city} Banner`} className="absolute inset-0 w-full h-full object-cover" />
           <div className="relative z-20 container mx-auto px-4">
-            <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">
-              PREMIER {data.city} SERVICE
-            </div>
+            <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">PREMIER {data.city} SERVICE</div>
             <h1 className="text-4xl md:text-5xl font-black text-white mb-4">{data.title}</h1>
             <p className="text-xl text-gray-200 max-w-2xl mx-auto">{data.subtitle}</p>
           </div>
@@ -1301,27 +1454,18 @@ const DestinationTemplate = ({ data, setIsQuoteModalOpen }) => {
         <div className="flex flex-col lg:flex-row gap-12 max-w-6xl mx-auto">
           <div className="lg:w-2/3">
             <h2 className="text-3xl font-black text-blue-800 mb-6">Compact Luxury & Maximum Comfort in {data.city}</h2>
-            {data.content.map((p, i) => (
-              <p key={i} className="text-gray-700 mb-5 leading-relaxed text-lg">{p}</p>
-            ))}
+            {data.content.map((p, i) => (<p key={i} className="text-gray-700 mb-5 leading-relaxed text-lg">{p}</p>))}
 
             <div className="mt-16">
               <h3 className="text-2xl font-bold text-blue-800 mb-6">Frequently Asked Questions</h3>
               <div className="space-y-4">
                 {data.faqs.map((faq, i) => (
                   <div key={i} className="border border-gray-200 rounded-lg bg-white overflow-hidden shadow-sm">
-                    <button 
-                      className="w-full px-6 py-4 text-left font-bold text-gray-800 flex justify-between items-center hover:bg-gray-50 transition"
-                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    >
+                    <button className="w-full px-6 py-4 text-left font-bold text-gray-800 flex justify-between items-center hover:bg-gray-50 transition" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                       {faq.q}
                       <ChevronDown size={20} className={`transform transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
                     </button>
-                    {openFaq === i && (
-                      <div className="px-6 pb-4 pt-2 text-gray-600 bg-gray-50 border-t border-gray-100">
-                        {faq.a}
-                      </div>
-                    )}
+                    {openFaq === i && (<div className="px-6 pb-4 pt-2 text-gray-600 bg-gray-50 border-t border-gray-100">{faq.a}</div>)}
                   </div>
                 ))}
               </div>
@@ -1334,9 +1478,7 @@ const DestinationTemplate = ({ data, setIsQuoteModalOpen }) => {
               <div className="space-y-6">
                 {data.highlights.map((item, i) => (
                   <div key={i} className="flex items-start">
-                    <div className="bg-blue-100 text-blue-800 p-3 rounded-lg mr-4 flex-shrink-0">
-                      <item.icon size={24} />
-                    </div>
+                    <div className="bg-blue-100 text-blue-800 p-3 rounded-lg mr-4 flex-shrink-0"><item.icon size={24} /></div>
                     <div>
                       <h4 className="font-bold text-gray-800 mb-1">{item.title}</h4>
                       <p className="text-sm text-gray-600 leading-snug">{item.desc}</p>
@@ -1346,10 +1488,7 @@ const DestinationTemplate = ({ data, setIsQuoteModalOpen }) => {
               </div>
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <p className="text-sm text-gray-600 mb-4 text-center">Ready to arrange your {data.city} transportation?</p>
-                <button 
-                  onClick={() => setIsQuoteModalOpen(true)}
-                  className="w-full bg-blue-800 text-white font-bold py-4 rounded-lg hover:bg-blue-900 transition shadow-lg flex justify-center items-center"
-                >
+                <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-blue-800 text-white font-bold py-4 rounded-lg hover:bg-blue-900 transition shadow-lg flex justify-center items-center">
                   Request a Quote <ArrowRight size={18} className="ml-2" />
                 </button>
               </div>
@@ -1361,172 +1500,11 @@ const DestinationTemplate = ({ data, setIsQuoteModalOpen }) => {
   );
 };
 
-const FifaPage = ({ setIsQuoteModalOpen }) => {
-  return (
-    <div className="w-full bg-gray-50 flex flex-col font-sans overflow-hidden">
-      <style>{`
-        @keyframes kenBurns {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.12); }
-        }
-        .animate-ken-burns {
-          animation: kenBurns 20s ease-out forwards;
-          transform-origin: center;
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .delay-150 { animation-delay: 150ms; }
-        .delay-300 { animation-delay: 300ms; }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-        .animate-float {
-          animation: float 3.5s ease-in-out infinite;
-        }
-        
-        @keyframes shine {
-          0% { left: -100%; }
-          20% { left: 200%; }
-          100% { left: 200%; }
-        }
-        .animate-shine::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 50%;
-          height: 100%;
-          background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-          transform: skewX(-20deg);
-          animation: shine 4s infinite;
-        }
-      `}</style>
-
-      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-black/60 z-10"></div>
-        <img 
-          src="/fifa-banner.jpg" 
-          alt="FIFA World Cup 2026 Banner" 
-          className="absolute inset-0 w-full h-full object-cover animate-ken-burns"
-        />
-        <div className="relative z-20 container mx-auto px-4">
-          <div className="inline-block bg-red-600 text-white font-bold px-4 py-1.5 rounded-full text-sm mb-6 uppercase tracking-widest shadow-[0_0_20px_rgba(220,38,38,0.5)] animate-fade-in-up" style={{ opacity: 0 }}>
-            Official Event Transportation
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 drop-shadow-lg animate-fade-in-up delay-150" style={{ opacity: 0 }}>
-            FIFA World Cup 2026™ <br className="hidden md:block"/> Coach Charters
-          </h1>
-          <p className="text-xl text-gray-200 max-w-2xl mx-auto drop-shadow-md animate-fade-in-up delay-300" style={{ opacity: 0 }}>
-            Premium group transportation and logistics for matches in Toronto and Vancouver.
-          </p>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-16 flex-grow">
-        <div className="flex flex-col lg:flex-row gap-12 max-w-6xl mx-auto">
-          <div className="lg:w-2/3">
-            <h2 className="text-3xl font-black text-blue-800 mb-6">Experience the Global Game in Canada</h2>
-            <p className="text-gray-700 mb-5 leading-relaxed text-lg">
-              The FIFA World Cup 2026™ is coming to North America, and Canada is proud to host matches in Toronto and Vancouver. With millions of fans, corporate sponsors, and teams descending on these cities, reliable group transportation is absolutely essential.
-            </p>
-            <p className="text-gray-700 mb-5 leading-relaxed text-lg">
-              Tours Coach Charters offers comprehensive charter bus solutions for the tournament. Whether you need VIP corporate shuttles to BMO Field in Toronto, large-scale fan transfers to BC Place in Vancouver, or complete team logistics, our modern fleet is ready.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 mb-12">
-              <div className="bg-white p-6 rounded-xl shadow-md border-b-4 border-transparent hover:border-red-600 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,51,160,0.15)] transition-all duration-300 group">
-                <h3 className="text-xl font-bold text-blue-800 mb-3 flex items-center group-hover:text-red-600 transition-colors">
-                  <Map className="text-red-600 mr-2" size={24} /> Toronto Host City
-                </h3>
-                <p className="text-gray-600 text-sm">Providing dedicated shuttles from Pearson Airport (YYZ), downtown hotels, and fan zones directly to Toronto Stadium (BMO Field). Avoid game-day traffic and transit crowding with our dedicated professional drivers.</p>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-md border-b-4 border-transparent hover:border-red-600 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,51,160,0.15)] transition-all duration-300 group">
-                <h3 className="text-xl font-bold text-blue-800 mb-3 flex items-center group-hover:text-red-600 transition-colors">
-                  <Map className="text-red-600 mr-2" size={24} /> Vancouver Host City
-                </h3>
-                <p className="text-gray-600 text-sm">Seamless transportation across the Lower Mainland. Shuttles from YVR Airport and downtown Vancouver straight to BC Place, ensuring your group arrives together, safely, and on time.</p>
-              </div>
-            </div>
-
-            <h3 className="text-2xl font-bold text-blue-800 mb-6">Why Book With Us for FIFA 2026?</h3>
-            <ul className="space-y-4 mb-8">
-              <li className="flex items-start group">
-                <div className="bg-green-100 p-1.5 rounded-full mr-3 mt-0.5 group-hover:bg-green-200 transition-colors">
-                  <CheckCircle className="text-green-600 flex-shrink-0" size={18} />
-                </div>
-                <div>
-                  <strong className="block text-gray-800">Advanced Booking Priority</strong>
-                  <span className="text-gray-600 text-sm">Secure your vehicles well in advance before fleet availability runs out across the country. Demand is expected to be unprecedented.</span>
-                </div>
-              </li>
-              <li className="flex items-start group">
-                 <div className="bg-green-100 p-1.5 rounded-full mr-3 mt-0.5 group-hover:bg-green-200 transition-colors">
-                  <CheckCircle className="text-green-600 flex-shrink-0" size={18} />
-                </div>
-                <div>
-                  <strong className="block text-gray-800">Custom Tournament Itineraries</strong>
-                  <span className="text-gray-600 text-sm">Flexible scheduling for multi-day rentals, training camp transfers, airport pick-ups, and post-match celebrations.</span>
-                </div>
-              </li>
-              <li className="flex items-start group">
-                 <div className="bg-green-100 p-1.5 rounded-full mr-3 mt-0.5 group-hover:bg-green-200 transition-colors">
-                  <CheckCircle className="text-green-600 flex-shrink-0" size={18} />
-                </div>
-                <div>
-                  <strong className="block text-gray-800">VIP & Corporate Hospitality</strong>
-                  <span className="text-gray-600 text-sm">Premium luxury coaches and executive mini-buses designed to impress corporate guests, sponsors, and international dignitaries.</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div className="lg:w-1/3">
-            <div className="bg-blue-800 rounded-xl shadow-2xl border border-blue-700 p-8 sticky top-32 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-red-600 rounded-full blur-[60px] opacity-40 pointer-events-none"></div>
-              
-              <Trophy size={56} className="text-red-500 mb-6 animate-float drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)]" />
-              <h3 className="text-2xl font-bold mb-4">High Demand Alert</h3>
-              <p className="text-blue-100 mb-6 text-sm leading-relaxed">
-                Transportation inventory for the FIFA World Cup 2026™ is booking up rapidly. We strongly advise corporate groups, travel agencies, and large fan clubs to secure their charter buses immediately to guarantee availability.
-              </p>
-              <div className="space-y-4 relative z-10">
-                <div className="flex items-center text-sm bg-white/10 backdrop-blur-sm p-3 rounded border border-white/5">
-                  <Users className="text-red-400 mr-3" size={20} /> Group Sizes: 14 to 56+
-                </div>
-                <div className="flex items-center text-sm bg-white/10 backdrop-blur-sm p-3 rounded border border-white/5">
-                  <CalendarCheck className="text-red-400 mr-3" size={20} /> Multi-Day Charters Available
-                </div>
-              </div>
-              <div className="mt-8 pt-6 border-t border-white/10 relative z-10">
-                <button 
-                  onClick={() => setIsQuoteModalOpen(true)}
-                  className="w-full bg-red-600 text-white font-bold py-4 rounded-lg hover:bg-red-700 transition shadow-[0_0_20px_rgba(220,38,38,0.4)] flex justify-center items-center overflow-hidden relative animate-shine group"
-                >
-                  <span className="relative z-10 flex items-center">
-                    Secure Your Fleet <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Footer = () => (
+const Footer = ({ setPage }) => (
   <footer className="bg-gray-900 text-gray-300 py-12 border-t-4 border-red-600">
     <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
-        <div className="mb-6 bg-white inline-block p-2 rounded-lg">
+        <div className="mb-6 bg-white inline-block p-2 rounded-lg cursor-pointer" onClick={() => setPage('home')}>
           <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 w-auto object-contain" />
         </div>
         <p className="text-sm mb-4">Canada's Premier Charter Bus Rentals. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
@@ -1544,10 +1522,10 @@ const Footer = () => (
       <div>
         <h4 className="text-white font-bold text-lg mb-4">Quick Links</h4>
         <ul className="space-y-2 text-sm">
-          <li><a href="#" className="hover:text-red-500 transition">Our Fleet</a></li>
-          <li><a href="#" className="hover:text-red-500 transition">Destinations</a></li>
-          <li><a href="#" className="hover:text-red-500 transition">Terms & Conditions</a></li>
-          <li><a href="#" className="hover:text-red-500 transition">Privacy Policy</a></li>
+          <li><button onClick={() => { setPage('about'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">About Us</button></li>
+          <li><button onClick={() => { setPage('contact'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Contact Us</button></li>
+          <li><button onClick={() => { setPage('luxury-coach-bus-rental'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Our Fleet</button></li>
+          <li><button onClick={() => { setPage('charter-bus-rental-toronto'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Destinations</button></li>
         </ul>
       </div>
 
@@ -1561,12 +1539,11 @@ const Footer = () => (
       </div>
     </div>
     <div className="container mx-auto px-4 mt-8 pt-8 border-t border-gray-800 text-sm text-center">
-      &copy; {new Date().getFullYear()} {COMPANY_INFO.name}. All rights reserved.
+      &copy; {new Date().getFullYear()} Canada Tours Coach LTD. All rights reserved.
     </div>
   </footer>
 );
 
-// The Newly Updated Chat Widget with dynamic resize logic
 const ChatWidget = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -1576,7 +1553,6 @@ const ChatWidget = () => {
         setIsChatOpen(event.data.isOpen);
       }
     };
-
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
@@ -1587,16 +1563,11 @@ const ChatWidget = () => {
       title="Live Support"
       allowTransparency={true}
       style={{
-        position: 'fixed', 
-        bottom: '0', 
-        right: '0', 
+        position: 'fixed', bottom: '0', right: '0', 
         width: isChatOpen ? '400px' : '150px', 
         height: isChatOpen ? '600px' : '150px', 
-        border: 'none', 
-        zIndex: 999999, 
-        background: 'transparent', 
-        pointerEvents: 'auto',
-        transition: 'all 0.3s ease-in-out'
+        border: 'none', zIndex: 999999, background: 'transparent', 
+        pointerEvents: 'auto', transition: 'all 0.3s ease-in-out'
       }}
     />
   );
@@ -1612,11 +1583,8 @@ export default function App() {
         setCurrentPage(e.state.page);
       } else {
         const path = window.location.pathname.replace('/', '');
-        if (path && SEO_DATA[path]) {
-          setCurrentPage(path);
-        } else {
-          setCurrentPage('home');
-        }
+        if (path && SEO_DATA[path]) setCurrentPage(path);
+        else setCurrentPage('home');
       }
     };
     window.addEventListener('popstate', handlePopState);
@@ -1625,7 +1593,6 @@ export default function App() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     const seo = SEO_DATA[currentPage] || { title: "Tours Coach Charters", desc: "Reliable transportation across Canada." };
     document.title = seo.title;
 
@@ -1642,13 +1609,13 @@ export default function App() {
       if (window.location.pathname !== newUrl) {
         window.history.pushState({ page: currentPage }, seo.title, newUrl);
       }
-    } catch (err) {
-      console.warn("History API restricted in this environment.");
-    }
+    } catch (err) {}
   }, [currentPage]);
 
   const renderPage = () => {
     if (currentPage === 'home') return <Home setPage={setCurrentPage} setIsQuoteModalOpen={setIsQuoteModalOpen} />;
+    if (currentPage === 'about') return <AboutUs setIsQuoteModalOpen={setIsQuoteModalOpen} />;
+    if (currentPage === 'contact') return <ContactUs setIsQuoteModalOpen={setIsQuoteModalOpen} />;
     if (FLEET_DATA[currentPage]) return <FleetTemplate data={FLEET_DATA[currentPage]} setPage={setCurrentPage} setIsQuoteModalOpen={setIsQuoteModalOpen} />;
     if (DESTINATION_DATA[currentPage]) return <DestinationTemplate data={DESTINATION_DATA[currentPage]} setIsQuoteModalOpen={setIsQuoteModalOpen} />;
     
@@ -1656,13 +1623,7 @@ export default function App() {
       case 'fifa-world-cup-2026-charters':
         return <FifaPage setIsQuoteModalOpen={setIsQuoteModalOpen} />;
       case 'winter-destinations':
-        return <GenericPage 
-                  title="Winter Destinations" 
-                  subtitle="Dedicated charter services to Whistler, Blue Mountain, and Banff." 
-                  bgImage="/winter-banner.jpg" 
-                  setPage={setCurrentPage}
-                  setIsQuoteModalOpen={setIsQuoteModalOpen}
-                />;
+        return <GenericPage title="Winter Destinations" subtitle="Dedicated charter services to Whistler, Blue Mountain, and Banff." bgImage="/winter-banner.jpg" setPage={setCurrentPage} setIsQuoteModalOpen={setIsQuoteModalOpen} />;
       default:
         return <Home setPage={setCurrentPage} setIsQuoteModalOpen={setIsQuoteModalOpen} />;
     }
@@ -1676,17 +1637,13 @@ export default function App() {
         {renderPage()}
       </main>
       
-      <Footer />
+      <Footer setPage={setCurrentPage} />
       
-      {/* Dynamic Chat Widget rendered on every page */}
       <ChatWidget />
 
       {isQuoteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6 overflow-y-auto">
-          <div 
-            className="w-full max-w-2xl my-auto animate-fade-in-up"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="w-full max-w-2xl my-auto animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
             <QuoteForm onClose={() => setIsQuoteModalOpen(false)} />
           </div>
         </div>

@@ -617,7 +617,7 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
 const QuoteForm = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [tripType, setTripType] = useState('return'); // State for One Way / Round Trip
+  const [tripType, setTripType] = useState('return');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -639,7 +639,7 @@ const QuoteForm = ({ onClose }) => {
       if (response.ok) {
         setSubmitted(true);
         form.reset();
-        setTripType('return'); // Reset the toggle back to default
+        setTripType('return');
         setTimeout(() => setSubmitted(false), 5000);
       } else {
         alert("There was a problem sending your quote. Please try calling us instead.");
@@ -706,7 +706,6 @@ const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          {/* NEW: Trip Type Toggle Radio Buttons */}
           <div className="flex space-x-6 py-1">
             <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
               <input 
@@ -732,14 +731,12 @@ const QuoteForm = ({ onClose }) => {
             </label>
           </div>
 
-          {/* DYNAMIC DATES: Layout changes based on the toggle */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Departure Date *</label>
               <input required name="departDate" type="date" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
             
-            {/* The Return Date field only renders if 'return' is selected */}
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Return Date *</label>
@@ -822,7 +819,6 @@ const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
 
 const TrustStatsBanner = () => (
   <div className="relative w-full max-w-6xl mx-auto rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl py-16 px-6 md:px-12 my-8">
-    {/* Cinematic Ambient Glow Effects in Background */}
     <div className="absolute inset-0 z-0 pointer-events-none">
       <div className="absolute top-[-30%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-[-30%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full"></div>
@@ -836,32 +832,24 @@ const TrustStatsBanner = () => (
         { value: 24, suffix: "/7", label: "Client Support", icon: Headphones }
       ].map((stat, i) => (
         <div key={i} className="flex flex-col items-center group cursor-default">
-          
-          {/* Frosted Glass Icon Container with Hover Glow */}
           <div className="relative mb-6">
             <div className="absolute inset-0 bg-red-600 rounded-full blur opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
             <div className="relative bg-slate-800/80 backdrop-blur-sm border border-slate-700 w-16 h-16 rounded-2xl flex items-center justify-center text-slate-300 group-hover:bg-red-600 group-hover:border-red-500 group-hover:text-white group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 shadow-xl">
               <stat.icon size={28} />
             </div>
           </div>
-          
-          {/* Gradient Animated Numbers */}
           <div className="text-5xl md:text-5xl lg:text-6xl font-black bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent mb-3 leading-none tracking-tight group-hover:scale-105 transition-transform duration-500">
             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
           </div>
-          
-          {/* Refined Label */}
           <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300 transition-colors duration-300">
             {stat.label}
           </div>
-          
         </div>
       ))}
     </div>
   </div>
 );
 
-// New About Us Component
 const AboutUs = ({ setIsQuoteModalOpen }) => (
   <div className="w-full bg-slate-50 flex flex-col font-sans">
     <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
@@ -870,7 +858,7 @@ const AboutUs = ({ setIsQuoteModalOpen }) => (
           src="/about-banner.jpg" 
           alt="About Canada Tours Coach" 
           className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => { e.target.src = "/home-hero.jpg" }} // Fallback if no specific banner exists
+          onError={(e) => { e.target.src = "/home-hero.jpg" }}
         />
         <div className="relative z-20 container mx-auto px-4 animate-fade-in-up">
           <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">
@@ -929,7 +917,6 @@ const AboutUs = ({ setIsQuoteModalOpen }) => (
   </div>
 );
 
-// New Contact Us Component
 const ContactUs = ({ setIsQuoteModalOpen }) => {
   const [submitted, setSubmitted] = useState(false);
 
@@ -961,7 +948,6 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
       <div className="container mx-auto px-4 py-16 lg:py-24">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
           
-          {/* Contact Information Side */}
           <div className="lg:w-5/12">
             <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-blue-50 rounded-full blur-3xl -z-10 opacity-70"></div>
@@ -1021,7 +1007,6 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
             </div>
           </div>
 
-          {/* Simple Message Form Side */}
           <div className="lg:w-7/12">
              <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full">
                <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight">Send Us a Message</h2>
@@ -1071,7 +1056,7 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
 };
 
 // ==========================================
-// FIFA PAGE COMPONENT (RESTORED)
+// FIFA PAGE COMPONENT 
 // ==========================================
 const FifaPage = ({ setIsQuoteModalOpen }) => {
   return (
@@ -1155,15 +1140,38 @@ const FifaPage = ({ setIsQuoteModalOpen }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 mb-12">
               <div className="bg-white p-6 rounded-xl shadow-md border-b-4 border-transparent hover:border-red-600 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,51,160,0.15)] transition-all duration-300 group">
                 <h3 className="text-xl font-bold text-blue-800 mb-3 flex items-center group-hover:text-red-600 transition-colors">
-                  <Map className="text-red-600 mr-2" size={24} /> Toronto Host City
+                  <Map className="text-red-600 mr-2" size={24} /> Toronto Stadium (BMO Field)
                 </h3>
-                <p className="text-gray-600 text-sm">Providing dedicated shuttles from Pearson Airport (YYZ), downtown hotels, and fan zones directly to Toronto Stadium (BMO Field). Avoid game-day traffic and transit crowding with our dedicated professional drivers.</p>
+                <p className="text-gray-600 text-sm mb-3">Providing dedicated shuttles from Pearson Airport (YYZ), downtown hotels, and fan zones directly to Toronto Stadium. Avoid game-day traffic and transit crowding.</p>
+                <div className="bg-slate-50 p-3 rounded text-sm text-slate-700 border border-slate-100">
+                  <strong className="block mb-2 text-blue-900 border-b border-slate-200 pb-1">Official Match Schedule:</strong>
+                  <ul className="space-y-1">
+                    <li><strong>Jun 12:</strong> Canada vs. Bosnia and Herzegovina</li>
+                    <li><strong>Jun 17:</strong> Ghana vs. Panama</li>
+                    <li><strong>Jun 20:</strong> Germany vs. Cote d'Ivoire</li>
+                    <li><strong>Jun 23:</strong> Panama vs. Croatia</li>
+                    <li><strong>Jun 26:</strong> Senegal vs. Iraq</li>
+                    <li><strong>Jul 2:</strong> Round of 32 Match</li>
+                  </ul>
+                </div>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-md border-b-4 border-transparent hover:border-red-600 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,51,160,0.15)] transition-all duration-300 group">
                 <h3 className="text-xl font-bold text-blue-800 mb-3 flex items-center group-hover:text-red-600 transition-colors">
-                  <Map className="text-red-600 mr-2" size={24} /> Vancouver Host City
+                  <Map className="text-red-600 mr-2" size={24} /> Vancouver Stadium (BC Place)
                 </h3>
-                <p className="text-gray-600 text-sm">Seamless transportation across the Lower Mainland. Shuttles from YVR Airport and downtown Vancouver straight to BC Place, ensuring your group arrives together, safely, and on time.</p>
+                <p className="text-gray-600 text-sm mb-3">Seamless transportation across the Lower Mainland. Shuttles from YVR Airport and downtown Vancouver straight to BC Place, ensuring your group arrives together, safely, and on time.</p>
+                <div className="bg-slate-50 p-3 rounded text-sm text-slate-700 border border-slate-100">
+                  <strong className="block mb-2 text-blue-900 border-b border-slate-200 pb-1">Official Match Schedule:</strong>
+                  <ul className="space-y-1">
+                    <li><strong>Jun 13:</strong> Türkiye vs. Australia</li>
+                    <li><strong>Jun 18:</strong> Qatar vs. Canada</li>
+                    <li><strong>Jun 21:</strong> Egypt vs. New Zealand</li>
+                    <li><strong>Jun 24:</strong> Switzerland vs. Canada</li>
+                    <li><strong>Jun 26:</strong> Belgium vs. New Zealand</li>
+                    <li><strong>Jul 2:</strong> Round of 32 Match</li>
+                    <li><strong>Jul 7:</strong> Round of 16 Match</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -1233,6 +1241,7 @@ const FifaPage = ({ setIsQuoteModalOpen }) => {
     </div>
   );
 };
+// ==========================================
 
 const Home = ({ setPage, setIsQuoteModalOpen }) => {
   const [currentFleetIdx, setCurrentFleetIdx] = useState(0);

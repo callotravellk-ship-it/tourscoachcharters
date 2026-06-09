@@ -302,7 +302,7 @@ const DESTINATION_DATA = {
     ],
     faqs: [
       { q: "How do you handle late-night wedding transportation?", a: "We offer flexible scheduling to ensure safe, late-night return trips for your wedding guests back to their hotels or homes." },
-      { q: "Can we book a bus for a corporate shopping day?", a: "Yes, we frequently book group shopping excursions, utilizing our buses' ample undercarriage storage for purchases." }
+      { q: "Can we book a bus for a corporate shopping day?", a: "Yes, frequently book group shopping excursions, utilizing our buses' ample undercarriage storage for purchases." }
     ]
   },
   "charter-bus-rental-vaughan": {
@@ -1070,6 +1070,167 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
   );
 };
 
+const FifaPage = ({ setIsQuoteModalOpen }) => {
+  return (
+    <div className="w-full bg-gray-50 flex flex-col font-sans overflow-hidden">
+      <style>{`
+        @keyframes kenBurns {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.12); }
+        }
+        .animate-ken-burns {
+          animation: kenBurns 20s ease-out forwards;
+          transform-origin: center;
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-150 { animation-delay: 150ms; }
+        .delay-300 { animation-delay: 300ms; }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-12px); }
+        }
+        .animate-float {
+          animation: float 3.5s ease-in-out infinite;
+        }
+        
+        @keyframes shine {
+          0% { left: -100%; }
+          20% { left: 200%; }
+          100% { left: 200%; }
+        }
+        .animate-shine::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+          transform: skewX(-20deg);
+          animation: shine 4s infinite;
+        }
+      `}</style>
+
+      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-black/60 z-10"></div>
+        <img 
+          src="/fifa-banner.jpg" 
+          alt="FIFA World Cup 2026 Banner" 
+          className="absolute inset-0 w-full h-full object-cover animate-ken-burns"
+        />
+        <div className="relative z-20 container mx-auto px-4">
+          <div className="inline-block bg-red-600 text-white font-bold px-4 py-1.5 rounded-full text-sm mb-6 uppercase tracking-widest shadow-[0_0_20px_rgba(220,38,38,0.5)] animate-fade-in-up" style={{ opacity: 0 }}>
+            Official Event Transportation
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 drop-shadow-lg animate-fade-in-up delay-150" style={{ opacity: 0 }}>
+            FIFA World Cup 2026™ <br className="hidden md:block"/> Coach Charters
+          </h1>
+          <p className="text-xl text-gray-200 max-w-2xl mx-auto drop-shadow-md animate-fade-in-up delay-300" style={{ opacity: 0 }}>
+            Premium group transportation and logistics for matches in Toronto and Vancouver.
+          </p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-16 flex-grow">
+        <div className="flex flex-col lg:flex-row gap-12 max-w-6xl mx-auto">
+          <div className="lg:w-2/3">
+            <h2 className="text-3xl font-black text-blue-800 mb-6">Experience the Global Game in Canada</h2>
+            <p className="text-gray-700 mb-5 leading-relaxed text-lg">
+              The FIFA World Cup 2026™ is coming to North America, and Canada is proud to host matches in Toronto and Vancouver. With millions of fans, corporate sponsors, and teams descending on these cities, reliable group transportation is absolutely essential.
+            </p>
+            <p className="text-gray-700 mb-5 leading-relaxed text-lg">
+              Tours Coach Charters offers comprehensive charter bus solutions for the tournament. Whether you need VIP corporate shuttles to BMO Field in Toronto, large-scale fan transfers to BC Place in Vancouver, or complete team logistics, our modern fleet is ready.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 mb-12">
+              <div className="bg-white p-6 rounded-xl shadow-md border-b-4 border-transparent hover:border-red-600 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,51,160,0.15)] transition-all duration-300 group">
+                <h3 className="text-xl font-bold text-blue-800 mb-3 flex items-center group-hover:text-red-600 transition-colors">
+                  <Map className="text-red-600 mr-2" size={24} /> Toronto Host City
+                </h3>
+                <p className="text-gray-600 text-sm">Providing dedicated shuttles from Pearson Airport (YYZ), downtown hotels, and fan zones directly to Toronto Stadium (BMO Field). Avoid game-day traffic and transit crowding with our dedicated professional drivers.</p>
+              </div>
+              <div className="bg-white p-6 rounded-xl shadow-md border-b-4 border-transparent hover:border-red-600 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,51,160,0.15)] transition-all duration-300 group">
+                <h3 className="text-xl font-bold text-blue-800 mb-3 flex items-center group-hover:text-red-600 transition-colors">
+                  <Map className="text-red-600 mr-2" size={24} /> Vancouver Host City
+                </h3>
+                <p className="text-gray-600 text-sm">Seamless transportation across the Lower Mainland. Shuttles from YVR Airport and downtown Vancouver straight to BC Place, ensuring your group arrives together, safely, and on time.</p>
+              </div>
+            </div>
+
+            <h3 className="text-2xl font-bold text-blue-800 mb-6">Why Book With Us for FIFA 2026?</h3>
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-start group">
+                <div className="bg-green-100 p-1.5 rounded-full mr-3 mt-0.5 group-hover:bg-green-200 transition-colors">
+                  <CheckCircle className="text-green-600 flex-shrink-0" size={18} />
+                </div>
+                <div>
+                  <strong className="block text-gray-800">Advanced Booking Priority</strong>
+                  <span className="text-gray-600 text-sm">Secure your vehicles well in advance before fleet availability runs out across the country. Demand is expected to be unprecedented.</span>
+                </div>
+              </li>
+              <li className="flex items-start group">
+                 <div className="bg-green-100 p-1.5 rounded-full mr-3 mt-0.5 group-hover:bg-green-200 transition-colors">
+                  <CheckCircle className="text-green-600 flex-shrink-0" size={18} />
+                </div>
+                <div>
+                  <strong className="block text-gray-800">Custom Tournament Itineraries</strong>
+                  <span className="text-gray-600 text-sm">Flexible scheduling for multi-day rentals, training camp transfers, airport pick-ups, and post-match celebrations.</span>
+                </div>
+              </li>
+              <li className="flex items-start group">
+                 <div className="bg-green-100 p-1.5 rounded-full mr-3 mt-0.5 group-hover:bg-green-200 transition-colors">
+                  <CheckCircle className="text-green-600 flex-shrink-0" size={18} />
+                </div>
+                <div>
+                  <strong className="block text-gray-800">VIP & Corporate Hospitality</strong>
+                  <span className="text-gray-600 text-sm">Premium luxury coaches and executive mini-buses designed to impress corporate guests, sponsors, and international dignitaries.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div className="lg:w-1/3">
+            <div className="bg-blue-800 rounded-xl shadow-2xl border border-blue-700 p-8 sticky top-32 text-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-red-600 rounded-full blur-[60px] opacity-40 pointer-events-none"></div>
+              
+              <Trophy size={56} className="text-red-500 mb-6 animate-float drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)]" />
+              <h3 className="text-2xl font-bold mb-4">High Demand Alert</h3>
+              <p className="text-blue-100 mb-6 text-sm leading-relaxed">
+                Transportation inventory for the FIFA World Cup 2026™ is booking up rapidly. We strongly advise corporate groups, travel agencies, and large fan clubs to secure their charter buses immediately to guarantee availability.
+              </p>
+              <div className="space-y-4 relative z-10">
+                <div className="flex items-center text-sm bg-white/10 backdrop-blur-sm p-3 rounded border border-white/5">
+                  <Users className="text-red-400 mr-3" size={20} /> Group Sizes: 14 to 56+
+                </div>
+                <div className="flex items-center text-sm bg-white/10 backdrop-blur-sm p-3 rounded border border-white/5">
+                  <CalendarCheck className="text-red-400 mr-3" size={20} /> Multi-Day Charters Available
+                </div>
+              </div>
+              <div className="mt-8 pt-6 border-t border-white/10 relative z-10">
+                <button 
+                  onClick={() => setIsQuoteModalOpen(true)}
+                  className="w-full bg-red-600 text-white font-bold py-4 rounded-lg hover:bg-red-700 transition shadow-[0_0_20px_rgba(220,38,38,0.4)] flex justify-center items-center overflow-hidden relative animate-shine group"
+                >
+                  <span className="relative z-10 flex items-center">
+                    Secure Your Fleet <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Home = ({ setPage, setIsQuoteModalOpen }) => {
   const [currentFleetIdx, setCurrentFleetIdx] = useState(0);
   const fleetList = Object.entries(FLEET_DATA);
@@ -1109,8 +1270,13 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               </div>
             </div>
             
-            <div className="lg:w-1/2 w-full max-w-md lg:max-w-none">
-              <QuoteForm />
+            <div className="lg:w-1/2 w-full max-w-md lg:max-w-none text-center lg:text-right">
+              <button 
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="w-full lg:w-auto inline-flex items-center justify-center bg-red-600 text-white font-black py-5 px-10 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-1 text-xl lg:text-2xl gap-3 animate-fade-in-up"
+              >
+                Get a Free Quote <ArrowRight size={24} />
+              </button>
             </div>
           </div>
         </div>
@@ -1158,37 +1324,30 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 className="group relative h-[360px] rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500"
                 onClick={() => setIsQuoteModalOpen(true)}
               >
-                {/* Full Background Image */}
                 <img 
                   src={service.img} 
                   alt={service.title} 
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                 />
                 
-                {/* Dark Gradient Overlay for Readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
                 
-                {/* Content Container positioned at the bottom */}
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                   
-                  {/* Frosted Glass Icon that turns Red on hover */}
                   <div className="bg-white/20 backdrop-blur-md text-white w-14 h-14 rounded-full flex items-center justify-center mb-6 border border-white/30 transform group-hover:scale-110 group-hover:bg-red-600 group-hover:border-red-600 transition-all duration-500 shadow-lg">
                     <service.icon size={26} />
                   </div>
                   
-                  {/* Title */}
                   <h3 className="font-bold text-2xl text-white mb-2 transform transition-transform duration-500 group-hover:-translate-y-2">
                     {service.title}
                   </h3>
                   
-                  {/* Sliding Description (Hidden by default, slides up on hover) */}
                   <div className="overflow-hidden">
                      <p className="text-slate-200 text-sm mb-4 transform translate-y-[120%] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out leading-relaxed">
                        {service.desc}
                      </p>
                   </div>
 
-                  {/* Call to Action Link */}
                   <div className="flex items-center text-white font-bold text-sm uppercase tracking-wider group-hover:text-red-400 transition-colors duration-300">
                     Get a Quote <ArrowRight size={18} className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300" />
                   </div>
@@ -1201,7 +1360,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
       </section>
 
       <section className="py-24 bg-slate-50 border-t border-slate-200 overflow-hidden relative">
-        {/* Injecting a quick animation style for the slider transitions */}
         <style>{`
           @keyframes softFade {
             from { opacity: 0; transform: translateY(10px); }
@@ -1220,7 +1378,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
 
           <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col md:flex-row relative border border-slate-100 group/slider">
             
-            {/* Image Side with Hover Navigation */}
             <div className="md:w-1/2 relative min-h-[400px] md:min-h-[480px] overflow-hidden bg-slate-100">
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent z-10 pointer-events-none"></div>
               
@@ -1231,7 +1388,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 className="absolute inset-0 w-full h-full object-cover animate-soft-fade" 
               />
               
-              {/* Floating Frosted Navigation Arrows */}
               <button 
                 onClick={prevFleet} 
                 className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white hover:text-red-600 text-blue-900 p-3.5 rounded-full transition-all duration-300 hover:scale-110 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100"
@@ -1248,13 +1404,10 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
               </button>
             </div>
 
-            {/* Content Side */}
             <div className="md:w-1/2 p-8 lg:p-14 flex flex-col justify-center relative bg-white">
-              {/* Decorative Background Blob */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
 
               <div key={`content-${currentFleetIdx}`} className="animate-soft-fade">
-                {/* Modern Pill Badge */}
                 <div className="inline-flex items-center bg-blue-50 border border-blue-100 text-blue-900 px-4 py-2 rounded-full text-sm font-bold mb-6 shadow-sm">
                   <Users size={16} className="mr-2 text-red-600" /> Capacity: {fleetList[currentFleetIdx][1].pax}
                 </div>
@@ -1268,7 +1421,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 </p>
                 
                 <div className="mt-auto">
-                  {/* Upgraded CTA Button */}
                   <button 
                     onClick={() => { setPage(fleetList[currentFleetIdx][0]); window.scrollTo(0,0); }} 
                     className="inline-flex items-center justify-center w-full sm:w-auto bg-slate-900 text-white font-bold py-3.5 px-7 rounded-xl hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 group/btn"
@@ -1276,7 +1428,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                     View Vehicle Details <ArrowRight size={18} className="ml-2 transform group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                   
-                  {/* Modern Slider Dots */}
                   <div className="flex space-x-3 mt-10 items-center">
                     {fleetList.map((_, idx) => (
                       <button 
@@ -1303,7 +1454,6 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
           <h3 className="text-gray-500 font-semibold uppercase tracking-widest text-sm">Trusted by Industry Leaders</h3>
         </div>
         
-        {/* Logo Container */}
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-70">
             <img src="/accenture.png" alt="Accenture" className="h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-105" />

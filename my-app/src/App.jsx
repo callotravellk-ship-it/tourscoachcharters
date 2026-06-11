@@ -522,12 +522,13 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
       </div>
 
       <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div 
-          className="cursor-pointer"
-          onClick={() => setPage('home')}
+        <a 
+          href="/"
+          className="cursor-pointer block"
+          onClick={(e) => { e.preventDefault(); setPage('home'); }}
         >
           <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 md:h-12 w-auto object-contain" />
-        </div>
+        </a>
 
         <div className="hidden lg:flex items-center space-x-8 font-semibold text-gray-700">
           {NAV_LINKS.map((link) => (
@@ -537,25 +538,35 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
               onMouseEnter={() => setActiveDropdown(link.id)}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button 
-                onClick={() => !link.dropdown && setPage(link.id)}
-                className={`flex items-center hover:text-blue-800 transition ${currentPage === link.id ? 'text-blue-800' : ''}`}
-              >
-                {link.title}
-                {link.dropdown && <ChevronDown size={16} className="ml-1" />}
-              </button>
+              {link.dropdown ? (
+                <button 
+                  className={`flex items-center hover:text-blue-800 transition ${currentPage === link.id ? 'text-blue-800' : ''}`}
+                >
+                  {link.title}
+                  <ChevronDown size={16} className="ml-1" />
+                </button>
+              ) : (
+                <a 
+                  href={link.id === 'home' ? '/' : `/${link.id}`}
+                  onClick={(e) => { e.preventDefault(); setPage(link.id); window.scrollTo(0,0); }}
+                  className={`flex items-center hover:text-blue-800 transition ${currentPage === link.id ? 'text-blue-800' : ''}`}
+                >
+                  {link.title}
+                </a>
+              )}
 
               {link.dropdown && activeDropdown === link.id && (
                 <div className="absolute top-full left-0 pt-2">
                   <div className={`${link.dropdown.length > 5 ? 'w-96 grid grid-cols-2 p-2 gap-1' : 'w-48 py-2'} bg-white shadow-xl rounded-md border border-gray-100`}>
                     {link.dropdown.map(drop => (
-                      <button
+                      <a
                         key={drop.id}
-                        onClick={() => setPage(drop.id)}
+                        href={`/${drop.id}`}
+                        onClick={(e) => { e.preventDefault(); setPage(drop.id); window.scrollTo(0,0); }}
                         className="block w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-800 transition text-sm rounded-md"
                       >
                         {drop.title}
-                      </button>
+                      </a>
                     ))}
                   </div>
                 </div>
@@ -580,22 +591,32 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
           <div className="flex flex-col p-4 space-y-4">
             {NAV_LINKS.map(link => (
               <div key={link.id}>
-                <button 
-                  onClick={() => { if(!link.dropdown) { setPage(link.id); setIsMobileMenuOpen(false); }}}
-                  className="font-bold text-gray-800 text-left w-full hover:text-blue-800"
-                >
-                  {link.title}
-                </button>
+                {link.dropdown ? (
+                  <button 
+                    className="font-bold text-gray-800 text-left w-full hover:text-blue-800"
+                  >
+                    {link.title}
+                  </button>
+                ) : (
+                  <a 
+                    href={link.id === 'home' ? '/' : `/${link.id}`}
+                    onClick={(e) => { e.preventDefault(); setPage(link.id); setIsMobileMenuOpen(false); window.scrollTo(0,0); }}
+                    className="block font-bold text-gray-800 text-left w-full hover:text-blue-800"
+                  >
+                    {link.title}
+                  </a>
+                )}
                 {link.dropdown && (
                   <div className="pl-4 mt-2 flex flex-col space-y-2 border-l-2 border-red-600">
                     {link.dropdown.map(drop => (
-                      <button
+                      <a
                         key={drop.id}
-                        onClick={() => { setPage(drop.id); setIsMobileMenuOpen(false); }}
-                        className="text-left text-gray-600 hover:text-blue-800"
+                        href={`/${drop.id}`}
+                        onClick={(e) => { e.preventDefault(); setPage(drop.id); setIsMobileMenuOpen(false); window.scrollTo(0,0); }}
+                        className="block text-left text-gray-600 hover:text-blue-800"
                       >
                         {drop.title}
-                      </button>
+                      </a>
                     ))}
                   </div>
                 )}
@@ -617,7 +638,7 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
 const QuoteForm = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [tripType, setTripType] = useState('return');
+  const [tripType, setTripType] = useState('return'); // State for One Way / Round Trip
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -639,7 +660,7 @@ const QuoteForm = ({ onClose }) => {
       if (response.ok) {
         setSubmitted(true);
         form.reset();
-        setTripType('return');
+        setTripType('return'); // Reset the toggle back to default
         setTimeout(() => setSubmitted(false), 5000);
       } else {
         alert("There was a problem sending your quote. Please try calling us instead.");
@@ -706,6 +727,7 @@ const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
+          {/* NEW: Trip Type Toggle Radio Buttons */}
           <div className="flex space-x-6 py-1">
             <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
               <input 
@@ -731,12 +753,14 @@ const QuoteForm = ({ onClose }) => {
             </label>
           </div>
 
+          {/* DYNAMIC DATES: Layout changes based on the toggle */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Departure Date *</label>
               <input required name="departDate" type="date" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
             
+            {/* The Return Date field only renders if 'return' is selected */}
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Return Date *</label>
@@ -819,6 +843,7 @@ const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
 
 const TrustStatsBanner = () => (
   <div className="relative w-full max-w-6xl mx-auto rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl py-16 px-6 md:px-12 my-8">
+    {/* Cinematic Ambient Glow Effects in Background */}
     <div className="absolute inset-0 z-0 pointer-events-none">
       <div className="absolute top-[-30%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-[-30%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full"></div>
@@ -832,24 +857,32 @@ const TrustStatsBanner = () => (
         { value: 24, suffix: "/7", label: "Client Support", icon: Headphones }
       ].map((stat, i) => (
         <div key={i} className="flex flex-col items-center group cursor-default">
+          
+          {/* Frosted Glass Icon Container with Hover Glow */}
           <div className="relative mb-6">
             <div className="absolute inset-0 bg-red-600 rounded-full blur opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
             <div className="relative bg-slate-800/80 backdrop-blur-sm border border-slate-700 w-16 h-16 rounded-2xl flex items-center justify-center text-slate-300 group-hover:bg-red-600 group-hover:border-red-500 group-hover:text-white group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 shadow-xl">
               <stat.icon size={28} />
             </div>
           </div>
+          
+          {/* Gradient Animated Numbers */}
           <div className="text-5xl md:text-5xl lg:text-6xl font-black bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent mb-3 leading-none tracking-tight group-hover:scale-105 transition-transform duration-500">
             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
           </div>
+          
+          {/* Refined Label */}
           <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300 transition-colors duration-300">
             {stat.label}
           </div>
+          
         </div>
       ))}
     </div>
   </div>
 );
 
+// New About Us Component
 const AboutUs = ({ setIsQuoteModalOpen }) => (
   <div className="w-full bg-slate-50 flex flex-col font-sans">
     <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
@@ -858,7 +891,7 @@ const AboutUs = ({ setIsQuoteModalOpen }) => (
           src="/about-banner.jpg" 
           alt="About Canada Tours Coach" 
           className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => { e.target.src = "/home-hero.jpg" }}
+          onError={(e) => { e.target.src = "/home-hero.jpg" }} // Fallback if no specific banner exists
         />
         <div className="relative z-20 container mx-auto px-4 animate-fade-in-up">
           <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">
@@ -917,6 +950,7 @@ const AboutUs = ({ setIsQuoteModalOpen }) => (
   </div>
 );
 
+// New Contact Us Component
 const ContactUs = ({ setIsQuoteModalOpen }) => {
   const [submitted, setSubmitted] = useState(false);
 
@@ -948,6 +982,7 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
       <div className="container mx-auto px-4 py-16 lg:py-24">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
           
+          {/* Contact Information Side */}
           <div className="lg:w-5/12">
             <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-blue-50 rounded-full blur-3xl -z-10 opacity-70"></div>
@@ -1007,6 +1042,7 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
             </div>
           </div>
 
+          {/* Simple Message Form Side */}
           <div className="lg:w-7/12">
              <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 h-full">
                <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight">Send Us a Message</h2>
@@ -1056,7 +1092,7 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
 };
 
 // ==========================================
-// FIFA PAGE COMPONENT 
+// FIFA PAGE COMPONENT
 // ==========================================
 const FifaPage = ({ setIsQuoteModalOpen }) => {
   return (
@@ -1429,12 +1465,13 @@ const Home = ({ setPage, setIsQuoteModalOpen }) => {
                 </p>
                 
                 <div className="mt-auto">
-                  <button 
-                    onClick={() => { setPage(fleetList[currentFleetIdx][0]); window.scrollTo(0,0); }} 
+                  <a 
+                    href={`/${fleetList[currentFleetIdx][0]}`}
+                    onClick={(e) => { e.preventDefault(); setPage(fleetList[currentFleetIdx][0]); window.scrollTo(0,0); }} 
                     className="inline-flex items-center justify-center w-full sm:w-auto bg-slate-900 text-white font-bold py-3.5 px-7 rounded-xl hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 group/btn"
                   >
                     View Vehicle Details <ArrowRight size={18} className="ml-2 transform group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
+                  </a>
                   
                   <div className="flex space-x-3 mt-10 items-center">
                     {fleetList.map((_, idx) => (
@@ -1662,9 +1699,13 @@ const Footer = ({ setPage }) => (
   <footer className="bg-gray-900 text-gray-300 py-12 border-t-4 border-red-600">
     <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
-        <div className="mb-6 bg-white inline-block p-2 rounded-lg cursor-pointer" onClick={() => setPage('home')}>
+        <a 
+          href="/" 
+          className="mb-6 bg-white inline-block p-2 rounded-lg cursor-pointer block" 
+          onClick={(e) => { e.preventDefault(); setPage('home'); window.scrollTo(0,0); }}
+        >
           <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 w-auto object-contain" />
-        </div>
+        </a>
         <p className="text-sm mb-4">Canada's Premier Charter Bus Rentals. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
       </div>
       
@@ -1679,11 +1720,11 @@ const Footer = ({ setPage }) => (
 
       <div>
         <h4 className="text-white font-bold text-lg mb-4">Quick Links</h4>
-        <ul className="space-y-2 text-sm">
-          <li><button onClick={() => { setPage('about'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">About Us</button></li>
-          <li><button onClick={() => { setPage('contact'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Contact Us</button></li>
-          <li><button onClick={() => { setPage('luxury-coach-bus-rental'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Our Fleet</button></li>
-          <li><button onClick={() => { setPage('charter-bus-rental-toronto'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Destinations</button></li>
+        <ul className="space-y-2 text-sm flex flex-col items-start">
+          <li><a href="/about" onClick={(e) => { e.preventDefault(); setPage('about'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">About Us</a></li>
+          <li><a href="/contact" onClick={(e) => { e.preventDefault(); setPage('contact'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Contact Us</a></li>
+          <li><a href="/luxury-coach-bus-rental" onClick={(e) => { e.preventDefault(); setPage('luxury-coach-bus-rental'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Our Fleet</a></li>
+          <li><a href="/charter-bus-rental-toronto" onClick={(e) => { e.preventDefault(); setPage('charter-bus-rental-toronto'); window.scrollTo(0,0); }} className="hover:text-red-500 transition">Destinations</a></li>
         </ul>
       </div>
 

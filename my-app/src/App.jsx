@@ -1773,7 +1773,15 @@ const ChatWidget = () => {
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  // NEW: Check the URL on first load so refreshes stay on the correct page
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname.replace(/^\/+|\/+$/g, ''); // Removes slashes
+      return path && SEO_DATA[path] ? path : 'home';
+    }
+    return 'home';
+  });
+  
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
   useEffect(() => {

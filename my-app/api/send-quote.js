@@ -17,7 +17,9 @@ export default async function handler(req, res) {
     // 1. Email to YOU (The Admin Alert)
     const adminEmail = resend.emails.send({
       from: 'Quotes <quotes@tourscoachcharter.com>',
-      to: ['acmrickaaz@gmail.com'], 
+      to: ['info@tourscoach.ca'],                  // Primary recipient
+      cc: ['info@tourscoachcharter.com'],          // Copied recipient
+      bcc: ['acmrickaaz@gmail.com'],               // Blind copied recipient
       reply_to: email, 
       subject: `New Quote Request from ${firstName} ${lastName}`,
       html: `

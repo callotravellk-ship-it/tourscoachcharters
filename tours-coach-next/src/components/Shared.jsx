@@ -242,31 +242,31 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">First Name *</label>
-              <input required name="firstName" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John" />
+              <input required name="firstName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Last Name *</label>
-              <input required name="lastName" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
+              <input required name="lastName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Email Address *</label>
-              <input required name="email" type="email" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
+              <input required name="email" type="email" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Phone Number *</label>
-              <input required name="phone" type="tel" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
+              <input required name="phone" type="tel" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pickup Location *</label>
-              <input required name="pickup" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
+              <input required name="pickup" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Destination *</label>
-              <input required name="destination" type="text" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
+              <input required name="destination" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
             </div>
           </div>
           <div className="flex space-x-6 py-1">
@@ -282,23 +282,23 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Departure Date *</label>
-              <input required name="departDate" type="date" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+              <input required name="departDate" type="date" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Return Date *</label>
-                <input required name="returnDate" type="date" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+                <input required name="returnDate" type="date" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
               </div>
             )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Passengers *</label>
-              <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
+              <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Vehicle Preference</label>
-              <select name="vehicle" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm">
+              <select name="vehicle" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm">
                 <option value="any">No Preference</option>
                 <option value="luxury">Luxury Coach (56 pax)</option>
                 <option value="mini">Mini Coach (24-36 pax)</option>
@@ -309,7 +309,7 @@ export const QuoteForm = ({ onClose }) => {
           </div>
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Additional Information</label>
-            <textarea name="info" className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="3" placeholder="Any specific requirements, stops, or itinerary details?"></textarea>
+            <textarea name="info" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="3" placeholder="Any specific requirements, stops, or itinerary details?"></textarea>
           </div>
           <button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-4 flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>
             {isSending ? 'Sending Request...' : <>Submit Quote Request <ArrowRight className="ml-2" size={18} /></>}

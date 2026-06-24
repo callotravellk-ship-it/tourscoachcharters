@@ -1,0 +1,10 @@
+export default function robots() {
+  return {
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: ['/api/'], // This prevents Google from crawling your private API routes
+    },
+    sitemap: 'https://tourscoachcharter.com/sitemap.xml',
+  };
+}

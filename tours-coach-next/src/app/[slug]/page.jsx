@@ -15,14 +15,18 @@ export async function generateMetadata({ params }) {
   return {
     title: seo.title,
     description: seo.desc,
+    // FORCE GOOGLE TO INDEX WWW VERSION VIA CANONICAL
+    alternates: {
+      canonical: `https://www.tourscoachcharter.com/${slug}`,
+    },
     openGraph: {
       title: seo.title,
       description: seo.desc,
-      url: `https://tourscoachcharter.com/${slug}`,
+      url: `https://www.tourscoachcharter.com/${slug}`, // Added www.
       siteName: 'Tours Coach Charters',
       images: [
         {
-          url: 'https://tourscoachcharter.com/logo.png',
+          url: 'https://www.tourscoachcharter.com/logo.png', // Added www.
           width: 1200,
           height: 630,
         },

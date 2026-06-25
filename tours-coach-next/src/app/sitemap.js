@@ -1,7 +1,8 @@
 import { DESTINATION_DATA, FLEET_DATA } from '../lib/data';
 
 export default async function sitemap() {
-  const baseUrl = 'https://tourscoachcharter.com';
+  // ADDED www. to the base URL
+  const baseUrl = 'https://www.tourscoachcharter.com';
 
   // 1. Static routes
   const routes = ['', '/about', '/contact', '/fifa-world-cup-2026-charters', '/winter-destinations'].map((route) => ({

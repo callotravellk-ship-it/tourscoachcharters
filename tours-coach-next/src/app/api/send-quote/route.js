@@ -10,6 +10,7 @@ export async function POST(req) {
     const { 
       firstName, lastName, email, phone, 
       pickup, destination, departDate, returnDate, 
+      pickupTime, returnTime, // NEW: Added time variables
       passengers, vehicle, info, tripType 
     } = body;
 
@@ -30,7 +31,9 @@ export async function POST(req) {
         <p><strong>Pickup Location:</strong> ${pickup}</p>
         <p><strong>Destination:</strong> ${destination}</p>
         <p><strong>Depart Date:</strong> ${departDate}</p>
+        <p><strong>Pick Up Time:</strong> ${pickupTime}</p>
         <p><strong>Return Date:</strong> ${returnDate || 'N/A'}</p>
+        <p><strong>Return Time:</strong> ${returnTime || 'N/A'}</p>
         <p><strong>Passengers:</strong> ${passengers}</p>
         <p><strong>Vehicle Preference:</strong> ${vehicle}</p>
         <p><strong>Additional Info:</strong> ${info || 'None provided.'}</p>

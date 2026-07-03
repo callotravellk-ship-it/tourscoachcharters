@@ -130,7 +130,7 @@ export const Header = () => {
                 )}
               </div>
             ))}
-             <button 
+              <button 
                 onClick={() => { setIsQuoteModalOpen(true); setIsMobileMenuOpen(false); }}
                 className="bg-red-600 text-white w-full py-3 rounded-md font-bold mt-4 shadow-md hover:bg-red-700"
               >
@@ -291,6 +291,22 @@ export const QuoteForm = ({ onClose }) => {
               </div>
             )}
           </div>
+          
+          {/* NEW ROW FOR TIMES */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pick Up Time *</label>
+              <input required name="pickupTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+            </div>
+            {tripType === 'return' && (
+              <div className="animate-fade-in-up">
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Return Time *</label>
+                <input required name="returnTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+              </div>
+            )}
+          </div>
+          {/* END NEW ROW */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Passengers *</label>

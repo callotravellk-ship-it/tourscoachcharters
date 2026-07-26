@@ -26,9 +26,16 @@ export const AboutUs = () => {
             <h2 className="text-3xl lg:text-4xl font-black text-slate-900 mb-6 tracking-tight">Canada's Premier Transportation Partner</h2>
             <p className="text-lg text-slate-600 mb-6 leading-relaxed">At Canada Tours Coach LTD, we believe that the journey is just as important as the destination. For over 15 years, we have specialized in providing top-tier charter bus rentals, corporate shuttles, and specialized event transportation.</p>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed">Headquartered in Pickering, Ontario, we proudly service the Greater Toronto Area and coordinate long-distance travel from coast to coast. From intimate family gatherings to massive corporate conventions and the upcoming FIFA 2026 World Cup, our logistics experts and professional drivers ensure your group moves effortlessly.</p>
-            <button onClick={() => setIsQuoteModalOpen(true)} className="inline-flex items-center justify-center bg-red-600 text-white font-bold py-3.5 px-8 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
-              Book Your Journey <ArrowRight size={18} className="ml-2" />
-            </button>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button onClick={() => setIsQuoteModalOpen(true)} className="inline-flex items-center justify-center bg-red-600 text-white font-bold py-3.5 px-8 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                Book Your Journey <ArrowRight size={18} className="ml-2" />
+              </button>
+              <a href="tel:4162699555" className="inline-flex items-center justify-center bg-white text-blue-800 font-bold py-3.5 px-8 rounded-xl border-2 border-blue-800 hover:bg-blue-50 transition-all duration-300 shadow-sm">
+                <Phone size={18} className="mr-2" /> Call (416) 269-9555
+              </a>
+            </div>
+            
           </div>
           <div className="lg:w-1/2 relative">
             <div className="absolute inset-0 bg-blue-600 rounded-3xl translate-x-4 translate-y-4 -z-10 opacity-20"></div>
@@ -104,10 +111,13 @@ export const ContactUs = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-12 pt-8 border-t border-slate-100">
+              <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col gap-3">
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2">
                   Get an Instant Quote <ArrowRight size={20} />
                 </button>
+                <a href="tel:4162699555" className="w-full bg-white text-slate-700 font-bold py-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 shadow-sm text-lg">
+                  <Phone size={20} className="text-blue-800" /> Or call (416) 269-9555
+                </a>
               </div>
             </div>
           </div>
@@ -216,10 +226,13 @@ export const FifaPage = () => {
                 <div className="flex items-center text-sm bg-white/10 backdrop-blur-sm p-3 rounded border border-white/5"><Users className="text-red-400 mr-3" size={20} /> Group Sizes: 14 to 56+</div>
                 <div className="flex items-center text-sm bg-white/10 backdrop-blur-sm p-3 rounded border border-white/5"><CalendarCheck className="text-red-400 mr-3" size={20} /> Multi-Day Charters Available</div>
               </div>
-              <div className="mt-8 pt-6 border-t border-white/10 relative z-10">
+              <div className="mt-8 pt-6 border-t border-white/10 relative z-10 flex flex-col gap-3">
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 rounded-lg hover:bg-red-700 transition shadow-[0_0_20px_rgba(220,38,38,0.4)] flex justify-center items-center overflow-hidden relative animate-shine group">
                   <span className="relative z-10 flex items-center">Secure Your Fleet <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></span>
                 </button>
+                <a href="tel:4162699555" className="w-full bg-blue-900 text-white font-bold py-3.5 rounded-lg hover:bg-blue-950 transition border border-blue-700 flex justify-center items-center gap-2">
+                  <Phone size={18} /> Call (416) 269-9555
+                </a>
               </div>
             </div>
           </div>
@@ -259,9 +272,16 @@ export const FleetTemplate = ({ data }) => {
                 ))}
               </ul>
             </div>
-            <button onClick={() => setIsQuoteModalOpen(true)} className="w-full sm:w-auto mt-auto bg-gradient-to-r from-red-600 to-red-700 text-white font-bold py-4 px-8 rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2">
-              Request a Quote <ArrowRight size={20} />
-            </button>
+            
+            <div className="mt-auto flex flex-col sm:flex-row gap-4">
+              <button onClick={() => setIsQuoteModalOpen(true)} className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white font-bold py-4 px-8 rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2">
+                Request a Quote <ArrowRight size={20} />
+              </button>
+              <a href="tel:4162699555" className="w-full sm:w-auto bg-white text-slate-700 font-bold py-4 px-8 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 text-lg">
+                <Phone size={20} className="text-blue-800" /> (416) 269-9555
+              </a>
+            </div>
+
           </div>
         </div>
         <div className="mb-20"><TrustStatsBanner /></div>
@@ -316,9 +336,16 @@ export const GenericPage = ({ title, subtitle, bgImage }) => {
               <h3 className="font-bold text-lg mb-1">Ready to book your trip to {title}?</h3>
               <p className="text-sm text-gray-700">Fill out our quote form or call us directly at <strong>{COMPANY_INFO.phone}</strong>.</p>
             </div>
-            <button onClick={() => setIsQuoteModalOpen(true)} className="bg-blue-800 text-white px-6 py-3 rounded hover:bg-blue-900 transition font-bold shadow-md whitespace-nowrap">
-              Get a Free Quote
-            </button>
+            
+            <div className="flex flex-col gap-3">
+              <button onClick={() => setIsQuoteModalOpen(true)} className="bg-blue-800 text-white px-6 py-3 rounded hover:bg-blue-900 transition font-bold shadow-md whitespace-nowrap">
+                Get a Free Quote
+              </button>
+              <a href="tel:4162699555" className="text-center font-bold text-blue-800 hover:text-red-600 transition flex items-center justify-center gap-2">
+                <Phone size={16} /> Call (416) 269-9555
+              </a>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -382,11 +409,14 @@ export const DestinationTemplate = ({ data }) => {
                   </div>
                 )})}
               </div>
-              <div className="mt-8 pt-6 border-t border-gray-100">
-                <p className="text-sm text-gray-600 mb-4 text-center">Ready to arrange your {data.city} transportation?</p>
+              <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col gap-3">
+                <p className="text-sm text-gray-600 mb-2 text-center">Ready to arrange your {data.city} transportation?</p>
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-blue-800 text-white font-bold py-4 rounded-lg hover:bg-blue-900 transition shadow-lg flex justify-center items-center">
                   Request a Quote <ArrowRight size={18} className="ml-2" />
                 </button>
+                <a href="tel:4162699555" className="w-full bg-white text-blue-800 font-bold py-3.5 rounded-lg hover:bg-gray-50 transition border border-gray-200 shadow-sm flex justify-center items-center gap-2">
+                  <Phone size={18} /> Call (416) 269-9555
+                </a>
               </div>
             </div>
           </div>
@@ -463,9 +493,14 @@ export const ServiceTemplate = ({ data }) => {
               <p className="text-blue-200 mb-8 leading-relaxed text-sm">
                 Contact our logistics team today to secure premium transportation for your upcoming event or corporate requirement.
               </p>
-              <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 px-6 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 flex justify-center items-center gap-2">
-                Get an Instant Quote <ArrowRight size={20} />
-              </button>
+              <div className="flex flex-col gap-3">
+                <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 px-6 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                  Get an Instant Quote <ArrowRight size={20} />
+                </button>
+                <a href="tel:4162699555" className="w-full bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-blue-950 transition-all border border-blue-700 flex justify-center items-center gap-2">
+                  <Phone size={18} /> Call (416) 269-9555
+                </a>
+              </div>
             </div>
           </div>
         </div>

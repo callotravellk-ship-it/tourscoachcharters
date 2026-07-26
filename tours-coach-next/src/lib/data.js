@@ -42,6 +42,18 @@ export const NAV_LINKS = [
       { title: "Barrie", id: "charter-bus-rental-barrie" }
     ]
   },
+  {
+    title: "Services",
+    id: "services",
+    dropdown: [
+      { title: "Corporate Transportation", id: "services/corporate-transportation" },
+      { title: "School Trips", id: "services/school-trip-transportation" },
+      { title: "Wedding Shuttles", id: "services/wedding-shuttle" },
+      { title: "Airport Transfers", id: "services/airport-group-transfers" },
+      { title: "Sports Teams", id: "services/sports-team-transportation" },
+      { title: "Event Shuttles", id: "services/event-shuttle-services" }
+    ]
+  },
   { title: "Winter", id: "winter-destinations" },
   { title: "FIFA 2026", id: "fifa-world-cup-2026-charters" },
   { title: "Contact Us", id: "contact" }
@@ -475,6 +487,117 @@ export const DESTINATION_DATA = {
     faqs: [
       { q: "Do your buses have storage for skis and snowboards?", a: "Yes, our luxury motorcoaches feature massive undercarriage storage bays that are perfect for safely stowing skis, snowboards, and heavy winter sports equipment." },
       { q: "Are your drivers experienced in winter driving conditions on Highway 400?", a: "Safety is our absolute priority. Our drivers undergo rigorous winter driving training, and our fleet is fully equipped and maintained for harsh Ontario winter weather." }
+    ]
+  }
+};
+
+export const SERVICE_DATA = {
+  "corporate-transportation": {
+    title: "Corporate Transportation & Executive Shuttles",
+    subtitle: "Premium group transit for conferences, executive retreats, and daily employee commuting.",
+    img: "/services-corporate.jpg",
+    highlights: [
+      { icon: "Briefcase", title: "Executive Shuttles", desc: "Wi-Fi enabled luxury coaches" },
+      { icon: "Building2", title: "Conference Transit", desc: "MTCC & Enercare Centre logistics" },
+      { icon: "Users", title: "Employee Commuting", desc: "Daily Last-Mile TTC connections" }
+    ],
+    content: [
+      "Tours Coach Charters provides sophisticated, reliable corporate transportation across the Greater Toronto Area and beyond. Whether you are moving executives from Pearson (YYZ) to the Financial District or transporting hundreds of attendees to a summit at the Metro Toronto Convention Centre, our logistics team ensures flawless execution.",
+      "Our modern luxury motorcoaches act as mobile offices. Equipped with fast Wi-Fi, individual power outlets, and climate control, your team can prepare for meetings or relax in transit. We also offer contract-based daily employee shuttles to bridge the gap between transit hubs (like Vaughan Metropolitan Centre) and corporate business parks."
+    ],
+    faqs: [
+      { q: "Can we set up a recurring contract for daily employee shuttles?", a: "Yes, we specialize in long-term corporate shuttle contracts, offering dedicated account managers and priority dispatch." },
+      { q: "Do the buses have Wi-Fi for working on the go?", a: "Absolutely. Our luxury fleet is fully equipped with reliable Wi-Fi and power outlets at every seat." }
+    ]
+  },
+  "school-trip-transportation": {
+    title: "School Trip & University Transportation",
+    subtitle: "Safe, cost-effective, and reliable bus rentals for educational field trips and campus events.",
+    img: "/services-school.jpg",
+    highlights: [
+      { icon: "Landmark", title: "Educational Trips", desc: "ROM, Science Centre & Toronto Zoo" },
+      { icon: "ShieldCheck", title: "Safety First", desc: "Fully vetted, certified drivers" },
+      { icon: "Users", title: "Campus Shuttles", desc: "UofT, York, and McMaster transit" }
+    ],
+    content: [
+      "Safety is our absolute priority when transporting students. We are the trusted transportation partner for school boards and universities across Ontario, providing reliable transit for everything from primary school visits to the Royal Ontario Museum to massive university campus tours.",
+      "We offer highly affordable, high-capacity school bus rentals for local excursions, as well as premium motorcoaches for out-of-town university athletic travel or overnight educational retreats."
+    ],
+    faqs: [
+      { q: "Are your drivers certified for school transport?", a: "Yes, all drivers undergo rigorous background checks, vulnerable sector screening, and extensive safety training." },
+      { q: "Can you accommodate multi-bus movements for entire grade levels?", a: "We frequently coordinate multi-bus logistics to safely transport hundreds of students simultaneously to destinations like Canada's Wonderland." }
+    ]
+  },
+  "wedding-shuttle": {
+    title: "Wedding Shuttle Services",
+    subtitle: "Elegant, seamless group transportation for your guests, bridal party, and family.",
+    img: "/services-wedding.jpg",
+    highlights: [
+      { icon: "Users", title: "Guest Shuttles", desc: "Continuous hotel-to-venue loops" },
+      { icon: "Map", title: "Rustic Venues", desc: "Navigating Caledon & York Region" },
+      { icon: "Award", title: "Bridal Party", desc: "Premium 14-passenger luxury vans" }
+    ],
+    content: [
+      "Your wedding day should be stress-free. Our dedicated wedding shuttle services ensure that your guests arrive on time and get back to their hotels safely at the end of the night. From sprawling banquet halls in Woodbridge to rustic barn venues in Caledon, our drivers know exactly how to navigate the routes.",
+      "We work directly with your wedding planner to map out continuous shuttle loops, late-night return trips, and private luxury transport for the bridal party. Ensure your guests can celebrate responsibly without worrying about parking or navigation."
+    ],
+    faqs: [
+      { q: "Do you offer late-night return shuttles?", a: "Yes, we run continuous late-night loops to ensure every guest gets back to their accommodation safely." },
+      { q: "Can we book a smaller vehicle for just the bridal party?", a: "Certainly. Our high-roof 14-passenger transit vans are perfect for transporting the bridal party comfortably." }
+    ]
+  },
+  "airport-group-transfers": {
+    title: "Airport Group Transfers",
+    subtitle: "Punctual, stress-free group shuttles to Pearson (YYZ), Billy Bishop (YTZ), and Hamilton (YHM).",
+    img: "/services-airport.jpg",
+    highlights: [
+      { icon: "Plane", title: "Pearson (YYZ)", desc: "Curbside at Terminals 1 & 3" },
+      { icon: "Briefcase", title: "Corporate VIP", desc: "Meet and greet services available" },
+      { icon: "ShieldCheck", title: "Flight Tracking", desc: "We adjust for delays automatically" }
+    ],
+    content: [
+      "Navigating airport logistics with a large group is challenging. We eliminate the stress with coordinated, high-capacity airport transfers. Whether you are greeting an international tour group at Toronto Pearson (YYZ) or moving a corporate team to Billy Bishop (YTZ), we guarantee absolute punctuality.",
+      "Our logistics team actively monitors your flight status, ensuring our luxury coaches or executive vans are staged and ready the moment your group collects their luggage. Enjoy ample undercarriage storage for heavy bags and a comfortable ride directly to your destination."
+    ],
+    faqs: [
+      { q: "What happens if our flight is delayed?", a: "Our dispatch team tracks all inbound flights in real-time. We will adjust your pickup time automatically at no extra cost." },
+      { q: "Where do we meet the bus at Pearson Airport?", a: "We coordinate pickups at the designated commercial charter bus zones at both Terminal 1 and Terminal 3." }
+    ]
+  },
+  "sports-team-transportation": {
+    title: "Sports Team Transportation",
+    subtitle: "High-capacity motorcoaches designed for athletes, minor hockey tournaments, and away games.",
+    img: "/services-sports.jpg",
+    highlights: [
+      { icon: "Trophy", title: "Tournament Travel", desc: "Transit to CAA Centre & local arenas" },
+      { icon: "Users", title: "Maximum Comfort", desc: "Extra legroom for taller athletes" },
+      { icon: "Briefcase", title: "Massive Storage", desc: "Undercarriage bays for all gear" }
+    ],
+    content: [
+      "Athletes need to arrive rested and focused. Tours Coach Charters is the premier provider for sports team transportation across Canada. From minor hockey leagues traveling to the Wayne Gretzky Sports Centre to professional rosters heading to BMO Field, our fleet is built for sports transit.",
+      "Our 56-passenger luxury motorcoaches feature massive undercarriage storage bays, perfectly accommodating hockey bags, lacrosse sticks, and training equipment. With climate control and spacious reclining seats, your team will enjoy maximum comfort on the road."
+    ],
+    faqs: [
+      { q: "Is there enough room for all our hockey bags?", a: "Yes! Our luxury coaches feature massive undercarriage bays specifically designed to handle heavy sports equipment." },
+      { q: "Do you offer seasonal contracts for sports leagues?", a: "We offer heavily discounted, contract-based pricing for athletic directors booking entire season schedules." }
+    ]
+  },
+  "event-shuttle-services": {
+    title: "Mega-Event Shuttle Services",
+    subtitle: "Complex logistics and multi-bus fleet coordination for festivals, trade shows, and concerts.",
+    img: "/services-event.jpg",
+    highlights: [
+      { icon: "Map", title: "Park & Ride", desc: "Continuous off-site shuttle loops" },
+      { icon: "Building2", title: "Trade Shows", desc: "International Centre & Enercare transit" },
+      { icon: "Users", title: "Festival Transit", desc: "Downsview Park & waterfront events" }
+    ],
+    content: [
+      "When you are hosting an event for thousands of people, parking and traffic congestion are your biggest liabilities. We specialize in mega-event logistics, deploying synchronized fleets of motorcoaches and school buses to move massive crowds efficiently.",
+      "From park-and-ride shuttle loops for summer music festivals at Downsview Park to VIP transport for international trade shows, our dedicated dispatchers ensure smooth traffic flow, minimizing wait times and maximizing attendee satisfaction."
+    ],
+    faqs: [
+      { q: "Can you provide a dedicated on-site dispatcher?", a: "Yes, for large-scale events utilizing multiple buses, we provide on-site coordinators to manage the loading zones and keep schedules tight." },
+      { q: "Do you offer wrapped buses for event branding?", a: "We can coordinate custom vinyl wrapping or signage on our coaches to promote your event while in transit." }
     ]
   }
 };

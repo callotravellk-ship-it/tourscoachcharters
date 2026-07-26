@@ -395,3 +395,81 @@ export const DestinationTemplate = ({ data }) => {
     </div>
   );
 };
+
+export const ServiceTemplate = ({ data }) => {
+  const { setIsQuoteModalOpen } = useQuote();
+
+  return (
+    <div className="w-full bg-slate-50 flex flex-col font-sans min-h-screen">
+      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-black/60 z-10"></div>
+        <img src={data.img} alt={data.title} className="absolute inset-0 w-full h-full object-cover" />
+        <div className="relative z-20 container mx-auto px-4 animate-fade-in-up">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 drop-shadow-lg">{data.title}</h1>
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto drop-shadow-md leading-relaxed">{data.subtitle}</p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-16 flex-grow">
+        {/* Highlights Grid overlaying the banner */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16 -mt-24 relative z-30">
+          {data.highlights.map((item, i) => {
+            const IconComp = Icons[item.icon] || Icons.CheckCircle;
+            return (
+              <div key={i} className="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+                <div className="w-14 h-14 bg-blue-50 text-blue-800 rounded-xl flex items-center justify-center mb-6">
+                  <IconComp size={28} />
+                </div>
+                <h3 className="font-bold text-xl text-slate-900 mb-3">{item.title}</h3>
+                <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-12 max-w-6xl mx-auto">
+          {/* Main Content */}
+          <div className="lg:w-2/3">
+            <h2 className="text-3xl font-black text-blue-900 mb-6 tracking-tight">Premium {data.title}</h2>
+            <div className="space-y-6 mb-12 text-lg text-slate-700 leading-relaxed">
+              {data.content.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+              <h3 className="text-2xl font-bold text-slate-900 mb-8 border-b border-slate-100 pb-4">Frequently Asked Questions</h3>
+              <div className="space-y-6">
+                {data.faqs.map((faq, i) => (
+                  <div key={i}>
+                    <h4 className="font-bold text-lg text-blue-800 mb-2 flex items-start">
+                      <Icons.ChevronRight className="text-red-600 mr-2 flex-shrink-0 mt-1" size={20} />
+                      {faq.q}
+                    </h4>
+                    <p className="text-slate-600 pl-7 leading-relaxed">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Sticky CTA Sidebar */}
+          <div className="lg:w-1/3">
+            <div className="bg-blue-900 rounded-3xl shadow-2xl border border-blue-800 p-8 text-center sticky top-32">
+              <div className="bg-red-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-red-600/30">
+                <Icons.CalendarCheck size={32} className="text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Book Your Fleet</h3>
+              <p className="text-blue-200 mb-8 leading-relaxed text-sm">
+                Contact our logistics team today to secure premium transportation for your upcoming event or corporate requirement.
+              </p>
+              <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 px-6 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                Get an Instant Quote <ArrowRight size={20} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

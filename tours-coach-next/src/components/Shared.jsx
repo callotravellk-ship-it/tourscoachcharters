@@ -5,7 +5,10 @@ import { usePathname } from 'next/navigation';
 import { useQuote } from '../context/QuoteContext';
 import { Phone, Mail, ChevronDown, Menu, X, ShieldCheck, Map, Headphones, Award, Route, Send, ArrowRight, CheckCircle } from 'lucide-react';
 import { COMPANY_INFO, NAV_LINKS } from '../lib/data';
-import Autocomplete from "react-google-autocomplete"; // <-- ADDED GOOGLE MAPS IMPORT
+
+// --- NEW GEOAPIFY IMPORTS ---
+import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 
 export const Facebook = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
@@ -201,6 +204,10 @@ export const QuoteForm = ({ onClose }) => {
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
+    // Because custom components don't always use traditional names, we inject the context state manually
+    payload.pickup = quoteData.pickup;
+    payload.destination = quoteData.destination;
+
     try {
       const response = await fetch('/api/send-quote', {
         method: 'POST',
@@ -226,6 +233,16 @@ export const QuoteForm = ({ onClose }) => {
 
   return (
     <div className="bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 max-h-[600px] overflow-y-auto custom-scrollbar">
+      
+      {/* Styles to seamlessly blend the Geoapify component into your Tailwind design */}
+      <style>{`
+        .geoapify-autocomplete-input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: none; outline: none; background: transparent; }
+        .geoapify-autocomplete-items { position: absolute; z-index: 99; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
+        .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; }
+        .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }
+        .geoapify-close-button { display: none; }
+      `}</style>
+
       {onClose && (
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors z-20">
           <X size={24} />
@@ -263,47 +280,43 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          {/* ADDED: Google Map Autocomplete Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pickup Location *</label>
-              <Autocomplete
-                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-                required
-                name="pickup"
-                value={quoteData.pickup}
-                onPlaceSelected={(place) => {
-                  setQuoteData({ ...quoteData, pickup: place.formatted_address || place.name });
-                }}
-                onChange={(e) => setQuoteData({ ...quoteData, pickup: e.target.value })}
-                options={{
-                  types: ["geocode", "establishment"],
-                  componentRestrictions: { country: "ca" },
-                }}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
-                placeholder="Start typing an address..."
-              />
+          {/* FREE GEOAPIFY AUTOCOMPLETE FIELDS */}
+          <GeoapifyContext apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY || ""}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pickup Location *</label>
+                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+                  <GeoapifyGeocoderAutocomplete
+                    placeholder="Start typing an address..."
+                    filterByCountryCode={["ca"]}
+                    value={quoteData.pickup}
+                    placeSelect={(place) => {
+                      if(place) setQuoteData({ ...quoteData, pickup: place.properties.formatted });
+                    }}
+                    onUserInput={(value) => {
+                      setQuoteData({ ...quoteData, pickup: value });
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Destination *</label>
+                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+                  <GeoapifyGeocoderAutocomplete
+                    placeholder="Start typing an address..."
+                    filterByCountryCode={["ca"]}
+                    value={quoteData.destination}
+                    placeSelect={(place) => {
+                      if(place) setQuoteData({ ...quoteData, destination: place.properties.formatted });
+                    }}
+                    onUserInput={(value) => {
+                      setQuoteData({ ...quoteData, destination: value });
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Destination *</label>
-              <Autocomplete
-                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-                required
-                name="destination"
-                value={quoteData.destination}
-                onPlaceSelected={(place) => {
-                  setQuoteData({ ...quoteData, destination: place.formatted_address || place.name });
-                }}
-                onChange={(e) => setQuoteData({ ...quoteData, destination: e.target.value })}
-                options={{
-                  types: ["geocode", "establishment"],
-                  componentRestrictions: { country: "ca" },
-                }}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
-                placeholder="Start typing an address..."
-              />
-            </div>
-          </div>
+          </GeoapifyContext>
 
           <div className="flex space-x-6 py-1">
             <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">

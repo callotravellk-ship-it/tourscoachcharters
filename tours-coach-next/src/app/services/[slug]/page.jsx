@@ -2,8 +2,11 @@ import { SERVICE_DATA } from '../../../lib/data';
 import { ServiceTemplate } from '../../../components/Templates';
 import { notFound } from 'next/navigation';
 
-export async function generateMetadata({ params }) {
-  const service = SERVICE_DATA[params.slug];
+export async function generateMetadata(props) {
+  // Await the params to support Next.js 15
+  const params = await props.params;
+  const service = SERVICE_DATA[params?.slug];
+  
   if (!service) return { title: 'Service Not Found' };
 
   return {
@@ -18,9 +21,12 @@ export function generateStaticParams() {
   }));
 }
 
-export default function ServicePage({ params }) {
-  const service = SERVICE_DATA[params.slug];
+export default async function ServicePage(props) {
+  // Await the params to ensure the URL slug is read correctly before checking the data
+  const params = await props.params;
+  const service = SERVICE_DATA[params?.slug];
 
+  // If the slug doesn't match our data, return the 404 page
   if (!service) {
     notFound(); 
   }

@@ -5,6 +5,7 @@ import { useQuote } from '../context/QuoteContext';
 import { Star, CalendarCheck, ShieldCheck, Map, Headphones, BusFront, Users, Briefcase, Trophy, Navigation, Car, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { QuoteForm, TrustStatsBanner } from '../components/Shared';
 import { FLEET_DATA } from '../lib/data';
+import { HeroSearch } from '../components/HeroSearch'; // <-- Import your Hero Search Bar
 
 export default function HomePage() {
   const { setIsQuoteModalOpen } = useQuote();
@@ -16,7 +17,7 @@ export default function HomePage() {
 
   return (
     <div className="w-full">
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800">
+      <section className="relative pt-32 pb-28 lg:pt-40 lg:pb-36 bg-blue-800">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-black/60 z-10"></div>
           <img src="/home-hero.jpg" alt="Coach bus on road" className="absolute inset-0 w-full h-full object-cover" />
@@ -27,7 +28,7 @@ export default function HomePage() {
               <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6">Canada's Premier Charter Bus Rentals</div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6">Trusted Coach Charters for Group Travel in Canada.</h1>
               <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-xl">Whether you need a coach for a large group or a minibus for a smaller trip, we've got you covered anywhere in Canada. Greater Toronto Area and beyond.</p>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 p-4 rounded-lg flex items-start">
+              <div className="bg-white/15 backdrop-blur-md border border-white/20 p-4 rounded-lg flex items-start">
                 <Star className="text-yellow-400 mr-4 flex-shrink-0 mt-1 fill-current" />
                 <p className="text-sm font-medium italic">"With our price-beat guarantee, we promise to beat any competitor's comparable quote by 5%."</p>
               </div>
@@ -38,6 +39,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* HERO SEARCH BAR OVERLAY */}
+      <div className="container mx-auto px-4">
+        <HeroSearch />
+      </div>
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">

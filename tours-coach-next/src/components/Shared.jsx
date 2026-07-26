@@ -188,6 +188,9 @@ export const Footer = () => (
 );
 
 export const QuoteForm = ({ onClose }) => {
+  // 1. Pull in the quoteData and setQuoteData from context
+  const { quoteData, setQuoteData } = useQuote();
+  
   const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [tripType, setTripType] = useState('return');
@@ -210,6 +213,8 @@ export const QuoteForm = ({ onClose }) => {
         setSubmitted(true);
         form.reset();
         setTripType('return');
+        // Optional: clear the pre-filled data after a successful submission
+        setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-rental' });
         setTimeout(() => setSubmitted(false), 5000);
       } else {
         alert("There was a problem sending your quote. Please try calling us instead.");
@@ -259,16 +264,35 @@ export const QuoteForm = ({ onClose }) => {
               <input required name="phone" type="tel" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
             </div>
           </div>
+
+          {/* 2. Bind the Pickup and Destination Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pickup Location *</label>
-              <input required name="pickup" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
+              <input 
+                required 
+                name="pickup" 
+                type="text" 
+                value={quoteData.pickup} 
+                onChange={(e) => setQuoteData({ ...quoteData, pickup: e.target.value })}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+                placeholder="City or Address" 
+              />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Destination *</label>
-              <input required name="destination" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="City or Address" />
+              <input 
+                required 
+                name="destination" 
+                type="text" 
+                value={quoteData.destination}
+                onChange={(e) => setQuoteData({ ...quoteData, destination: e.target.value })}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+                placeholder="City or Address" 
+              />
             </div>
           </div>
+
           <div className="flex space-x-6 py-1">
             <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
               <input type="radio" name="tripType" value="return" checked={tripType === 'return'} onChange={() => setTripType('return')} className="mr-2 w-4 h-4 text-blue-800 border-gray-300" />
@@ -292,7 +316,6 @@ export const QuoteForm = ({ onClose }) => {
             )}
           </div>
           
-          {/* NEW ROW FOR TIMES */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pick Up Time *</label>
@@ -305,21 +328,26 @@ export const QuoteForm = ({ onClose }) => {
               </div>
             )}
           </div>
-          {/* END NEW ROW */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Passengers *</label>
               <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
             </div>
+            {/* 3. Bind the Vehicle Preference Select */}
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Vehicle Preference</label>
-              <select name="vehicle" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm">
+              <select 
+                name="vehicle" 
+                value={quoteData.vehicle}
+                onChange={(e) => setQuoteData({ ...quoteData, vehicle: e.target.value })}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm"
+              >
                 <option value="any">No Preference</option>
-                <option value="luxury">Luxury Coach (56 pax)</option>
-                <option value="mini">Mini Coach (24-36 pax)</option>
-                <option value="van">Passenger Van (14 pax)</option>
-                <option value="school">School Bus</option>
+                <option value="luxury-coach-bus-rental">Luxury Coach (56 pax)</option>
+                <option value="mini-coach-bus-rental">Mini Coach (24-36 pax)</option>
+                <option value="14-passenger-van-rental">Passenger Van (14 pax)</option>
+                <option value="school-bus-rental">School Bus</option>
               </select>
             </div>
           </div>

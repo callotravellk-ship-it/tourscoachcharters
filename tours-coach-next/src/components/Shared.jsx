@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useQuote } from '../context/QuoteContext';
 import { Phone, Mail, ChevronDown, Menu, X, ShieldCheck, Map, Headphones, Award, Route, Send, ArrowRight, CheckCircle } from 'lucide-react';
 import { COMPANY_INFO, NAV_LINKS } from '../lib/data';
+import Autocomplete from "react-google-autocomplete"; // <-- ADDED GOOGLE MAPS IMPORT
 
 export const Facebook = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
@@ -188,9 +189,7 @@ export const Footer = () => (
 );
 
 export const QuoteForm = ({ onClose }) => {
-  // 1. Pull in the quoteData and setQuoteData from context
   const { quoteData, setQuoteData } = useQuote();
-  
   const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [tripType, setTripType] = useState('return');
@@ -213,7 +212,6 @@ export const QuoteForm = ({ onClose }) => {
         setSubmitted(true);
         form.reset();
         setTripType('return');
-        // Optional: clear the pre-filled data after a successful submission
         setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-rental' });
         setTimeout(() => setSubmitted(false), 5000);
       } else {
@@ -265,30 +263,44 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          {/* 2. Bind the Pickup and Destination Inputs */}
+          {/* ADDED: Google Map Autocomplete Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pickup Location *</label>
-              <input 
-                required 
-                name="pickup" 
-                type="text" 
-                value={quoteData.pickup} 
+              <Autocomplete
+                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+                required
+                name="pickup"
+                value={quoteData.pickup}
+                onPlaceSelected={(place) => {
+                  setQuoteData({ ...quoteData, pickup: place.formatted_address || place.name });
+                }}
                 onChange={(e) => setQuoteData({ ...quoteData, pickup: e.target.value })}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
-                placeholder="City or Address" 
+                options={{
+                  types: ["geocode", "establishment"],
+                  componentRestrictions: { country: "ca" },
+                }}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
+                placeholder="Start typing an address..."
               />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Destination *</label>
-              <input 
-                required 
-                name="destination" 
-                type="text" 
+              <Autocomplete
+                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+                required
+                name="destination"
                 value={quoteData.destination}
+                onPlaceSelected={(place) => {
+                  setQuoteData({ ...quoteData, destination: place.formatted_address || place.name });
+                }}
                 onChange={(e) => setQuoteData({ ...quoteData, destination: e.target.value })}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
-                placeholder="City or Address" 
+                options={{
+                  types: ["geocode", "establishment"],
+                  componentRestrictions: { country: "ca" },
+                }}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
+                placeholder="Start typing an address..."
               />
             </div>
           </div>
@@ -334,7 +346,6 @@ export const QuoteForm = ({ onClose }) => {
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Passengers *</label>
               <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
             </div>
-            {/* 3. Bind the Vehicle Preference Select */}
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Vehicle Preference</label>
               <select 

@@ -1,26 +1,35 @@
-import { DESTINATION_DATA, FLEET_DATA } from '../lib/data';
+import { FLEET_DATA } from '../lib/data'; // Adjust path if needed
 
-export default async function sitemap() {
-  // ADDED www. to the base URL
-  const baseUrl = 'https://www.tourscoachcharter.com';
+export default function sitemap() {
+  const baseUrl = "https://www.tourscoachcharter.com";
 
-  // 1. Static routes
-  const routes = ['', '/about', '/contact', '/fifa-world-cup-2026-charters', '/winter-destinations'].map((route) => ({
+  // 1. Define your core static pages here
+  // (Add any extra service or destination pages you create to this list)
+  const coreRoutes = [
+    "", // This represents your homepage (/)
+    "/about",
+    "/contact",
+    "/search",
+    "/charter-bus-rental-toronto",
+    // Add additional routes like "/fifa-2026-charter-bus" here when ready
+  ];
+
+  const corePages = coreRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
+    changeFrequency: route === "" ? "weekly" : "monthly",
+    priority: route === "" ? 1.0 : 0.8,
   }));
 
-  // 2. Dynamic Destination routes
-  const destinations = Object.keys(DESTINATION_DATA).map((slug) => ({
-    url: `${baseUrl}/${slug}`,
+  // 2. Dynamically pull all your fleet vehicles from your data file
+  // This ensures your sitemap always matches your live inventory
+  const fleetPages = Object.keys(FLEET_DATA || {}).map((vehicleId) => ({
+    url: `${baseUrl}/${vehicleId}`,
     lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.9,
   }));
 
-  // 3. Dynamic Fleet routes
-  const fleet = Object.keys(FLEET_DATA).map((slug) => ({
-    url: `${baseUrl}/${slug}`,
-    lastModified: new Date(),
-  }));
-
-  return [...routes, ...destinations, ...fleet];
+  // 3. Combine everything and return it to Next.js
+  return [...corePages, ...fleetPages];
 }

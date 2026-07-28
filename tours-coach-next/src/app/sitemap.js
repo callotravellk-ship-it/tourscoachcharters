@@ -7,7 +7,8 @@ export default function sitemap() {
   // (e.g., if the FIFA page isn't in your top menu, add "/fifa-2026-charter-bus" here)
   const allRoutes = [
     "", 
-    "/search"
+    "/search",
+    "/request-a-quote" // <-- Added your new lead campaign page here
   ];
 
   // 2. Automatically loop through your entire Navigation Menu (NAV_LINKS)

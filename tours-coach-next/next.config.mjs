@@ -8,7 +8,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/luxury-coach-bus-56-passengers/', // Catching the trailing slash version just in case
+        source: '/luxury-coach-bus-56-passengers/', 
         destination: '/luxury-coach-bus-rental',
         permanent: true,
       },
@@ -20,16 +20,6 @@ const nextConfig = {
       {
         source: '/contact-us/',
         destination: '/contact',
-        permanent: true,
-      },
-      {
-        source: '/request-a-quote',
-        destination: '/', 
-        permanent: true,
-      },
-      {
-        source: '/request-a-quote/',
-        destination: '/', 
         permanent: true,
       },
       {

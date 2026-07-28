@@ -216,6 +216,16 @@ export const QuoteForm = ({ onClose }) => {
       });
 
       if (response.ok) {
+        
+        // --- META PIXEL LEAD TRACKING EVENT ---
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('track', 'Lead', {
+            content_name: 'Charter Bus Quote Request',
+            currency: 'CAD'
+          });
+        }
+        // --------------------------------------
+
         setSubmitted(true);
         form.reset();
         setTripType('return');
@@ -232,7 +242,7 @@ export const QuoteForm = ({ onClose }) => {
   };
 
   return (
-    <div className="bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 max-h-[600px] overflow-y-auto custom-scrollbar">
+    <div className={`bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 ${onClose ? 'max-h-[600px] overflow-y-auto custom-scrollbar' : ''}`}>
       
       {/* Styles to seamlessly blend the Geoapify component into your Tailwind design */}
       <style>{`

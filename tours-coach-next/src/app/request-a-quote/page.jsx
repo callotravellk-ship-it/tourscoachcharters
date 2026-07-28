@@ -28,7 +28,7 @@ export default function RequestQuotePage() {
             Fast & Free Charter Quotes
           </div>
           <h1 className="text-3xl md:text-5xl font-black mb-4 tracking-tight">
-            Get Your Instant Charter Bus Quote
+            Get Your Instant Quote
           </h1>
           <p className="text-gray-200 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
             Fill out the form below for guaranteed competitive pricing, coast-to-coast availability, and 24/7 dedicated support.

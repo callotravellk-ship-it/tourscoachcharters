@@ -365,7 +365,7 @@ export const QuoteForm = ({ onClose }) => {
                 min={departDate || today} 
                 className={`w-full px-3 py-2 border rounded outline-none text-sm transition-all duration-300 ${
                   tripType === 'oneway' 
-                    ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed' 
+                    ? 'bg-gray-100 border-gray-200 text-gray-400 opacity-50 cursor-not-allowed' 
                     : 'bg-white border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-800'
                 }`} 
               />
@@ -390,7 +390,7 @@ export const QuoteForm = ({ onClose }) => {
                 type="time" 
                 className={`w-full px-3 py-2 border rounded outline-none text-sm transition-all duration-300 ${
                   tripType === 'oneway' 
-                    ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed' 
+                    ? 'bg-gray-100 border-gray-200 text-gray-400 opacity-50 cursor-not-allowed' 
                     : 'bg-white border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-800'
                 }`} 
               />

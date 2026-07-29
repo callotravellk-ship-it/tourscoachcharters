@@ -6,6 +6,10 @@ import { useQuote } from '../context/QuoteContext';
 import { Phone, Mail, ChevronDown, Menu, X, ShieldCheck, Map, Headphones, Award, Route, Send, ArrowRight, CheckCircle } from 'lucide-react';
 import { COMPANY_INFO, NAV_LINKS } from '../lib/data';
 
+// --- GEOAPIFY IMPORTS RESTORED ---
+import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';
+import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+
 export const Facebook = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
 );
@@ -193,18 +197,15 @@ export const QuoteForm = ({ onClose }) => {
   const [isSending, setIsSending] = useState(false);
   const [tripType, setTripType] = useState('return');
   
-  // Track departure date to prevent the return date from being before it
   const [departDate, setDepartDate] = useState('');
-
-  // Get today's date in YYYY-MM-DD format to prevent past date selection
   const today = new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Extra safety validation
+    // Strict JavaScript validation ensures Geoapify fields are not empty
     if (!quoteData.pickup || !quoteData.destination) {
-      alert("Please ensure both Pickup and Destination locations are filled out.");
+      alert("Please ensure both Pickup and Destination locations are selected.");
       return;
     }
 
@@ -224,7 +225,6 @@ export const QuoteForm = ({ onClose }) => {
       });
 
       if (response.ok) {
-        // --- META PIXEL LEAD TRACKING EVENT ---
         if (typeof window !== 'undefined' && window.fbq) {
           window.fbq('track', 'Lead', {
             content_name: 'Charter Bus Quote Request',
@@ -251,6 +251,15 @@ export const QuoteForm = ({ onClose }) => {
   return (
     <div className={`bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 ${onClose ? 'max-h-[600px] overflow-y-auto custom-scrollbar' : ''}`}>
       
+      {/* Styles to seamlessly blend the Geoapify component into Tailwind */}
+      <style>{`
+        .geoapify-autocomplete-input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: none; outline: none; background: transparent; }
+        .geoapify-autocomplete-items { position: absolute; z-index: 99; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
+        .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; line-height: 1.4; }
+        .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }
+        .geoapify-close-button { display: none; }
+      `}</style>
+
       {onClose && (
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors z-20">
           <X size={24} />
@@ -296,36 +305,47 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Pickup Location <span className="text-red-500 text-sm">*</span>
-              </label>
-              <textarea 
-                required 
-                name="pickup" 
-                rows="2"
-                value={quoteData.pickup || ''}
-                onChange={(e) => setQuoteData({ ...quoteData, pickup: e.target.value })}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white resize-none leading-tight" 
-                placeholder="Type or paste full pickup address..." 
-              />
+          {/* FULL WIDTH GEOAPIFY FIELDS */}
+          <GeoapifyContext apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY || ""}>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Pickup Location <span className="text-red-500 text-sm">*</span>
+                </label>
+                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+                  <GeoapifyGeocoderAutocomplete
+                    placeholder="Start typing an address..."
+                    filterByCountryCode={["ca"]}
+                    value={quoteData.pickup}
+                    placeSelect={(place) => {
+                      if(place) setQuoteData({ ...quoteData, pickup: place.properties.formatted });
+                    }}
+                    onUserInput={(value) => {
+                      setQuoteData({ ...quoteData, pickup: value });
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Destination <span className="text-red-500 text-sm">*</span>
+                </label>
+                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+                  <GeoapifyGeocoderAutocomplete
+                    placeholder="Start typing an address..."
+                    filterByCountryCode={["ca"]}
+                    value={quoteData.destination}
+                    placeSelect={(place) => {
+                      if(place) setQuoteData({ ...quoteData, destination: place.properties.formatted });
+                    }}
+                    onUserInput={(value) => {
+                      setQuoteData({ ...quoteData, destination: value });
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Destination <span className="text-red-500 text-sm">*</span>
-              </label>
-              <textarea 
-                required 
-                name="destination" 
-                rows="2"
-                value={quoteData.destination || ''}
-                onChange={(e) => setQuoteData({ ...quoteData, destination: e.target.value })}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white resize-none leading-tight" 
-                placeholder="Type or paste full destination address..." 
-              />
-            </div>
-          </div>
+          </GeoapifyContext>
 
           <div className="flex space-x-6 py-1">
             <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">

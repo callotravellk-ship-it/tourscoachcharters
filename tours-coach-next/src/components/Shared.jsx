@@ -196,15 +196,27 @@ export const QuoteForm = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [tripType, setTripType] = useState('return');
+  
+  // Track departure date to prevent the return date from being before it
+  const [departDate, setDepartDate] = useState('');
+
+  // Get today's date in YYYY-MM-DD format to prevent past date selection
+  const today = new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Extra safety validation
+    if (!quoteData.pickup || !quoteData.destination) {
+      alert("Please ensure both Pickup and Destination locations are filled out.");
+      return;
+    }
+
     setIsSending(true);
     const form = e.target;
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
-    // Because custom components don't always use traditional names, we inject the context state manually
     payload.pickup = quoteData.pickup;
     payload.destination = quoteData.destination;
 
@@ -216,7 +228,6 @@ export const QuoteForm = ({ onClose }) => {
       });
 
       if (response.ok) {
-        
         // --- META PIXEL LEAD TRACKING EVENT ---
         if (typeof window !== 'undefined' && window.fbq) {
           window.fbq('track', 'Lead', {
@@ -224,11 +235,11 @@ export const QuoteForm = ({ onClose }) => {
             currency: 'CAD'
           });
         }
-        // --------------------------------------
 
         setSubmitted(true);
         form.reset();
         setTripType('return');
+        setDepartDate('');
         setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-rental' });
         setTimeout(() => setSubmitted(false), 5000);
       } else {
@@ -244,22 +255,13 @@ export const QuoteForm = ({ onClose }) => {
   return (
     <div className={`bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 ${onClose ? 'max-h-[600px] overflow-y-auto custom-scrollbar' : ''}`}>
       
-      {/* Styles to seamlessly blend the Geoapify component into your Tailwind design */}
-      <style>{`
-        .geoapify-autocomplete-input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: none; outline: none; background: transparent; }
-        .geoapify-autocomplete-items { position: absolute; z-index: 99; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
-        .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; }
-        .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }
-        .geoapify-close-button { display: none; }
-      `}</style>
-
       {onClose && (
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors z-20">
           <X size={24} />
         </button>
       )}
       <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Quote</h3>
-      <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
+      <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price. Fields marked with <span className="text-red-500 font-bold">*</span> are required.</p>
       
       {submitted ? (
         <div className="bg-green-50 border border-green-200 text-green-700 p-8 rounded-lg text-center my-12 animate-fade-in-up">
@@ -271,62 +273,64 @@ export const QuoteForm = ({ onClose }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">First Name *</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                First Name <span className="text-red-500 text-sm">*</span>
+              </label>
               <input required name="firstName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Last Name *</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Last Name <span className="text-red-500 text-sm">*</span>
+              </label>
               <input required name="lastName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Email Address *</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Email Address <span className="text-red-500 text-sm">*</span>
+              </label>
               <input required name="email" type="email" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Phone Number *</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Phone Number <span className="text-red-500 text-sm">*</span>
+              </label>
               <input required name="phone" type="tel" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
             </div>
           </div>
 
-          {/* FREE GEOAPIFY AUTOCOMPLETE FIELDS */}
-          <GeoapifyContext apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY || ""}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pickup Location *</label>
-                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
-                  <GeoapifyGeocoderAutocomplete
-                    placeholder="Start typing an address..."
-                    filterByCountryCode={["ca"]}
-                    value={quoteData.pickup}
-                    placeSelect={(place) => {
-                      if(place) setQuoteData({ ...quoteData, pickup: place.properties.formatted });
-                    }}
-                    onUserInput={(value) => {
-                      setQuoteData({ ...quoteData, pickup: value });
-                    }}
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Destination *</label>
-                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
-                  <GeoapifyGeocoderAutocomplete
-                    placeholder="Start typing an address..."
-                    filterByCountryCode={["ca"]}
-                    value={quoteData.destination}
-                    placeSelect={(place) => {
-                      if(place) setQuoteData({ ...quoteData, destination: place.properties.formatted });
-                    }}
-                    onUserInput={(value) => {
-                      setQuoteData({ ...quoteData, destination: value });
-                    }}
-                  />
-                </div>
-              </div>
+          {/* Standard Text Inputs for maximum usability, visibility, and copy/paste support */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Pickup Location <span className="text-red-500 text-sm">*</span>
+              </label>
+              <input 
+                required 
+                name="pickup" 
+                type="text" 
+                value={quoteData.pickup || ''}
+                onChange={(e) => setQuoteData({ ...quoteData, pickup: e.target.value })}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                placeholder="Type or paste pickup address..." 
+              />
             </div>
-          </GeoapifyContext>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Destination <span className="text-red-500 text-sm">*</span>
+              </label>
+              <input 
+                required 
+                name="destination" 
+                type="text" 
+                value={quoteData.destination || ''}
+                onChange={(e) => setQuoteData({ ...quoteData, destination: e.target.value })}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                placeholder="Type or paste destination address..." 
+              />
+            </div>
+          </div>
 
           <div className="flex space-x-6 py-1">
             <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
@@ -338,27 +342,50 @@ export const QuoteForm = ({ onClose }) => {
               One Way
             </label>
           </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Departure Date *</label>
-              <input required name="departDate" type="date" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Departure Date <span className="text-red-500 text-sm">*</span>
+              </label>
+              <input 
+                required 
+                name="departDate" 
+                type="date" 
+                min={today}
+                value={departDate}
+                onChange={(e) => setDepartDate(e.target.value)}
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+              />
             </div>
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Return Date *</label>
-                <input required name="returnDate" type="date" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Return Date <span className="text-red-500 text-sm">*</span>
+                </label>
+                <input 
+                  required 
+                  name="returnDate" 
+                  type="date" 
+                  min={departDate || today} 
+                  className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+                />
               </div>
             )}
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className={tripType === 'oneway' ? "md:col-span-2 transition-all duration-300" : "transition-all duration-300"}>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Pick Up Time *</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Pick Up Time <span className="text-red-500 text-sm">*</span>
+              </label>
               <input required name="pickupTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Return Time *</label>
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Return Time <span className="text-red-500 text-sm">*</span>
+                </label>
                 <input required name="returnTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
               </div>
             )}
@@ -366,11 +393,15 @@ export const QuoteForm = ({ onClose }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Passengers *</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Passengers <span className="text-red-500 text-sm">*</span>
+              </label>
               <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Vehicle Preference</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Vehicle Preference
+              </label>
               <select 
                 name="vehicle" 
                 value={quoteData.vehicle}

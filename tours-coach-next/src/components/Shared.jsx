@@ -6,10 +6,6 @@ import { useQuote } from '../context/QuoteContext';
 import { Phone, Mail, ChevronDown, Menu, X, ShieldCheck, Map, Headphones, Award, Route, Send, ArrowRight, CheckCircle } from 'lucide-react';
 import { COMPANY_INFO, NAV_LINKS } from '../lib/data';
 
-// --- NEW GEOAPIFY IMPORTS ---
-import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';
-import '@geoapify/geocoder-autocomplete/styles/minimal.css';
-
 export const Facebook = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
 );
@@ -300,34 +296,34 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Standard Text Inputs for maximum usability, visibility, and copy/paste support */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Full-width multi-line address fields for maximum visibility */}
+          <div className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
                 Pickup Location <span className="text-red-500 text-sm">*</span>
               </label>
-              <input 
+              <textarea 
                 required 
                 name="pickup" 
-                type="text" 
+                rows="2"
                 value={quoteData.pickup || ''}
                 onChange={(e) => setQuoteData({ ...quoteData, pickup: e.target.value })}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
-                placeholder="Type or paste pickup address..." 
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white resize-none leading-tight" 
+                placeholder="Type or paste full pickup address..." 
               />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
                 Destination <span className="text-red-500 text-sm">*</span>
               </label>
-              <input 
+              <textarea 
                 required 
                 name="destination" 
-                type="text" 
+                rows="2"
                 value={quoteData.destination || ''}
                 onChange={(e) => setQuoteData({ ...quoteData, destination: e.target.value })}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
-                placeholder="Type or paste destination address..." 
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white resize-none leading-tight" 
+                placeholder="Type or paste full destination address..." 
               />
             </div>
           </div>

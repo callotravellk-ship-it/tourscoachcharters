@@ -266,7 +266,7 @@ export const QuoteForm = ({ onClose }) => {
         </button>
       )}
       <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Quote</h3>
-      <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price. Fields marked with <span className="text-red-500 font-bold">*</span> are required.</p>
+      <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
       
       {submitted ? (
         <div className="bg-green-50 border border-green-200 text-green-700 p-8 rounded-lg text-center my-12 animate-fade-in-up">
@@ -279,13 +279,13 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                First Name <span className="text-red-500 text-sm">*</span>
+                First Name <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="firstName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Last Name <span className="text-red-500 text-sm">*</span>
+                Last Name <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="lastName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
             </div>
@@ -293,13 +293,13 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Email Address <span className="text-red-500 text-sm">*</span>
+                Email Address <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="email" type="email" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Phone Number <span className="text-red-500 text-sm">*</span>
+                Phone Number <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="phone" type="tel" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
             </div>
@@ -310,7 +310,7 @@ export const QuoteForm = ({ onClose }) => {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Pickup Location <span className="text-red-500 text-sm">*</span>
+                  Pickup Location <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
                 </label>
                 <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
                   <GeoapifyGeocoderAutocomplete
@@ -328,7 +328,7 @@ export const QuoteForm = ({ onClose }) => {
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Destination <span className="text-red-500 text-sm">*</span>
+                  Destination <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
                 </label>
                 <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
                   <GeoapifyGeocoderAutocomplete
@@ -361,7 +361,7 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Departure Date <span className="text-red-500 text-sm">*</span>
+                Departure Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input 
                 required 
@@ -376,7 +376,7 @@ export const QuoteForm = ({ onClose }) => {
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Return Date <span className="text-red-500 text-sm">*</span>
+                  Return Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
                 </label>
                 <input 
                   required 
@@ -392,14 +392,14 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Pick Up Time <span className="text-red-500 text-sm">*</span>
+                Pick Up Time <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="pickupTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Return Time <span className="text-red-500 text-sm">*</span>
+                  Return Time <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
                 </label>
                 <input 
                   required 
@@ -414,13 +414,13 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Passengers <span className="text-red-500 text-sm">*</span>
+                Passengers <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Vehicle Preference
+                Vehicle Preference <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
               </label>
               <select 
                 name="vehicle" 
@@ -437,7 +437,9 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">Additional Information</label>
+            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+              Additional Information <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
+            </label>
             <textarea name="info" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="3" placeholder="Any specific requirements, stops, or itinerary details?"></textarea>
           </div>
           <button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-4 flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>

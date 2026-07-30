@@ -373,23 +373,20 @@ export const QuoteForm = ({ onClose }) => {
                 className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
               />
             </div>
-            <div>
-              <label className={`block text-xs font-bold mb-1 uppercase tracking-wide transition-colors duration-300 ${tripType === 'oneway' ? 'text-gray-400' : 'text-gray-700'}`}>
-                Return Date {tripType === 'return' && <span className="text-red-500 text-sm">*</span>}
-              </label>
-              <input 
-                required={tripType === 'return'}
-                disabled={tripType === 'oneway'}
-                name="returnDate" 
-                type="date" 
-                min={departDate || today} 
-                className={`w-full px-3 py-2 border rounded outline-none text-sm transition-all duration-300 ${
-                  tripType === 'oneway' 
-                    ? 'bg-gray-100 border-gray-200 text-gray-400 opacity-50 cursor-not-allowed' 
-                    : 'bg-white border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-800'
-                }`} 
-              />
-            </div>
+            {tripType === 'return' && (
+              <div className="animate-fade-in-up">
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Return Date <span className="text-red-500 text-sm">*</span>
+                </label>
+                <input 
+                  required 
+                  name="returnDate" 
+                  type="date" 
+                  min={departDate || today} 
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+                />
+              </div>
+            )}
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -399,22 +396,19 @@ export const QuoteForm = ({ onClose }) => {
               </label>
               <input required name="pickupTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
-            <div>
-              <label className={`block text-xs font-bold mb-1 uppercase tracking-wide transition-colors duration-300 ${tripType === 'oneway' ? 'text-gray-400' : 'text-gray-700'}`}>
-                Return Time {tripType === 'return' && <span className="text-red-500 text-sm">*</span>}
-              </label>
-              <input 
-                required={tripType === 'return'}
-                disabled={tripType === 'oneway'}
-                name="returnTime" 
-                type="time" 
-                className={`w-full px-3 py-2 border rounded outline-none text-sm transition-all duration-300 ${
-                  tripType === 'oneway' 
-                    ? 'bg-gray-100 border-gray-200 text-gray-400 opacity-50 cursor-not-allowed' 
-                    : 'bg-white border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-800'
-                }`} 
-              />
-            </div>
+            {tripType === 'return' && (
+              <div className="animate-fade-in-up">
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Return Time <span className="text-red-500 text-sm">*</span>
+                </label>
+                <input 
+                  required 
+                  name="returnTime" 
+                  type="time" 
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+                />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

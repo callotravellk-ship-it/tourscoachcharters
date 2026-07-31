@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { collection, query, orderBy, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { 
-  LayoutDashboard, Users, Calendar, MapPin, 
-  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings
+  LayoutDashboard, Users, MapPin, 
+  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings,
+  Calendar as CalendarIcon // Imported explicitly for the sidebar
 } from 'lucide-react';
 
 export default function CRMDashboard() {
@@ -266,12 +267,19 @@ export default function CRMDashboard() {
         </div>
         
         <nav className="flex-1 p-4 overflow-y-auto custom-scrollbar">
+          {/* UPDATED NAVIGATION SIDEBAR */}
           <ul className="space-y-2">
             <li>
-              <a href="#" className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium shadow-md">
+              <Link href="/crm" className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium shadow-md">
                 <LayoutDashboard size={20} />
                 <span>Quote Requests</span>
-              </a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/crm/calendar" className="flex items-center space-x-3 text-slate-300 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
+                <CalendarIcon size={20} />
+                <span>Dispatch Calendar</span>
+              </Link>
             </li>
           </ul>
 
@@ -426,13 +434,13 @@ export default function CRMDashboard() {
                   <div>
                     <p className="text-xs text-slate-500 mb-1">Pickup</p>
                     <p className="text-sm font-medium text-slate-800">{selectedLead.pickup}</p>
-                    <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> {selectedLead.departDate} at {selectedLead.pickupTime}</p>
+                    <p className="text-xs text-slate-600 mt-1"><CalendarIcon size={12} className="inline mr-1"/> {selectedLead.departDate} at {selectedLead.pickupTime}</p>
                   </div>
                   <div className="border-t border-slate-200 pt-4">
                     <p className="text-xs text-slate-500 mb-1">Destination</p>
                     <p className="text-sm font-medium text-slate-800">{selectedLead.destination}</p>
                     {selectedLead.tripType === 'return' && (
-                      <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> Return: {selectedLead.returnDate} at {selectedLead.returnTime}</p>
+                      <p className="text-xs text-slate-600 mt-1"><CalendarIcon size={12} className="inline mr-1"/> Return: {selectedLead.returnDate} at {selectedLead.returnTime}</p>
                     )}
                   </div>
                 </div>

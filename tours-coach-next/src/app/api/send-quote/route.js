@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { db } from '../../../lib/firebase'; // Imports your new Firebase setup
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 // Initialize Resend with your API key
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -10,13 +12,36 @@ export async function POST(req) {
     const { 
       firstName, lastName, email, phone, 
       pickup, destination, departDate, returnDate, 
-      pickupTime, returnTime, // NEW: Added time variables
+      pickupTime, returnTime, 
       passengers, vehicle, info, tripType 
     } = body;
 
-    // 1. Email sent to YOUR team
+    // 1. SAVE TO FIREBASE CRM
+    // This creates a new record in your "leads" collection
+    const leadPromise = addDoc(collection(db, "leads"), {
+      firstName,
+      lastName,
+      email,
+      phone,
+      pickup,
+      destination,
+      departDate,
+      returnDate: returnDate || null,
+      pickupTime,
+      returnTime: returnTime || null,
+      passengers,
+      vehicle,
+      info: info || '',
+      tripType,
+      status: "New", // Tags it as a fresh lead for the dashboard
+      createdAt: serverTimestamp(), // Logs the exact submission time
+      quotedPrice: null, // Empty field for agents to fill later
+      assignedVehicle: "", // Empty field for agents to fill later
+    });
+
+    // 2. EMAIL SENT TO YOUR TEAM
     const adminEmail = resend.emails.send({
-      from: 'Quotes <quotes@tourscoachcharter.com>', // Ensure this domain is verified in Resend
+      from: 'Quotes <quotes@tourscoachcharter.com>',
       to: ['info@tourscoach.ca'],
       cc: ['info@tourscoachcharter.com'],
       bcc: ['acmrickaaz@gmail.com'],
@@ -40,9 +65,9 @@ export async function POST(req) {
       `
     });
 
-    // 2. Auto-reply email sent to the CUSTOMER
+    // 3. AUTO-REPLY EMAIL SENT TO THE CUSTOMER
     const customerEmail = resend.emails.send({
-      from: 'Canada Tours Coach LTD <quotes@tourscoachcharter.com>', // Ensure this domain is verified in Resend
+      from: 'Canada Tours Coach LTD <quotes@tourscoachcharter.com>',
       to: [email],
       subject: 'We received your quote request!',
       html: `
@@ -59,12 +84,13 @@ export async function POST(req) {
       `
     });
 
-    // Send both emails simultaneously
-    await Promise.all([adminEmail, customerEmail]);
+    // Execute the database save and both emails simultaneously for maximum speed
+    await Promise.all([leadPromise, adminEmail, customerEmail]);
     
     return NextResponse.json({ success: true });
 
   } catch (error) {
+    console.error("Error processing quote:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

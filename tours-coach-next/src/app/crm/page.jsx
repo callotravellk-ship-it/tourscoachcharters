@@ -160,12 +160,15 @@ export default function CRMDashboard() {
     }
   };
 
-  // --- CALCULATE SUMMARY STATS ---
+  // --- FULL SUMMARY STATS ---
   const stats = {
     new: leads.filter(l => l.status === 'New').length,
     quoted: leads.filter(l => l.status === 'Quoted').length,
-    paid: leads.filter(l => ['Advance Paid', 'Fully Paid'].includes(l.status)).length,
+    advancePaid: leads.filter(l => l.status === 'Advance Paid').length,
+    fullyPaid: leads.filter(l => l.status === 'Fully Paid').length,
     dispatched: leads.filter(l => l.status === 'Dispatched').length,
+    completed: leads.filter(l => l.status === 'Completed').length,
+    cancelled: leads.filter(l => l.status === 'Cancelled').length,
   };
 
   if (!isAuthenticated) {
@@ -222,7 +225,7 @@ export default function CRMDashboard() {
           <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Agent Portal</p>
         </div>
         
-        <nav className="flex-1 p-4 overflow-y-auto">
+        <nav className="flex-1 p-4 overflow-y-auto custom-scrollbar">
           <ul className="space-y-2">
             <li>
               <a href="#" className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium shadow-md">
@@ -233,30 +236,42 @@ export default function CRMDashboard() {
           </ul>
 
           {/* --- SIDEBAR SUMMARY WIDGET --- */}
-          <div className="mt-10">
-            <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 px-2">Pipeline Summary</h3>
-            <div className="space-y-2">
+          <div className="mt-8 pb-4">
+            <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Pipeline Summary</h3>
+            <div className="space-y-1.5">
               <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
-                <span className="text-sm text-slate-300">New Requests</span>
+                <span className="text-sm text-slate-300">New</span>
                 <span className="bg-emerald-500/20 text-emerald-400 py-0.5 px-2 rounded text-xs font-bold">{stats.new}</span>
               </div>
               <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
-                <span className="text-sm text-slate-300">Pending Quotes</span>
+                <span className="text-sm text-slate-300">Quoted</span>
                 <span className="bg-purple-500/20 text-purple-400 py-0.5 px-2 rounded text-xs font-bold">{stats.quoted}</span>
               </div>
               <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
-                <span className="text-sm text-slate-300">Paid Trips</span>
-                <span className="bg-blue-500/20 text-blue-400 py-0.5 px-2 rounded text-xs font-bold">{stats.paid}</span>
+                <span className="text-sm text-slate-300">Advance Paid</span>
+                <span className="bg-blue-500/20 text-blue-400 py-0.5 px-2 rounded text-xs font-bold">{stats.advancePaid}</span>
+              </div>
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">Fully Paid</span>
+                <span className="bg-teal-500/20 text-teal-400 py-0.5 px-2 rounded text-xs font-bold">{stats.fullyPaid}</span>
               </div>
               <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
                 <span className="text-sm text-slate-300">Dispatched</span>
                 <span className="bg-orange-500/20 text-orange-400 py-0.5 px-2 rounded text-xs font-bold">{stats.dispatched}</span>
               </div>
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">Completed</span>
+                <span className="bg-slate-500/20 text-slate-400 py-0.5 px-2 rounded text-xs font-bold">{stats.completed}</span>
+              </div>
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">Cancelled</span>
+                <span className="bg-red-500/20 text-red-400 py-0.5 px-2 rounded text-xs font-bold">{stats.cancelled}</span>
+              </div>
             </div>
           </div>
         </nav>
 
-        <div className="p-4 border-t border-slate-800 text-xs text-slate-500 flex justify-between items-center">
+        <div className="p-4 border-t border-slate-800 text-xs text-slate-500 flex justify-between items-center shrink-0">
           <span>CTC CRM v1.1</span>
           <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition font-bold">
             Logout

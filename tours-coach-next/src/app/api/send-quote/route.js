@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Initialize Resend with your API key
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
@@ -20,7 +19,7 @@ export async function POST(req) {
       to: ['info@tourscoach.ca'],
       cc: ['info@tourscoachcharter.com'],
       bcc: ['acmrickaaz@gmail.com'],
-      reply_to: email, 
+      reply_to: email, // This stays as the customer's email so you can reply to them
       subject: `New Quote Request from ${firstName} ${lastName}`,
       html: `
         <h2>New Charter Quote Request</h2>
@@ -42,8 +41,9 @@ export async function POST(req) {
 
     // 2. AUTO-REPLY EMAIL SENT TO THE CUSTOMER
     const customerEmail = resend.emails.send({
-      from: 'Canada Tours Coach LTD <quotes@tourscoachcharter.com>',
+      from: 'Tours Coach Charters <quotes@tourscoachcharter.com>',
       to: [email],
+      reply_to: 'info@tourscoachcharter.com', // Added explicit reply-to address here
       subject: 'We received your quote request!',
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
@@ -53,7 +53,7 @@ export async function POST(req) {
           <p style="font-size: 16px;">Please allow us some time to work on this, we’ll get back to you with a detailed quote as soon as possible.</p>
           <br/>
           <p style="font-size: 16px;">Best regards,</p>
-          <p style="font-size: 16px;"><strong>The Team at Canada Tours Coach LTD</strong></p>
+          <p style="font-size: 16px;"><strong>The Team at Tours Coach Charters</strong></p>
           <p style="font-size: 14px;"><a href="https://tourscoachcharter.com" style="color: #dc2626; text-decoration: none; font-weight: bold;">tourscoachcharter.com</a> | (416) 269-9555</p>
         </div>
       `

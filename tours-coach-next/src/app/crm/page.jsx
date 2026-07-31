@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { collection, query, orderBy, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { 
-  LayoutDashboard, Users, MapPin, 
-  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings,
-  Calendar as CalendarIcon // Imported explicitly for the sidebar
+  LayoutDashboard, Users, Calendar, MapPin, 
+  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings, Download
 } from 'lucide-react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function CRMDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,6 +26,11 @@ export default function CRMDashboard() {
   
   const [updateStatus, setUpdateStatus] = useState('');
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  // --- NEW GEOAPIFY STATES ---
+  const [suggestedPrice, setSuggestedPrice] = useState(null);
+  const [routeInfo, setRouteInfo] = useState(null);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   useEffect(() => {
     const session = localStorage.getItem('crm_auth');
@@ -53,12 +59,68 @@ export default function CRMDashboard() {
     if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
 
+  // --- GEOAPIFY AUTOMATED QUOTING ENGINE ---
+  const calculateRouteAndPrice = async (pickup, destination, tripType) => {
+    const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_KEY;
+    if (!apiKey) {
+      console.warn("Geoapify API key is missing from .env.local. Skipping calculation.");
+      return;
+    }
+    
+    setIsCalculating(true);
+    try {
+      // 1. Geocode Pickup
+      const pickupRes = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(pickup)}&apiKey=${apiKey}`);
+      const pickupData = await pickupRes.json();
+      const pickupCoords = pickupData.features?.[0]?.geometry?.coordinates; // [lon, lat]
+
+      // 2. Geocode Destination
+      const destRes = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(destination)}&apiKey=${apiKey}`);
+      const destData = await destRes.json();
+      const destCoords = destData.features?.[0]?.geometry?.coordinates;
+
+      if (pickupCoords && destCoords) {
+        // 3. Get Route Data for a Heavy Vehicle (Bus)
+        const routeRes = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${pickupCoords[1]},${pickupCoords[0]}|${destCoords[1]},${destCoords[0]}&mode=bus&apiKey=${apiKey}`);
+        const routeData = await routeRes.json();
+        
+        if (routeData.features?.length > 0) {
+          const props = routeData.features[0].properties;
+          const distKm = props.distance / 1000;
+          const timeMins = props.time / 60;
+          
+          setRouteInfo({ distance: distKm.toFixed(1), time: timeMins.toFixed(0) });
+          
+          // 4. Custom Pricing Logic: Base $150 + $2.50/km + $40/hr
+          let price = 150 + (distKm * 2.50) + ((timeMins / 60) * 40);
+          
+          // Double the price if it's a round trip
+          if (tripType === 'return') price *= 2;
+          
+          // Round to the nearest $5 for clean numbers
+          setSuggestedPrice(Math.ceil(price / 5) * 5);
+        }
+      }
+    } catch (error) {
+      console.error("Geoapify routing error:", error);
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
   useEffect(() => {
     if (selectedLead) {
       setQuotePrice(selectedLead.quotedPrice || '');
       setDepositAmount(selectedLead.depositAmount || '');
       setAssignedVehicle(selectedLead.assignedVehicle || (selectedLead.vehicle !== 'any' ? selectedLead.vehicle : 'Luxury Coach (56 pax)'));
       setUpdateStatus(selectedLead.status);
+
+      // Trigger Geoapify Calculation automatically if the lead is brand new
+      if (selectedLead.status === 'New') {
+        setSuggestedPrice(null);
+        setRouteInfo(null);
+        calculateRouteAndPrice(selectedLead.pickup, selectedLead.destination, selectedLead.tripType);
+      }
     }
   }, [selectedLead]);
 
@@ -161,11 +223,9 @@ export default function CRMDashboard() {
     }
   };
 
-  // --- HELPER TO RENDER SMART FINANCIALS IN THE TABLE ---
   const renderFinancials = (lead) => {
     if (lead.status === 'New') return <span className="text-xs text-slate-400 italic">Pending Quote</span>;
     
-    // Convert to numbers for safe math
     const total = Number(lead.quotedPrice) || 0;
     const deposit = Number(lead.depositAmount) || 0;
     const balance = total - deposit;
@@ -193,7 +253,6 @@ export default function CRMDashboard() {
         </div>
       );
     }
-    // Cancelled state
     return (
        <div className="flex flex-col">
           <span className="text-sm text-slate-400 line-through">${total.toLocaleString()}</span>
@@ -201,7 +260,66 @@ export default function CRMDashboard() {
     );
   };
 
-  // --- FULL SUMMARY STATS ---
+  const generateInvoice = (e) => {
+    e.preventDefault();
+    if (!selectedLead) return;
+
+    const doc = new jsPDF();
+    
+    doc.setFontSize(22);
+    doc.setTextColor(30, 58, 138);
+    doc.text("Tours Coach Charters", 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139);
+    doc.text("Official Booking Invoice", 14, 28);
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 34);
+
+    doc.setFontSize(12);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Billed To:", 14, 48);
+    doc.setFontSize(10);
+    doc.text(`${selectedLead.firstName} ${selectedLead.lastName}`, 14, 55);
+    doc.text(selectedLead.email, 14, 61);
+    doc.text(selectedLead.phone, 14, 67);
+
+    const total = Number(selectedLead.quotedPrice) || 0;
+    const deposit = Number(selectedLead.depositAmount) || 0;
+    const balance = total - deposit;
+
+    doc.autoTable({
+      startY: 75,
+      headStyles: { fillColor: [30, 58, 138] },
+      head: [['Trip Details', 'Information']],
+      body: [
+        ['Route', `${selectedLead.pickup} to ${selectedLead.destination}`],
+        ['Trip Type', selectedLead.tripType === 'return' ? 'Round Trip' : 'One Way'],
+        ['Departure', `${selectedLead.departDate} at ${selectedLead.pickupTime}`],
+        ['Assigned Vehicle', selectedLead.assignedVehicle || 'TBD'],
+        ['Passengers', selectedLead.passengers],
+      ],
+    });
+
+    doc.autoTable({
+      startY: doc.lastAutoTable.finalY + 10,
+      headStyles: { fillColor: [4, 120, 87] },
+      head: [['Financial Summary', 'Amount (CAD)']],
+      body: [
+        ['Total Trip Cost', `$${total.toLocaleString()}`],
+        ['Advance Paid', `$${deposit.toLocaleString()}`],
+        ['Pending Balance', `$${balance.toLocaleString()}`],
+        ['Current Status', selectedLead.status],
+      ],
+    });
+
+    doc.setFontSize(9);
+    doc.setTextColor(148, 163, 184);
+    doc.text("Thank you for traveling with Tours Coach Charters.", 14, doc.lastAutoTable.finalY + 20);
+    doc.text("tourscoachcharter.com | (416) 269-9555", 14, doc.lastAutoTable.finalY + 26);
+
+    doc.save(`Invoice_${selectedLead.firstName}_${selectedLead.lastName}.pdf`);
+  };
+
   const stats = {
     new: leads.filter(l => l.status === 'New').length,
     quoted: leads.filter(l => l.status === 'Quoted').length,
@@ -257,8 +375,8 @@ export default function CRMDashboard() {
   }
 
   return (
-    <div className="h-screen w-full bg-slate-50 flex pt-[72px] md:pt-[80px] box-border">
-      <div className="w-64 bg-slate-900 text-white flex flex-col h-full">
+    <div className="h-screen w-full bg-slate-50 flex pt-[72px] md:pt-[80px] box-border relative">
+      <div className="w-64 bg-slate-900 text-white flex flex-col h-full shrink-0">
         <div className="p-6 border-b border-slate-800">
           <Link href="/">
             <img src="/logo.png" alt="Logo" className="h-8 object-contain mb-4 bg-white p-1 rounded" />
@@ -267,17 +385,16 @@ export default function CRMDashboard() {
         </div>
         
         <nav className="flex-1 p-4 overflow-y-auto custom-scrollbar">
-          {/* UPDATED NAVIGATION SIDEBAR */}
           <ul className="space-y-2">
             <li>
-              <Link href="/crm" className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium shadow-md">
+              <a href="#" className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium shadow-md">
                 <LayoutDashboard size={20} />
                 <span>Quote Requests</span>
-              </Link>
+              </a>
             </li>
             <li>
               <Link href="/crm/calendar" className="flex items-center space-x-3 text-slate-300 hover:text-white hover:bg-slate-800 px-4 py-3 rounded-lg font-medium transition">
-                <CalendarIcon size={20} />
+                <Calendar size={20} />
                 <span>Dispatch Calendar</span>
               </Link>
             </li>
@@ -319,7 +436,7 @@ export default function CRMDashboard() {
         </nav>
 
         <div className="p-4 border-t border-slate-800 text-xs text-slate-500 flex justify-between items-center shrink-0">
-          <span>CTC CRM v1.1</span>
+          <span>CTC CRM v1.2</span>
           <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition font-bold">
             Logout
           </button>
@@ -352,7 +469,6 @@ export default function CRMDashboard() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Received</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Customer</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Trip Route</th>
-                    {/* Added Financials Column Header */}
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Financials</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                     <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Action</th>
@@ -372,7 +488,6 @@ export default function CRMDashboard() {
                         <div className="text-sm text-slate-900 max-w-xs truncate" title={lead.pickup}><strong>From:</strong> {lead.pickup}</div>
                         <div className="text-sm text-slate-500 max-w-xs truncate" title={lead.destination}><strong>To:</strong> {lead.destination}</div>
                       </td>
-                      {/* Added Smart Financials Cell */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         {renderFinancials(lead)}
                       </td>
@@ -434,13 +549,13 @@ export default function CRMDashboard() {
                   <div>
                     <p className="text-xs text-slate-500 mb-1">Pickup</p>
                     <p className="text-sm font-medium text-slate-800">{selectedLead.pickup}</p>
-                    <p className="text-xs text-slate-600 mt-1"><CalendarIcon size={12} className="inline mr-1"/> {selectedLead.departDate} at {selectedLead.pickupTime}</p>
+                    <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> {selectedLead.departDate} at {selectedLead.pickupTime}</p>
                   </div>
                   <div className="border-t border-slate-200 pt-4">
                     <p className="text-xs text-slate-500 mb-1">Destination</p>
                     <p className="text-sm font-medium text-slate-800">{selectedLead.destination}</p>
                     {selectedLead.tripType === 'return' && (
-                      <p className="text-xs text-slate-600 mt-1"><CalendarIcon size={12} className="inline mr-1"/> Return: {selectedLead.returnDate} at {selectedLead.returnTime}</p>
+                      <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> Return: {selectedLead.returnDate} at {selectedLead.returnTime}</p>
                     )}
                   </div>
                 </div>
@@ -455,7 +570,6 @@ export default function CRMDashboard() {
                 </div>
               )}
 
-              {/* --- PRICING OR MANAGEMENT ENGINE --- */}
               <div className="border-t border-slate-200 pt-6">
                 {selectedLead.status === 'New' ? (
                   <>
@@ -463,6 +577,38 @@ export default function CRMDashboard() {
                       <DollarSign size={16} className="mr-2 text-green-600"/> Price This Trip
                     </h3>
                     
+                    {/* --- SMART GEOAPIFY QUOTE PANEL --- */}
+                    {isCalculating ? (
+                      <div className="bg-blue-50 text-blue-800 p-3 rounded-lg mb-6 text-sm flex items-center animate-pulse border border-blue-100">
+                        <Clock size={16} className="mr-2" /> Geoapify is analyzing route & traffic...
+                      </div>
+                    ) : suggestedPrice && routeInfo ? (
+                      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6 flex justify-between items-center shadow-sm">
+                        <div>
+                          <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-1 flex items-center">
+                            <MapPin size={12} className="mr-1"/> Smart Quote Estimate
+                          </p>
+                          <p className="text-sm font-medium text-slate-800">
+                            {routeInfo.distance} km • {routeInfo.time} mins
+                          </p>
+                        </div>
+                        <div className="text-right flex items-center space-x-3">
+                          <span className="text-lg font-bold text-blue-900">${suggestedPrice}</span>
+                          <button 
+                            type="button"
+                            onClick={() => {
+                               setQuotePrice(suggestedPrice);
+                               // Automatically calculate a standard 20% deposit
+                               setDepositAmount(Math.round(suggestedPrice * 0.20)); 
+                            }}
+                            className="bg-blue-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-blue-700 transition shadow-sm"
+                          >
+                            Apply Estimate
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
+
                     <form onSubmit={handleSendQuote} className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
@@ -517,7 +663,14 @@ export default function CRMDashboard() {
                         </div>
                       </div>
 
-                      <form onSubmit={handleStatusChange}>
+                      <button 
+                        onClick={generateInvoice}
+                        className="w-full bg-slate-100 border border-slate-300 text-slate-700 font-bold py-2.5 rounded-lg shadow-sm hover:bg-slate-200 transition flex items-center justify-center text-sm"
+                      >
+                        <Download size={16} className="mr-2 text-slate-500"/> Download PDF Invoice
+                      </button>
+
+                      <form onSubmit={handleStatusChange} className="pt-2">
                         <label className="block text-xs font-bold text-slate-600 mb-2">Update Trip Status</label>
                         <div className="flex space-x-2">
                           <select 

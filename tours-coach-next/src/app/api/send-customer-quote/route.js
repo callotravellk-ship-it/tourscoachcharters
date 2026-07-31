@@ -13,15 +13,15 @@ export async function POST(req) {
     } = body;
 
     const { data, error } = await resend.emails.send({
-      from: 'Canada Tours Coach LTD <quotes@tourscoachcharter.com>', // Must be your verified Resend domain
+      from: 'Tours Coach Charters <quotes@tourscoachcharter.com>', 
       to: [email],
-      reply_to: 'info@tourscoach.ca', // So customers can reply directly to your team
+      reply_to: 'info@tourscoachcharter.com', // Updated reply-to address
       subject: `Your Charter Quote: ${pickup} to ${destination}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; line-height: 1.6; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
           <div style="background-color: #1e3a8a; padding: 24px; text-align: center; color: white;">
             <h1 style="margin: 0; font-size: 24px;">Your Official Quote</h1>
-            <p style="margin: 8px 0 0 0; opacity: 0.9;">Canada Tours Coach LTD</p>
+            <p style="margin: 8px 0 0 0; opacity: 0.9;">Tours Coach Charters</p>
           </div>
           
           <div style="padding: 32px;">

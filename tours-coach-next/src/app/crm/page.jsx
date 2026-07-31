@@ -126,8 +126,7 @@ export default function CRMDashboard() {
 
   if (!isAuthenticated) {
     return (
-      // Added pt-[124px] to push the login box below the global fixed header
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden pt-[124px]">
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden pt-[80px] md:pt-[96px]">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full pointer-events-none"></div>
         
@@ -170,8 +169,7 @@ export default function CRMDashboard() {
   }
 
   return (
-    // Replaced min-h-screen with h-screen and added pt-[110px] md:pt-[124px] to perfectly clear the navigation bar
-    <div className="h-screen w-full bg-slate-50 flex pt-[110px] md:pt-[124px] box-border">
+    <div className="h-screen w-full bg-slate-50 flex pt-[80px] md:pt-[96px] box-border">
       <div className="w-64 bg-slate-900 text-white flex flex-col h-full">
         <div className="p-6 border-b border-slate-800">
           <Link href="/">

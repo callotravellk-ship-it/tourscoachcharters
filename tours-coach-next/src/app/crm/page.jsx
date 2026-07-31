@@ -301,159 +301,157 @@ export default function CRMDashboard() {
       </div>
 
       {selectedLead && (
-        <div className="fixed inset-0 overflow-hidden z-[100]">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setSelectedLead(null)}></div>
-          <div className="fixed inset-y-0 right-0 max-w-lg w-full flex">
-            <div className="h-full w-full bg-white shadow-2xl flex flex-col animate-fade-in-up">
+          <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl flex flex-col max-h-[95vh] animate-fade-in-up overflow-hidden">
+            
+            <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
+              <div className="flex items-center space-x-3">
+                <h2 className="text-lg font-bold">Booking Details</h2>
+                <span className={`px-2 py-0.5 text-xs font-bold rounded border ${getStatusColor(selectedLead.status)}`}>
+                  {selectedLead.status}
+                </span>
+              </div>
+              <button onClick={() => setSelectedLead(null)} className="text-slate-300 hover:text-white transition-colors">
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
               
-              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <h2 className="text-lg font-bold">Booking Details</h2>
-                  <span className={`px-2 py-0.5 text-xs font-bold rounded border ${getStatusColor(selectedLead.status)}`}>
-                    {selectedLead.status}
-                  </span>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Users size={14} className="mr-2"/> Customer</h3>
+                  <p className="text-sm font-bold text-slate-800">{selectedLead.firstName} {selectedLead.lastName}</p>
+                  <p className="text-sm truncate"><a href={`mailto:${selectedLead.email}`} className="text-blue-600 hover:underline">{selectedLead.email}</a></p>
+                  <p className="text-sm"><a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a></p>
                 </div>
-                <button onClick={() => setSelectedLead(null)} className="text-slate-300 hover:text-white transition-colors">
-                  <X size={24} />
-                </button>
+                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Bus size={14} className="mr-2"/> Logistics</h3>
+                   <p className="text-sm"><strong>Pax:</strong> {selectedLead.passengers}</p>
+                   <p className="text-sm"><strong>Pref:</strong> {selectedLead.vehicle === 'any' ? 'No Preference' : selectedLead.vehicle}</p>
+                </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Users size={14} className="mr-2"/> Customer</h3>
-                    <p className="text-sm font-bold text-slate-800">{selectedLead.firstName} {selectedLead.lastName}</p>
-                    <p className="text-sm truncate"><a href={`mailto:${selectedLead.email}`} className="text-blue-600 hover:underline">{selectedLead.email}</a></p>
-                    <p className="text-sm"><a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a></p>
-                  </div>
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Bus size={14} className="mr-2"/> Logistics</h3>
-                     <p className="text-sm"><strong>Pax:</strong> {selectedLead.passengers}</p>
-                     <p className="text-sm"><strong>Pref:</strong> {selectedLead.vehicle === 'any' ? 'No Preference' : selectedLead.vehicle}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><MapPin size={14} className="mr-2"/> Itinerary ({selectedLead.tripType === 'return' ? 'Round Trip' : 'One Way'})</h3>
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 space-y-4">
-                    <div>
-                      <p className="text-xs text-slate-500 mb-1">Pickup</p>
-                      <p className="text-sm font-medium text-slate-800">{selectedLead.pickup}</p>
-                      <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> {selectedLead.departDate} at {selectedLead.pickupTime}</p>
-                    </div>
-                    <div className="border-t border-slate-200 pt-4">
-                      <p className="text-xs text-slate-500 mb-1">Destination</p>
-                      <p className="text-sm font-medium text-slate-800">{selectedLead.destination}</p>
-                      {selectedLead.tripType === 'return' && (
-                        <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> Return: {selectedLead.returnDate} at {selectedLead.returnTime}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {selectedLead.info && (
+              <div>
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><MapPin size={14} className="mr-2"/> Itinerary ({selectedLead.tripType === 'return' ? 'Round Trip' : 'One Way'})</h3>
+                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 space-y-4">
                   <div>
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><FileText size={14} className="mr-2"/> Notes</h3>
-                    <div className="bg-amber-50 text-amber-900 p-3 rounded-lg border border-amber-100 text-sm italic">
-                      "{selectedLead.info}"
-                    </div>
+                    <p className="text-xs text-slate-500 mb-1">Pickup</p>
+                    <p className="text-sm font-medium text-slate-800">{selectedLead.pickup}</p>
+                    <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> {selectedLead.departDate} at {selectedLead.pickupTime}</p>
                   </div>
-                )}
+                  <div className="border-t border-slate-200 pt-4">
+                    <p className="text-xs text-slate-500 mb-1">Destination</p>
+                    <p className="text-sm font-medium text-slate-800">{selectedLead.destination}</p>
+                    {selectedLead.tripType === 'return' && (
+                      <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> Return: {selectedLead.returnDate} at {selectedLead.returnTime}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-                {/* --- PRICING OR MANAGEMENT ENGINE --- */}
-                <div className="border-t border-slate-200 pt-6">
-                  {selectedLead.status === 'New' ? (
-                    <>
-                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
-                        <DollarSign size={16} className="mr-2 text-green-600"/> Price This Trip
-                      </h3>
-                      
-                      <form onSubmit={handleSendQuote} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-xs font-bold text-slate-600 mb-1">Total Price (CAD)</label>
-                            <input 
-                              type="number" required value={quotePrice} onChange={(e) => setQuotePrice(e.target.value)}
-                              className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
-                              placeholder="e.g. 1500"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-bold text-slate-600 mb-1">Required Deposit (CAD)</label>
-                            <input 
-                              type="number" required value={depositAmount} onChange={(e) => setDepositAmount(e.target.value)}
-                              className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
-                              placeholder="e.g. 300"
-                            />
-                          </div>
-                        </div>
+              {selectedLead.info && (
+                <div>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><FileText size={14} className="mr-2"/> Notes</h3>
+                  <div className="bg-amber-50 text-amber-900 p-3 rounded-lg border border-amber-100 text-sm italic">
+                    "{selectedLead.info}"
+                  </div>
+                </div>
+              )}
+
+              {/* --- PRICING OR MANAGEMENT ENGINE --- */}
+              <div className="border-t border-slate-200 pt-6">
+                {selectedLead.status === 'New' ? (
+                  <>
+                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                      <DollarSign size={16} className="mr-2 text-green-600"/> Price This Trip
+                    </h3>
+                    
+                    <form onSubmit={handleSendQuote} className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs font-bold text-slate-600 mb-1">Assign Vehicle</label>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">Total Price (CAD)</label>
                           <input 
-                            type="text" required value={assignedVehicle} onChange={(e) => setAssignedVehicle(e.target.value)}
+                            type="number" required value={quotePrice} onChange={(e) => setQuotePrice(e.target.value)}
                             className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
+                            placeholder="e.g. 1500"
                           />
                         </div>
-                        
-                        <button disabled={isSendingQuote} type="submit" className={`w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700 transition flex items-center justify-center mt-2 ${isSendingQuote ? 'opacity-70 cursor-not-allowed' : ''}`}>
-                          {isSendingQuote ? 'Sending Email...' : <>Email Official Quote <Send size={16} className="ml-2"/></>}
-                        </button>
-                      </form>
-                    </>
-                  ) : (
-                    <>
-                      {/* --- ONCE QUOTED, SHOW MANAGEMENT VIEW --- */}
-                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
-                        <Settings size={16} className="mr-2 text-blue-600"/> Booking Management
-                      </h3>
-                      
-                      <div className="space-y-6">
-                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-2 gap-4">
-                          <div>
-                            <p className="text-xs text-slate-500 mb-1">Total Price Quoted</p>
-                            <p className="text-sm font-bold text-slate-800">${selectedLead.quotedPrice} CAD</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-slate-500 mb-1">Deposit Requested</p>
-                            <p className="text-sm font-bold text-slate-800">${selectedLead.depositAmount || 'N/A'} CAD</p>
-                          </div>
-                          <div className="col-span-2 border-t border-slate-200 pt-3 mt-1">
-                            <p className="text-xs text-slate-500 mb-1">Assigned Vehicle</p>
-                            <p className="text-sm font-bold text-slate-800">{selectedLead.assignedVehicle}</p>
-                          </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">Required Deposit (CAD)</label>
+                          <input 
+                            type="number" required value={depositAmount} onChange={(e) => setDepositAmount(e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
+                            placeholder="e.g. 300"
+                          />
                         </div>
-
-                        <form onSubmit={handleStatusChange}>
-                          <label className="block text-xs font-bold text-slate-600 mb-2">Update Trip Status</label>
-                          <div className="flex space-x-2">
-                            <select 
-                              value={updateStatus}
-                              onChange={(e) => setUpdateStatus(e.target.value)}
-                              className="flex-1 px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm bg-white"
-                            >
-                              <option value="Quoted">Quoted (Awaiting Payment)</option>
-                              <option value="Advance Paid">Advance Paid</option>
-                              <option value="Fully Paid">Fully Paid</option>
-                              <option value="Dispatched">Dispatched</option>
-                              <option value="Completed">Completed</option>
-                              <option value="Cancelled">Cancelled</option>
-                            </select>
-                            <button 
-                              type="submit"
-                              disabled={isUpdatingStatus}
-                              className={`bg-slate-800 text-white px-5 py-2 rounded font-bold text-sm hover:bg-slate-900 transition ${isUpdatingStatus ? 'opacity-50 cursor-wait' : ''}`}
-                            >
-                              {isUpdatingStatus ? 'Saving...' : 'Update'}
-                            </button>
-                          </div>
-                        </form>
                       </div>
-                    </>
-                  )}
-                </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-600 mb-1">Assign Vehicle</label>
+                        <input 
+                          type="text" required value={assignedVehicle} onChange={(e) => setAssignedVehicle(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
+                        />
+                      </div>
+                      
+                      <button disabled={isSendingQuote} type="submit" className={`w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700 transition flex items-center justify-center mt-2 ${isSendingQuote ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                        {isSendingQuote ? 'Sending Email...' : <>Email Official Quote <Send size={16} className="ml-2"/></>}
+                      </button>
+                    </form>
+                  </>
+                ) : (
+                  <>
+                    {/* --- ONCE QUOTED, SHOW MANAGEMENT VIEW --- */}
+                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                      <Settings size={16} className="mr-2 text-blue-600"/> Booking Management
+                    </h3>
+                    
+                    <div className="space-y-6">
+                      <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Total Price Quoted</p>
+                          <p className="text-sm font-bold text-slate-800">${selectedLead.quotedPrice} CAD</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Deposit Requested</p>
+                          <p className="text-sm font-bold text-slate-800">${selectedLead.depositAmount || 'N/A'} CAD</p>
+                        </div>
+                        <div className="col-span-2 border-t border-slate-200 pt-3 mt-1">
+                          <p className="text-xs text-slate-500 mb-1">Assigned Vehicle</p>
+                          <p className="text-sm font-bold text-slate-800">{selectedLead.assignedVehicle}</p>
+                        </div>
+                      </div>
 
+                      <form onSubmit={handleStatusChange}>
+                        <label className="block text-xs font-bold text-slate-600 mb-2">Update Trip Status</label>
+                        <div className="flex space-x-2">
+                          <select 
+                            value={updateStatus}
+                            onChange={(e) => setUpdateStatus(e.target.value)}
+                            className="flex-1 px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm bg-white"
+                          >
+                            <option value="Quoted">Quoted (Awaiting Payment)</option>
+                            <option value="Advance Paid">Advance Paid</option>
+                            <option value="Fully Paid">Fully Paid</option>
+                            <option value="Dispatched">Dispatched</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                          </select>
+                          <button 
+                            type="submit"
+                            disabled={isUpdatingStatus}
+                            className={`bg-slate-800 text-white px-5 py-2 rounded font-bold text-sm hover:bg-slate-900 transition ${isUpdatingStatus ? 'opacity-50 cursor-wait' : ''}`}
+                          >
+                            {isUpdatingStatus ? 'Saving...' : 'Update'}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </>
+                )}
               </div>
+
             </div>
           </div>
         </div>

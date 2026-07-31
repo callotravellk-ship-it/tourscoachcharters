@@ -22,7 +22,6 @@ export default function CRMDashboard() {
   const [assignedVehicle, setAssignedVehicle] = useState('');
   const [isSendingQuote, setIsSendingQuote] = useState(false);
   
-  // New state for manual status updates
   const [updateStatus, setUpdateStatus] = useState('');
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
@@ -53,7 +52,6 @@ export default function CRMDashboard() {
     if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
 
-  // Pre-fill modal data when a lead is opened
   useEffect(() => {
     if (selectedLead) {
       setQuotePrice(selectedLead.quotedPrice || '');
@@ -82,7 +80,6 @@ export default function CRMDashboard() {
     localStorage.removeItem('crm_auth');
   };
 
-  // Handles sending the initial quote
   const handleSendQuote = async (e) => {
     e.preventDefault();
     setIsSendingQuote(true);
@@ -101,7 +98,6 @@ export default function CRMDashboard() {
 
       if (!response.ok) throw new Error("Email sending failed");
 
-      // Save price and deposit info to Firebase, update status to Quoted
       const leadRef = doc(db, 'leads', selectedLead.id);
       await updateDoc(leadRef, {
         status: "Quoted",
@@ -123,7 +119,6 @@ export default function CRMDashboard() {
     }
   };
 
-  // Handles manual status updates for payments and dispatch
   const handleStatusChange = async (e) => {
     e.preventDefault();
     setIsUpdatingStatus(true);
@@ -152,7 +147,6 @@ export default function CRMDashboard() {
     }).format(date);
   };
 
-  // Helper to color-code the statuses dynamically
   const getStatusColor = (status) => {
     switch (status) {
       case 'New': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
@@ -164,6 +158,14 @@ export default function CRMDashboard() {
       case 'Cancelled': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-slate-100 text-slate-800 border-slate-200';
     }
+  };
+
+  // --- CALCULATE SUMMARY STATS ---
+  const stats = {
+    new: leads.filter(l => l.status === 'New').length,
+    quoted: leads.filter(l => l.status === 'Quoted').length,
+    paid: leads.filter(l => ['Advance Paid', 'Fully Paid'].includes(l.status)).length,
+    dispatched: leads.filter(l => l.status === 'Dispatched').length,
   };
 
   if (!isAuthenticated) {
@@ -219,6 +221,7 @@ export default function CRMDashboard() {
           </Link>
           <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Agent Portal</p>
         </div>
+        
         <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-2">
             <li>
@@ -228,7 +231,31 @@ export default function CRMDashboard() {
               </a>
             </li>
           </ul>
+
+          {/* --- SIDEBAR SUMMARY WIDGET --- */}
+          <div className="mt-10">
+            <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 px-2">Pipeline Summary</h3>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">New Requests</span>
+                <span className="bg-emerald-500/20 text-emerald-400 py-0.5 px-2 rounded text-xs font-bold">{stats.new}</span>
+              </div>
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">Pending Quotes</span>
+                <span className="bg-purple-500/20 text-purple-400 py-0.5 px-2 rounded text-xs font-bold">{stats.quoted}</span>
+              </div>
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">Paid Trips</span>
+                <span className="bg-blue-500/20 text-blue-400 py-0.5 px-2 rounded text-xs font-bold">{stats.paid}</span>
+              </div>
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">Dispatched</span>
+                <span className="bg-orange-500/20 text-orange-400 py-0.5 px-2 rounded text-xs font-bold">{stats.dispatched}</span>
+              </div>
+            </div>
+          </div>
         </nav>
+
         <div className="p-4 border-t border-slate-800 text-xs text-slate-500 flex justify-between items-center">
           <span>CTC CRM v1.1</span>
           <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition font-bold">
@@ -402,7 +429,6 @@ export default function CRMDashboard() {
                   </>
                 ) : (
                   <>
-                    {/* --- ONCE QUOTED, SHOW MANAGEMENT VIEW --- */}
                     <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
                       <Settings size={16} className="mr-2 text-blue-600"/> Booking Management
                     </h3>

@@ -219,42 +219,49 @@ export const QuoteForm = ({ onClose }) => {
 
     payload.pickup = quoteData.pickup;
     payload.destination = quoteData.destination;
-    payload.tripType = tripType; // ensure trip type is passed accurately
+    payload.tripType = tripType;
 
     try {
-      // 1. SAVE TO FIREBASE DIRECTLY FROM THE CLIENT DASHBOARD
-      await addDoc(collection(db, "leads"), {
-        ...payload,
-        status: "New",
-        createdAt: serverTimestamp(),
-        quotedPrice: null,
-        assignedVehicle: "",
-      });
-
-      // 2. TRIGGER THE API TO FIRE OFF THE EMAILS
+      // 1. TRIGGER THE EMAILS FIRST (Failsafe - never lose a customer request!)
       const response = await fetch('/api/send-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
-        if (typeof window !== 'undefined' && window.fbq) {
-          window.fbq('track', 'Lead', {
-            content_name: 'Charter Bus Quote Request',
-            currency: 'CAD'
-          });
-        }
-
-        setSubmitted(true);
-        form.reset();
-        setTripType('return');
-        setDepartDate('');
-        setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-rental' });
-        setTimeout(() => setSubmitted(false), 5000);
-      } else {
-        alert("There was a problem sending your quote. Please try calling us instead.");
+      if (!response.ok) {
+        throw new Error("Email sending failed");
       }
+
+      // 2. SAVE TO CRM IN BACKGROUND
+      // We don't "await" this in the main flow so a missing Vercel env variable won't freeze the button
+      if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        addDoc(collection(db, "leads"), {
+          ...payload,
+          status: "New",
+          createdAt: serverTimestamp(),
+          quotedPrice: null,
+          assignedVehicle: "",
+        }).catch(err => console.error("Firebase save error:", err));
+      } else {
+        console.warn("Firebase API Key missing in environment variables. CRM save skipped.");
+      }
+
+      // 3. SUCCESS STATE
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead', {
+          content_name: 'Charter Bus Quote Request',
+          currency: 'CAD'
+        });
+      }
+
+      setSubmitted(true);
+      form.reset();
+      setTripType('return');
+      setDepartDate('');
+      setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-rental' });
+      setTimeout(() => setSubmitted(false), 5000);
+
     } catch (error) {
       console.error(error);
       alert("Network error. Please try again.");

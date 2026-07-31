@@ -17,7 +17,6 @@ export default function CRMDashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedLead, setSelectedLead] = useState(null);
 
-  // --- QUOTE BUILDER STATE ---
   const [quotePrice, setQuotePrice] = useState('');
   const [depositAmount, setDepositAmount] = useState('');
   const [assignedVehicle, setAssignedVehicle] = useState('');
@@ -50,7 +49,6 @@ export default function CRMDashboard() {
     if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
 
-  // Pre-fill the assigned vehicle based on the customer's request when a lead is opened
   useEffect(() => {
     if (selectedLead) {
       setQuotePrice(selectedLead.quotedPrice || '');
@@ -78,13 +76,11 @@ export default function CRMDashboard() {
     localStorage.removeItem('crm_auth');
   };
 
-  // --- SEND QUOTE LOGIC ---
   const handleSendQuote = async (e) => {
     e.preventDefault();
     setIsSendingQuote(true);
 
     try {
-      // 1. Trigger the API to send the official email to the customer
       const response = await fetch('/api/send-customer-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -98,7 +94,6 @@ export default function CRMDashboard() {
 
       if (!response.ok) throw new Error("Email sending failed");
 
-      // 2. Update the document in Firebase to reflect the new status and price
       const leadRef = doc(db, 'leads', selectedLead.id);
       await updateDoc(leadRef, {
         status: "Quoted",
@@ -107,10 +102,8 @@ export default function CRMDashboard() {
         quotedAt: new Date()
       });
 
-      // 3. Refresh the leads list so the status changes in the UI instantly
       await fetchLeads();
       
-      // Close the modal and show success
       setSelectedLead(null);
       alert(`Quote of $${quotePrice} successfully sent to ${selectedLead.firstName}!`);
 
@@ -133,7 +126,8 @@ export default function CRMDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+      // Added pt-[124px] to push the login box below the global fixed header
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden pt-[124px]">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full pointer-events-none"></div>
         
@@ -176,15 +170,16 @@ export default function CRMDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      <div className="w-64 bg-slate-900 text-white flex flex-col">
+    // Replaced min-h-screen with h-screen and added pt-[110px] md:pt-[124px] to perfectly clear the navigation bar
+    <div className="h-screen w-full bg-slate-50 flex pt-[110px] md:pt-[124px] box-border">
+      <div className="w-64 bg-slate-900 text-white flex flex-col h-full">
         <div className="p-6 border-b border-slate-800">
           <Link href="/">
             <img src="/logo.png" alt="Logo" className="h-8 object-contain mb-4 bg-white p-1 rounded" />
           </Link>
           <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Agent Portal</p>
         </div>
-        <nav className="flex-1 p-4">
+        <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-2">
             <li>
               <a href="#" className="flex items-center space-x-3 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium shadow-md">
@@ -202,8 +197,8 @@ export default function CRMDashboard() {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white shadow-sm border-b border-slate-200 p-6 flex justify-between items-center">
+      <div className="flex-1 flex flex-col h-full overflow-hidden">
+        <header className="bg-white shadow-sm border-b border-slate-200 p-6 flex justify-between items-center shrink-0">
           <h1 className="text-2xl font-bold text-slate-800">Active Leads</h1>
           <div className="bg-blue-50 text-blue-800 px-4 py-2 rounded-full text-sm font-bold border border-blue-100">
             {leads.length} Total Requests
@@ -269,7 +264,6 @@ export default function CRMDashboard() {
         </main>
       </div>
 
-      {/* Detail Slide-Over Modal */}
       {selectedLead && (
         <div className="fixed inset-0 overflow-hidden z-[100]">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setSelectedLead(null)}></div>
@@ -328,7 +322,6 @@ export default function CRMDashboard() {
                   </div>
                 )}
 
-                {/* --- PRICING ENGINE --- */}
                 <div className="border-t border-slate-200 pt-6">
                   <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
                     <DollarSign size={16} className="mr-2 text-green-600"/> 

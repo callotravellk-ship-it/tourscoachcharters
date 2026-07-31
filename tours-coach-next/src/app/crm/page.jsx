@@ -5,19 +5,34 @@ import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { 
   LayoutDashboard, Users, Calendar, MapPin, 
-  Phone, Mail, FileText, X, Bus, Clock, ChevronRight 
+  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock 
 } from 'lucide-react';
 
 export default function CRMDashboard() {
+  // --- AUTHENTICATION STATE ---
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState(false);
+
+  // --- DATA STATE ---
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedLead, setSelectedLead] = useState(null);
 
-  // Fetch leads from Firebase on component mount
+  // Check if user is already logged in (via localStorage) when the page loads
   useEffect(() => {
+    const session = localStorage.getItem('crm_auth');
+    if (session === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  // Fetch leads ONLY if the user is authenticated
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
     const fetchLeads = async () => {
       try {
-        // Query the 'leads' collection, ordered by newest first
         const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
         
@@ -35,12 +50,29 @@ export default function CRMDashboard() {
     };
 
     fetchLeads();
-  }, []);
+  }, [isAuthenticated]);
 
-  // Helper to format Firebase timestamps securely
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const correctPassword = process.env.NEXT_PUBLIC_CRM_PASSWORD || 'coachadmin123';
+    
+    if (passwordInput === correctPassword) {
+      setIsAuthenticated(true);
+      setLoginError(false);
+      localStorage.setItem('crm_auth', 'true'); // Keep them logged in for this browser
+    } else {
+      setLoginError(true);
+      setPasswordInput('');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('crm_auth');
+  };
+
   const formatDate = (timestamp) => {
     if (!timestamp) return 'N/A';
-    // Handle both Firebase Timestamp objects and standard dates
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     return new Intl.DateTimeFormat('en-US', { 
       month: 'short', day: 'numeric', year: 'numeric', 
@@ -48,6 +80,57 @@ export default function CRMDashboard() {
     }).format(date);
   };
 
+  // ==========================================
+  // VIEW 1: THE SECURE LOGIN SCREEN
+  // ==========================================
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative z-10 border-t-4 border-red-600 animate-fade-in-up">
+          <div className="text-center mb-8">
+            <div className="bg-slate-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-200 shadow-inner">
+              <Lock size={32} className="text-slate-700" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-800">Agent Portal</h1>
+            <p className="text-slate-500 text-sm mt-2">Enter your secure password to view quote requests.</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <input 
+                type="password" 
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="Enter Password..."
+                className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 transition-all ${
+                  loginError ? 'border-red-500 focus:ring-red-200' : 'border-slate-300 focus:ring-blue-800'
+                }`}
+                autoFocus
+              />
+              {loginError && <p className="text-red-500 text-xs mt-2 font-medium">Incorrect password. Please try again.</p>}
+            </div>
+            <button type="submit" className="w-full bg-blue-800 text-white font-bold py-3 rounded-lg shadow-md hover:bg-blue-900 transition flex items-center justify-center">
+              Unlock Dashboard <Unlock size={18} className="ml-2" />
+            </button>
+          </form>
+          
+          <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+             <Link href="/" className="text-sm text-slate-400 hover:text-blue-600 transition">
+               &larr; Return to Main Website
+             </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // VIEW 2: THE UNLOCKED DASHBOARD
+  // ==========================================
   return (
     <div className="min-h-screen bg-slate-50 flex">
       
@@ -69,8 +152,11 @@ export default function CRMDashboard() {
             </li>
           </ul>
         </nav>
-        <div className="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">
-          Canada Tours Coach CRM v1.0
+        <div className="p-4 border-t border-slate-800 text-xs text-slate-500 flex justify-between items-center">
+          <span>CTC CRM v1.0</span>
+          <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition font-bold">
+            Logout
+          </button>
         </div>
       </div>
 

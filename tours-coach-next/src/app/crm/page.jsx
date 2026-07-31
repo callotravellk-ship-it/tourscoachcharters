@@ -5,7 +5,7 @@ import { collection, query, orderBy, getDocs, doc, updateDoc } from 'firebase/fi
 import { db } from '../../lib/firebase';
 import { 
   LayoutDashboard, Users, Calendar, MapPin, 
-  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send
+  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings
 } from 'lucide-react';
 
 export default function CRMDashboard() {
@@ -21,6 +21,10 @@ export default function CRMDashboard() {
   const [depositAmount, setDepositAmount] = useState('');
   const [assignedVehicle, setAssignedVehicle] = useState('');
   const [isSendingQuote, setIsSendingQuote] = useState(false);
+  
+  // New state for manual status updates
+  const [updateStatus, setUpdateStatus] = useState('');
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   useEffect(() => {
     const session = localStorage.getItem('crm_auth');
@@ -49,11 +53,13 @@ export default function CRMDashboard() {
     if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
 
+  // Pre-fill modal data when a lead is opened
   useEffect(() => {
     if (selectedLead) {
       setQuotePrice(selectedLead.quotedPrice || '');
-      setDepositAmount('');
+      setDepositAmount(selectedLead.depositAmount || '');
       setAssignedVehicle(selectedLead.assignedVehicle || (selectedLead.vehicle !== 'any' ? selectedLead.vehicle : 'Luxury Coach (56 pax)'));
+      setUpdateStatus(selectedLead.status);
     }
   }, [selectedLead]);
 
@@ -76,6 +82,7 @@ export default function CRMDashboard() {
     localStorage.removeItem('crm_auth');
   };
 
+  // Handles sending the initial quote
   const handleSendQuote = async (e) => {
     e.preventDefault();
     setIsSendingQuote(true);
@@ -94,16 +101,17 @@ export default function CRMDashboard() {
 
       if (!response.ok) throw new Error("Email sending failed");
 
+      // Save price and deposit info to Firebase, update status to Quoted
       const leadRef = doc(db, 'leads', selectedLead.id);
       await updateDoc(leadRef, {
         status: "Quoted",
         quotedPrice: quotePrice,
+        depositAmount: depositAmount,
         assignedVehicle: assignedVehicle,
         quotedAt: new Date()
       });
 
       await fetchLeads();
-      
       setSelectedLead(null);
       alert(`Quote of $${quotePrice} successfully sent to ${selectedLead.firstName}!`);
 
@@ -115,6 +123,26 @@ export default function CRMDashboard() {
     }
   };
 
+  // Handles manual status updates for payments and dispatch
+  const handleStatusChange = async (e) => {
+    e.preventDefault();
+    setIsUpdatingStatus(true);
+    try {
+      const leadRef = doc(db, 'leads', selectedLead.id);
+      await updateDoc(leadRef, {
+        status: updateStatus,
+        updatedAt: new Date()
+      });
+      await fetchLeads();
+      setSelectedLead({ ...selectedLead, status: updateStatus });
+    } catch (error) {
+      console.error(error);
+      alert("Failed to update status.");
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
   const formatDate = (timestamp) => {
     if (!timestamp) return 'N/A';
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -122,6 +150,20 @@ export default function CRMDashboard() {
       month: 'short', day: 'numeric', year: 'numeric', 
       hour: 'numeric', minute: '2-digit' 
     }).format(date);
+  };
+
+  // Helper to color-code the statuses dynamically
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'New': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      case 'Quoted': return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'Advance Paid': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'Fully Paid': return 'bg-teal-100 text-teal-800 border-teal-200';
+      case 'Dispatched': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Completed': return 'bg-slate-200 text-slate-800 border-slate-300';
+      case 'Cancelled': return 'bg-red-100 text-red-800 border-red-200';
+      default: return 'bg-slate-100 text-slate-800 border-slate-200';
+    }
   };
 
   if (!isAuthenticated) {
@@ -188,7 +230,7 @@ export default function CRMDashboard() {
           </ul>
         </nav>
         <div className="p-4 border-t border-slate-800 text-xs text-slate-500 flex justify-between items-center">
-          <span>CTC CRM v1.0</span>
+          <span>CTC CRM v1.1</span>
           <button onClick={handleLogout} className="text-red-400 hover:text-red-300 transition font-bold">
             Logout
           </button>
@@ -240,17 +282,13 @@ export default function CRMDashboard() {
                         <div className="text-sm text-slate-500 max-w-xs truncate" title={lead.destination}><strong>To:</strong> {lead.destination}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          lead.status === 'Quoted' 
-                            ? 'bg-purple-100 text-purple-800 border border-purple-200' 
-                            : 'bg-green-100 text-green-800 border border-green-200'
-                        }`}>
+                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border ${getStatusColor(lead.status)}`}>
                           {lead.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button className="text-blue-600 hover:text-blue-900 flex items-center justify-end w-full">
-                          {lead.status === 'Quoted' ? 'Review' : 'Price Trip'} <ChevronRight size={16} className="ml-1" />
+                          {lead.status === 'New' ? 'Price Trip' : 'Manage'} <ChevronRight size={16} className="ml-1" />
                         </button>
                       </td>
                     </tr>
@@ -269,9 +307,12 @@ export default function CRMDashboard() {
             <div className="h-full w-full bg-white shadow-2xl flex flex-col animate-fade-in-up">
               
               <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
-                <h2 className="text-lg font-bold">
-                  {selectedLead.status === 'Quoted' ? 'Quoted Request' : 'New Quote Request'}
-                </h2>
+                <div className="flex items-center space-x-3">
+                  <h2 className="text-lg font-bold">Booking Details</h2>
+                  <span className={`px-2 py-0.5 text-xs font-bold rounded border ${getStatusColor(selectedLead.status)}`}>
+                    {selectedLead.status}
+                  </span>
+                </div>
                 <button onClick={() => setSelectedLead(null)} className="text-slate-300 hover:text-white transition-colors">
                   <X size={24} />
                 </button>
@@ -320,61 +361,96 @@ export default function CRMDashboard() {
                   </div>
                 )}
 
+                {/* --- PRICING OR MANAGEMENT ENGINE --- */}
                 <div className="border-t border-slate-200 pt-6">
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
-                    <DollarSign size={16} className="mr-2 text-green-600"/> 
-                    {selectedLead.status === 'Quoted' ? 'Quote Already Sent' : 'Price This Trip'}
-                  </h3>
-                  
-                  <form onSubmit={handleSendQuote} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-slate-600 mb-1">Total Price (CAD)</label>
-                        <input 
-                          type="number" 
-                          required
-                          disabled={selectedLead.status === 'Quoted'}
-                          value={quotePrice}
-                          onChange={(e) => setQuotePrice(e.target.value)}
-                          className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm disabled:bg-slate-100"
-                          placeholder="e.g. 1500"
-                        />
+                  {selectedLead.status === 'New' ? (
+                    <>
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                        <DollarSign size={16} className="mr-2 text-green-600"/> Price This Trip
+                      </h3>
+                      
+                      <form onSubmit={handleSendQuote} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-1">Total Price (CAD)</label>
+                            <input 
+                              type="number" required value={quotePrice} onChange={(e) => setQuotePrice(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
+                              placeholder="e.g. 1500"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-slate-600 mb-1">Required Deposit (CAD)</label>
+                            <input 
+                              type="number" required value={depositAmount} onChange={(e) => setDepositAmount(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
+                              placeholder="e.g. 300"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-600 mb-1">Assign Vehicle</label>
+                          <input 
+                            type="text" required value={assignedVehicle} onChange={(e) => setAssignedVehicle(e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
+                          />
+                        </div>
+                        
+                        <button disabled={isSendingQuote} type="submit" className={`w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700 transition flex items-center justify-center mt-2 ${isSendingQuote ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                          {isSendingQuote ? 'Sending Email...' : <>Email Official Quote <Send size={16} className="ml-2"/></>}
+                        </button>
+                      </form>
+                    </>
+                  ) : (
+                    <>
+                      {/* --- ONCE QUOTED, SHOW MANAGEMENT VIEW --- */}
+                      <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                        <Settings size={16} className="mr-2 text-blue-600"/> Booking Management
+                      </h3>
+                      
+                      <div className="space-y-6">
+                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-xs text-slate-500 mb-1">Total Price Quoted</p>
+                            <p className="text-sm font-bold text-slate-800">${selectedLead.quotedPrice} CAD</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-500 mb-1">Deposit Requested</p>
+                            <p className="text-sm font-bold text-slate-800">${selectedLead.depositAmount || 'N/A'} CAD</p>
+                          </div>
+                          <div className="col-span-2 border-t border-slate-200 pt-3 mt-1">
+                            <p className="text-xs text-slate-500 mb-1">Assigned Vehicle</p>
+                            <p className="text-sm font-bold text-slate-800">{selectedLead.assignedVehicle}</p>
+                          </div>
+                        </div>
+
+                        <form onSubmit={handleStatusChange}>
+                          <label className="block text-xs font-bold text-slate-600 mb-2">Update Trip Status</label>
+                          <div className="flex space-x-2">
+                            <select 
+                              value={updateStatus}
+                              onChange={(e) => setUpdateStatus(e.target.value)}
+                              className="flex-1 px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm bg-white"
+                            >
+                              <option value="Quoted">Quoted (Awaiting Payment)</option>
+                              <option value="Advance Paid">Advance Paid</option>
+                              <option value="Fully Paid">Fully Paid</option>
+                              <option value="Dispatched">Dispatched</option>
+                              <option value="Completed">Completed</option>
+                              <option value="Cancelled">Cancelled</option>
+                            </select>
+                            <button 
+                              type="submit"
+                              disabled={isUpdatingStatus || updateStatus === selectedLead.status}
+                              className="bg-slate-800 text-white px-5 py-2 rounded font-bold text-sm hover:bg-slate-900 disabled:opacity-50 transition"
+                            >
+                              {isUpdatingStatus ? 'Saving...' : 'Update'}
+                            </button>
+                          </div>
+                        </form>
                       </div>
-                      <div>
-                        <label className="block text-xs font-bold text-slate-600 mb-1">Required Deposit (CAD)</label>
-                        <input 
-                          type="number" 
-                          required
-                          disabled={selectedLead.status === 'Quoted'}
-                          value={depositAmount}
-                          onChange={(e) => setDepositAmount(e.target.value)}
-                          className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm disabled:bg-slate-100"
-                          placeholder="e.g. 300"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-600 mb-1">Assign Vehicle</label>
-                      <input 
-                        type="text" 
-                        required
-                        disabled={selectedLead.status === 'Quoted'}
-                        value={assignedVehicle}
-                        onChange={(e) => setAssignedVehicle(e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm disabled:bg-slate-100"
-                      />
-                    </div>
-                    
-                    {selectedLead.status !== 'Quoted' && (
-                      <button 
-                        disabled={isSendingQuote} 
-                        type="submit" 
-                        className={`w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700 transition flex items-center justify-center mt-2 ${isSendingQuote ? 'opacity-70 cursor-not-allowed' : ''}`}
-                      >
-                        {isSendingQuote ? 'Sending Email...' : <>Email Official Quote <Send size={16} className="ml-2"/></>}
-                      </button>
-                    )}
-                  </form>
+                    </>
+                  )}
                 </div>
 
               </div>

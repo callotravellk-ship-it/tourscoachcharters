@@ -1,25 +1,28 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { 
   LayoutDashboard, Users, Calendar, MapPin, 
-  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock 
+  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send
 } from 'lucide-react';
 
 export default function CRMDashboard() {
-  // --- AUTHENTICATION STATE ---
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState(false);
 
-  // --- DATA STATE ---
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedLead, setSelectedLead] = useState(null);
 
-  // Check if user is already logged in (via localStorage) when the page loads
+  // --- QUOTE BUILDER STATE ---
+  const [quotePrice, setQuotePrice] = useState('');
+  const [depositAmount, setDepositAmount] = useState('');
+  const [assignedVehicle, setAssignedVehicle] = useState('');
+  const [isSendingQuote, setIsSendingQuote] = useState(false);
+
   useEffect(() => {
     const session = localStorage.getItem('crm_auth');
     if (session === 'true') {
@@ -27,30 +30,34 @@ export default function CRMDashboard() {
     }
   }, []);
 
-  // Fetch leads ONLY if the user is authenticated
+  const fetchLeads = async () => {
+    try {
+      const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      const leadsData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setLeads(leadsData);
+    } catch (error) {
+      console.error("Error fetching leads:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!isAuthenticated) return;
-
-    const fetchLeads = async () => {
-      try {
-        const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
-        const querySnapshot = await getDocs(q);
-        
-        const leadsData = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        
-        setLeads(leadsData);
-      } catch (error) {
-        console.error("Error fetching leads:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLeads();
+    if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
+
+  // Pre-fill the assigned vehicle based on the customer's request when a lead is opened
+  useEffect(() => {
+    if (selectedLead) {
+      setQuotePrice(selectedLead.quotedPrice || '');
+      setDepositAmount('');
+      setAssignedVehicle(selectedLead.assignedVehicle || (selectedLead.vehicle !== 'any' ? selectedLead.vehicle : 'Luxury Coach (56 pax)'));
+    }
+  }, [selectedLead]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -59,7 +66,7 @@ export default function CRMDashboard() {
     if (passwordInput === correctPassword) {
       setIsAuthenticated(true);
       setLoginError(false);
-      localStorage.setItem('crm_auth', 'true'); // Keep them logged in for this browser
+      localStorage.setItem('crm_auth', 'true');
     } else {
       setLoginError(true);
       setPasswordInput('');
@@ -71,6 +78,50 @@ export default function CRMDashboard() {
     localStorage.removeItem('crm_auth');
   };
 
+  // --- SEND QUOTE LOGIC ---
+  const handleSendQuote = async (e) => {
+    e.preventDefault();
+    setIsSendingQuote(true);
+
+    try {
+      // 1. Trigger the API to send the official email to the customer
+      const response = await fetch('/api/send-customer-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...selectedLead,
+          quotePrice,
+          depositAmount,
+          assignedVehicle
+        }),
+      });
+
+      if (!response.ok) throw new Error("Email sending failed");
+
+      // 2. Update the document in Firebase to reflect the new status and price
+      const leadRef = doc(db, 'leads', selectedLead.id);
+      await updateDoc(leadRef, {
+        status: "Quoted",
+        quotedPrice: quotePrice,
+        assignedVehicle: assignedVehicle,
+        quotedAt: new Date()
+      });
+
+      // 3. Refresh the leads list so the status changes in the UI instantly
+      await fetchLeads();
+      
+      // Close the modal and show success
+      setSelectedLead(null);
+      alert(`Quote of $${quotePrice} successfully sent to ${selectedLead.firstName}!`);
+
+    } catch (error) {
+      console.error(error);
+      alert("Error sending quote. Please check your network and try again.");
+    } finally {
+      setIsSendingQuote(false);
+    }
+  };
+
   const formatDate = (timestamp) => {
     if (!timestamp) return 'N/A';
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -80,13 +131,9 @@ export default function CRMDashboard() {
     }).format(date);
   };
 
-  // ==========================================
-  // VIEW 1: THE SECURE LOGIN SCREEN
-  // ==========================================
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Background decorative elements */}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-red-600/20 blur-[120px] rounded-full pointer-events-none"></div>
         
@@ -128,13 +175,8 @@ export default function CRMDashboard() {
     );
   }
 
-  // ==========================================
-  // VIEW 2: THE UNLOCKED DASHBOARD
-  // ==========================================
   return (
     <div className="min-h-screen bg-slate-50 flex">
-      
-      {/* Sidebar */}
       <div className="w-64 bg-slate-900 text-white flex flex-col">
         <div className="p-6 border-b border-slate-800">
           <Link href="/">
@@ -160,7 +202,6 @@ export default function CRMDashboard() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white shadow-sm border-b border-slate-200 p-6 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-slate-800">Active Leads</h1>
@@ -171,7 +212,6 @@ export default function CRMDashboard() {
 
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6">
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            
             {loading ? (
               <div className="p-12 text-center text-slate-500 animate-pulse flex flex-col items-center">
                 <Clock size={40} className="mb-4 text-slate-300" />
@@ -207,13 +247,17 @@ export default function CRMDashboard() {
                         <div className="text-sm text-slate-500 max-w-xs truncate" title={lead.destination}><strong>To:</strong> {lead.destination}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          lead.status === 'Quoted' 
+                            ? 'bg-purple-100 text-purple-800 border border-purple-200' 
+                            : 'bg-green-100 text-green-800 border border-green-200'
+                        }`}>
                           {lead.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button className="text-blue-600 hover:text-blue-900 flex items-center justify-end w-full">
-                          View <ChevronRight size={16} className="ml-1" />
+                          {lead.status === 'Quoted' ? 'Review' : 'Price Trip'} <ChevronRight size={16} className="ml-1" />
                         </button>
                       </td>
                     </tr>
@@ -229,34 +273,39 @@ export default function CRMDashboard() {
       {selectedLead && (
         <div className="fixed inset-0 overflow-hidden z-[100]">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setSelectedLead(null)}></div>
-          <div className="fixed inset-y-0 right-0 max-w-md w-full flex">
+          <div className="fixed inset-y-0 right-0 max-w-lg w-full flex">
             <div className="h-full w-full bg-white shadow-2xl flex flex-col animate-fade-in-up">
               
               <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
-                <h2 className="text-lg font-bold">Quote Request Details</h2>
+                <h2 className="text-lg font-bold">
+                  {selectedLead.status === 'Quoted' ? 'Quoted Request' : 'New Quote Request'}
+                </h2>
                 <button onClick={() => setSelectedLead(null)} className="text-slate-300 hover:text-white transition-colors">
                   <X size={24} />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-8">
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 
-                {/* Customer Info */}
-                <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center"><Users size={14} className="mr-2"/> Customer</h3>
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 space-y-2">
-                    <p className="text-sm"><strong>Name:</strong> {selectedLead.firstName} {selectedLead.lastName}</p>
-                    <p className="text-sm"><strong>Email:</strong> <a href={`mailto:${selectedLead.email}`} className="text-blue-600 hover:underline">{selectedLead.email}</a></p>
-                    <p className="text-sm"><strong>Phone:</strong> <a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a></p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Users size={14} className="mr-2"/> Customer</h3>
+                    <p className="text-sm font-bold text-slate-800">{selectedLead.firstName} {selectedLead.lastName}</p>
+                    <p className="text-sm truncate"><a href={`mailto:${selectedLead.email}`} className="text-blue-600 hover:underline">{selectedLead.email}</a></p>
+                    <p className="text-sm"><a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a></p>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Bus size={14} className="mr-2"/> Logistics</h3>
+                     <p className="text-sm"><strong>Pax:</strong> {selectedLead.passengers}</p>
+                     <p className="text-sm"><strong>Pref:</strong> {selectedLead.vehicle === 'any' ? 'No Preference' : selectedLead.vehicle}</p>
                   </div>
                 </div>
 
-                {/* Trip Info */}
                 <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center"><MapPin size={14} className="mr-2"/> Itinerary ({selectedLead.tripType === 'return' ? 'Round Trip' : 'One Way'})</h3>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><MapPin size={14} className="mr-2"/> Itinerary ({selectedLead.tripType === 'return' ? 'Round Trip' : 'One Way'})</h3>
                   <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 space-y-4">
                     <div>
-                      <p className="text-xs text-slate-500 mb-1">Pickup Location</p>
+                      <p className="text-xs text-slate-500 mb-1">Pickup</p>
                       <p className="text-sm font-medium text-slate-800">{selectedLead.pickup}</p>
                       <p className="text-xs text-slate-600 mt-1"><Calendar size={12} className="inline mr-1"/> {selectedLead.departDate} at {selectedLead.pickupTime}</p>
                     </div>
@@ -270,33 +319,74 @@ export default function CRMDashboard() {
                   </div>
                 </div>
 
-                {/* Logistics */}
-                <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center"><Bus size={14} className="mr-2"/> Logistics</h3>
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 space-y-2">
-                    <p className="text-sm"><strong>Passengers:</strong> {selectedLead.passengers}</p>
-                    <p className="text-sm"><strong>Requested Vehicle:</strong> {selectedLead.vehicle === 'any' ? 'No Preference' : selectedLead.vehicle}</p>
-                  </div>
-                </div>
-
-                {/* Additional Info */}
                 {selectedLead.info && (
                   <div>
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center"><FileText size={14} className="mr-2"/> Additional Info</h3>
-                    <div className="bg-amber-50 text-amber-900 p-4 rounded-lg border border-amber-100 text-sm italic">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><FileText size={14} className="mr-2"/> Notes</h3>
+                    <div className="bg-amber-50 text-amber-900 p-3 rounded-lg border border-amber-100 text-sm italic">
                       "{selectedLead.info}"
                     </div>
                   </div>
                 )}
-              </div>
 
-              {/* Action Footer (For Phase 3) */}
-              <div className="p-6 border-t border-slate-200 bg-slate-50">
-                <button className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow hover:bg-blue-700 transition">
-                  Create Quote (Coming Soon)
-                </button>
-              </div>
+                {/* --- PRICING ENGINE --- */}
+                <div className="border-t border-slate-200 pt-6">
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                    <DollarSign size={16} className="mr-2 text-green-600"/> 
+                    {selectedLead.status === 'Quoted' ? 'Quote Already Sent' : 'Price This Trip'}
+                  </h3>
+                  
+                  <form onSubmit={handleSendQuote} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-600 mb-1">Total Price (CAD)</label>
+                        <input 
+                          type="number" 
+                          required
+                          disabled={selectedLead.status === 'Quoted'}
+                          value={quotePrice}
+                          onChange={(e) => setQuotePrice(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm disabled:bg-slate-100"
+                          placeholder="e.g. 1500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-600 mb-1">Required Deposit (CAD)</label>
+                        <input 
+                          type="number" 
+                          required
+                          disabled={selectedLead.status === 'Quoted'}
+                          value={depositAmount}
+                          onChange={(e) => setDepositAmount(e.target.value)}
+                          className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm disabled:bg-slate-100"
+                          placeholder="e.g. 300"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">Assign Vehicle</label>
+                      <input 
+                        type="text" 
+                        required
+                        disabled={selectedLead.status === 'Quoted'}
+                        value={assignedVehicle}
+                        onChange={(e) => setAssignedVehicle(e.target.value)}
+                        className="w-full px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm disabled:bg-slate-100"
+                      />
+                    </div>
+                    
+                    {selectedLead.status !== 'Quoted' && (
+                      <button 
+                        disabled={isSendingQuote} 
+                        type="submit" 
+                        className={`w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700 transition flex items-center justify-center mt-2 ${isSendingQuote ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      >
+                        {isSendingQuote ? 'Sending Email...' : <>Email Official Quote <Send size={16} className="ml-2"/></>}
+                      </button>
+                    )}
+                  </form>
+                </div>
 
+              </div>
             </div>
           </div>
         </div>

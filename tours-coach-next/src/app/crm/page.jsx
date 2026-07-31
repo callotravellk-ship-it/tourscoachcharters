@@ -441,8 +441,8 @@ export default function CRMDashboard() {
                             </select>
                             <button 
                               type="submit"
-                              disabled={isUpdatingStatus || updateStatus === selectedLead.status}
-                              className="bg-slate-800 text-white px-5 py-2 rounded font-bold text-sm hover:bg-slate-900 disabled:opacity-50 transition"
+                              disabled={isUpdatingStatus}
+                              className={`bg-slate-800 text-white px-5 py-2 rounded font-bold text-sm hover:bg-slate-900 transition ${isUpdatingStatus ? 'opacity-50 cursor-wait' : ''}`}
                             >
                               {isUpdatingStatus ? 'Saving...' : 'Update'}
                             </button>

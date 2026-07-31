@@ -160,6 +160,46 @@ export default function CRMDashboard() {
     }
   };
 
+  // --- HELPER TO RENDER SMART FINANCIALS IN THE TABLE ---
+  const renderFinancials = (lead) => {
+    if (lead.status === 'New') return <span className="text-xs text-slate-400 italic">Pending Quote</span>;
+    
+    // Convert to numbers for safe math
+    const total = Number(lead.quotedPrice) || 0;
+    const deposit = Number(lead.depositAmount) || 0;
+    const balance = total - deposit;
+
+    if (lead.status === 'Quoted') {
+      return (
+        <div className="flex flex-col">
+          <span className="text-sm font-bold text-slate-800">${total.toLocaleString()}</span>
+          <span className="text-[11px] text-amber-600 font-bold uppercase tracking-wide">Req. Adv: ${deposit.toLocaleString()}</span>
+        </div>
+      );
+    }
+    if (lead.status === 'Advance Paid') {
+      return (
+        <div className="flex flex-col">
+          <span className="text-sm font-bold text-blue-600">Paid: ${deposit.toLocaleString()}</span>
+          <span className="text-[11px] text-red-500 font-bold uppercase tracking-wide">Pending: ${balance.toLocaleString()}</span>
+        </div>
+      );
+    }
+    if (['Fully Paid', 'Dispatched', 'Completed'].includes(lead.status)) {
+      return (
+        <div className="flex flex-col">
+           <span className="text-sm font-bold text-emerald-600">Paid: ${total.toLocaleString()}</span>
+        </div>
+      );
+    }
+    // Cancelled state
+    return (
+       <div className="flex flex-col">
+          <span className="text-sm text-slate-400 line-through">${total.toLocaleString()}</span>
+       </div>
+    );
+  };
+
   // --- FULL SUMMARY STATS ---
   const stats = {
     new: leads.filter(l => l.status === 'New').length,
@@ -235,7 +275,6 @@ export default function CRMDashboard() {
             </li>
           </ul>
 
-          {/* --- SIDEBAR SUMMARY WIDGET --- */}
           <div className="mt-8 pb-4">
             <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Pipeline Summary</h3>
             <div className="space-y-1.5">
@@ -305,6 +344,8 @@ export default function CRMDashboard() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Received</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Customer</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Trip Route</th>
+                    {/* Added Financials Column Header */}
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Financials</th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                     <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Action</th>
                   </tr>
@@ -322,6 +363,10 @@ export default function CRMDashboard() {
                       <td className="px-6 py-4">
                         <div className="text-sm text-slate-900 max-w-xs truncate" title={lead.pickup}><strong>From:</strong> {lead.pickup}</div>
                         <div className="text-sm text-slate-500 max-w-xs truncate" title={lead.destination}><strong>To:</strong> {lead.destination}</div>
+                      </td>
+                      {/* Added Smart Financials Cell */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {renderFinancials(lead)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border ${getStatusColor(lead.status)}`}>

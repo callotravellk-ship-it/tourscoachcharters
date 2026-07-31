@@ -8,7 +8,7 @@ import {
   Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings, Download
 } from 'lucide-react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 export default function CRMDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -264,60 +264,67 @@ export default function CRMDashboard() {
     e.preventDefault();
     if (!selectedLead) return;
 
-    const doc = new jsPDF();
-    
-    doc.setFontSize(22);
-    doc.setTextColor(30, 58, 138);
-    doc.text("Tours Coach Charters", 14, 20);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(100, 116, 139);
-    doc.text("Official Booking Invoice", 14, 28);
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 34);
+    try {
+      const doc = new jsPDF();
+      
+      doc.setFontSize(22);
+      doc.setTextColor(30, 58, 138);
+      doc.text("Tours Coach Charters", 14, 20);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100, 116, 139);
+      doc.text("Official Booking Invoice", 14, 28);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 34);
 
-    doc.setFontSize(12);
-    doc.setTextColor(15, 23, 42);
-    doc.text("Billed To:", 14, 48);
-    doc.setFontSize(10);
-    doc.text(`${selectedLead.firstName} ${selectedLead.lastName}`, 14, 55);
-    doc.text(selectedLead.email, 14, 61);
-    doc.text(selectedLead.phone, 14, 67);
+      doc.setFontSize(12);
+      doc.setTextColor(15, 23, 42);
+      doc.text("Billed To:", 14, 48);
+      doc.setFontSize(10);
+      doc.text(`${selectedLead.firstName} ${selectedLead.lastName}`, 14, 55);
+      doc.text(selectedLead.email, 14, 61);
+      doc.text(selectedLead.phone, 14, 67);
 
-    const total = Number(selectedLead.quotedPrice) || 0;
-    const deposit = Number(selectedLead.depositAmount) || 0;
-    const balance = total - deposit;
+      const total = Number(selectedLead.quotedPrice) || 0;
+      const deposit = Number(selectedLead.depositAmount) || 0;
+      const balance = total - deposit;
 
-    doc.autoTable({
-      startY: 75,
-      headStyles: { fillColor: [30, 58, 138] },
-      head: [['Trip Details', 'Information']],
-      body: [
-        ['Route', `${selectedLead.pickup} to ${selectedLead.destination}`],
-        ['Trip Type', selectedLead.tripType === 'return' ? 'Round Trip' : 'One Way'],
-        ['Departure', `${selectedLead.departDate} at ${selectedLead.pickupTime}`],
-        ['Assigned Vehicle', selectedLead.assignedVehicle || 'TBD'],
-        ['Passengers', selectedLead.passengers],
-      ],
-    });
+      // CORRECTED autoTable syntax
+      autoTable(doc, {
+        startY: 75,
+        headStyles: { fillColor: [30, 58, 138] },
+        head: [['Trip Details', 'Information']],
+        body: [
+          ['Route', `${selectedLead.pickup} to ${selectedLead.destination}`],
+          ['Trip Type', selectedLead.tripType === 'return' ? 'Round Trip' : 'One Way'],
+          ['Departure', `${selectedLead.departDate} at ${selectedLead.pickupTime}`],
+          ['Assigned Vehicle', selectedLead.assignedVehicle || 'TBD'],
+          ['Passengers', selectedLead.passengers],
+        ],
+      });
 
-    doc.autoTable({
-      startY: doc.lastAutoTable.finalY + 10,
-      headStyles: { fillColor: [4, 120, 87] },
-      head: [['Financial Summary', 'Amount (CAD)']],
-      body: [
-        ['Total Trip Cost', `$${total.toLocaleString()}`],
-        ['Advance Paid', `$${deposit.toLocaleString()}`],
-        ['Pending Balance', `$${balance.toLocaleString()}`],
-        ['Current Status', selectedLead.status],
-      ],
-    });
+      // CORRECTED autoTable syntax
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY + 10,
+        headStyles: { fillColor: [4, 120, 87] },
+        head: [['Financial Summary', 'Amount (CAD)']],
+        body: [
+          ['Total Trip Cost', `$${total.toLocaleString()}`],
+          ['Advance Paid', `$${deposit.toLocaleString()}`],
+          ['Pending Balance', `$${balance.toLocaleString()}`],
+          ['Current Status', selectedLead.status],
+        ],
+      });
 
-    doc.setFontSize(9);
-    doc.setTextColor(148, 163, 184);
-    doc.text("Thank you for traveling with Tours Coach Charters.", 14, doc.lastAutoTable.finalY + 20);
-    doc.text("tourscoachcharter.com | (416) 269-9555", 14, doc.lastAutoTable.finalY + 26);
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text("Thank you for traveling with Tours Coach Charters.", 14, doc.lastAutoTable.finalY + 20);
+      doc.text("tourscoachcharter.com | (416) 269-9555", 14, doc.lastAutoTable.finalY + 26);
 
-    doc.save(`Invoice_${selectedLead.firstName}_${selectedLead.lastName}.pdf`);
+      doc.save(`Invoice_${selectedLead.firstName}_${selectedLead.lastName}.pdf`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("There was an error generating the PDF. Please try again.");
+    }
   };
 
   const stats = {
@@ -664,6 +671,7 @@ export default function CRMDashboard() {
                       </div>
 
                       <button 
+                        type="button"
                         onClick={generateInvoice}
                         className="w-full bg-slate-100 border border-slate-300 text-slate-700 font-bold py-2.5 rounded-lg shadow-sm hover:bg-slate-200 transition flex items-center justify-center text-sm"
                       >

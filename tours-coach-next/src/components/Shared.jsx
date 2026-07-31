@@ -6,9 +6,13 @@ import { useQuote } from '../context/QuoteContext';
 import { Phone, Mail, ChevronDown, Menu, X, ShieldCheck, Map, Headphones, Award, Route, Send, ArrowRight, CheckCircle } from 'lucide-react';
 import { COMPANY_INFO, NAV_LINKS } from '../lib/data';
 
-// --- GEOAPIFY IMPORTS RESTORED ---
+// --- GEOAPIFY IMPORTS ---
 import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';
 import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+
+// --- FIREBASE IMPORTS ---
+import { db } from '../lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export const Facebook = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
@@ -203,7 +207,6 @@ export const QuoteForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Strict JavaScript validation ensures Geoapify fields are not empty
     if (!quoteData.pickup || !quoteData.destination) {
       alert("Please ensure both Pickup and Destination locations are selected.");
       return;
@@ -216,8 +219,19 @@ export const QuoteForm = ({ onClose }) => {
 
     payload.pickup = quoteData.pickup;
     payload.destination = quoteData.destination;
+    payload.tripType = tripType; // ensure trip type is passed accurately
 
     try {
+      // 1. SAVE TO FIREBASE DIRECTLY FROM THE CLIENT DASHBOARD
+      await addDoc(collection(db, "leads"), {
+        ...payload,
+        status: "New",
+        createdAt: serverTimestamp(),
+        quotedPrice: null,
+        assignedVehicle: "",
+      });
+
+      // 2. TRIGGER THE API TO FIRE OFF THE EMAILS
       const response = await fetch('/api/send-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -242,6 +256,7 @@ export const QuoteForm = ({ onClose }) => {
         alert("There was a problem sending your quote. Please try calling us instead.");
       }
     } catch (error) {
+      console.error(error);
       alert("Network error. Please try again.");
     } finally {
       setIsSending(false);
@@ -251,7 +266,6 @@ export const QuoteForm = ({ onClose }) => {
   return (
     <div className={`bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 ${onClose ? 'max-h-[600px] overflow-y-auto custom-scrollbar' : ''}`}>
       
-      {/* Styles to seamlessly blend the Geoapify component into Tailwind */}
       <style>{`
         .geoapify-autocomplete-input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: none; outline: none; background: transparent; }
         .geoapify-autocomplete-items { position: absolute; z-index: 99; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
@@ -305,7 +319,6 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          {/* FULL WIDTH GEOAPIFY FIELDS */}
           <GeoapifyContext apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY || ""}>
             <div className="space-y-4">
               <div>

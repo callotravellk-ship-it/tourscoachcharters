@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { db } from '../../../lib/firebase'; // Imports your new Firebase setup
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 // Initialize Resend with your API key
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -16,30 +14,7 @@ export async function POST(req) {
       passengers, vehicle, info, tripType 
     } = body;
 
-    // 1. SAVE TO FIREBASE CRM
-    // This creates a new record in your "leads" collection
-    const leadPromise = addDoc(collection(db, "leads"), {
-      firstName,
-      lastName,
-      email,
-      phone,
-      pickup,
-      destination,
-      departDate,
-      returnDate: returnDate || null,
-      pickupTime,
-      returnTime: returnTime || null,
-      passengers,
-      vehicle,
-      info: info || '',
-      tripType,
-      status: "New", // Tags it as a fresh lead for the dashboard
-      createdAt: serverTimestamp(), // Logs the exact submission time
-      quotedPrice: null, // Empty field for agents to fill later
-      assignedVehicle: "", // Empty field for agents to fill later
-    });
-
-    // 2. EMAIL SENT TO YOUR TEAM
+    // 1. EMAIL SENT TO YOUR TEAM
     const adminEmail = resend.emails.send({
       from: 'Quotes <quotes@tourscoachcharter.com>',
       to: ['info@tourscoach.ca'],
@@ -65,7 +40,7 @@ export async function POST(req) {
       `
     });
 
-    // 3. AUTO-REPLY EMAIL SENT TO THE CUSTOMER
+    // 2. AUTO-REPLY EMAIL SENT TO THE CUSTOMER
     const customerEmail = resend.emails.send({
       from: 'Canada Tours Coach LTD <quotes@tourscoachcharter.com>',
       to: [email],
@@ -84,13 +59,12 @@ export async function POST(req) {
       `
     });
 
-    // Execute the database save and both emails simultaneously for maximum speed
-    await Promise.all([leadPromise, adminEmail, customerEmail]);
+    await Promise.all([adminEmail, customerEmail]);
     
     return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error("Error processing quote:", error);
+    console.error("Error processing emails:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

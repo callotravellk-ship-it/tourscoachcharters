@@ -59,11 +59,12 @@ export default function CRMDashboard() {
     if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
 
-  // --- GEOAPIFY AUTOMATED QUOTING ENGINE ---
+  // --- GEOAPIFY AUTOMATED QUOTING ENGINE (WITH FALLBACKS & LOGS) ---
   const calculateRouteAndPrice = async (pickup, destination, tripType) => {
     const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_KEY;
+    
     if (!apiKey) {
-      console.warn("Geoapify API key is missing from .env.local. Skipping calculation.");
+      console.error("Geoapify Key Error: NEXT_PUBLIC_GEOAPIFY_KEY is missing from environment variables!");
       return;
     }
     
@@ -79,30 +80,42 @@ export default function CRMDashboard() {
       const destData = await destRes.json();
       const destCoords = destData.features?.[0]?.geometry?.coordinates;
 
-      if (pickupCoords && destCoords) {
-        // 3. Get Route Data for a Heavy Vehicle (Bus)
-        const routeRes = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${pickupCoords[1]},${pickupCoords[0]}|${destCoords[1]},${destCoords[0]}&mode=bus&apiKey=${apiKey}`);
-        const routeData = await routeRes.json();
+      if (!pickupCoords || !destCoords) {
+        console.warn("Geoapify Geocoding Warning: Could not find lat/long coordinates for addresses.");
+        return;
+      }
+
+      // 3. Try Heavy Vehicle Routing ('bus') first
+      let routeRes = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${pickupCoords[1]},${pickupCoords[0]}|${destCoords[1]},${destCoords[0]}&mode=bus&apiKey=${apiKey}`);
+      let routeData = await routeRes.json();
+
+      // Fallback to standard driving route if bus mode has no coverage or fails
+      if (!routeData.features || routeData.features.length === 0) {
+        console.warn("Geoapify 'bus' route failed. Falling back to standard 'drive' routing...");
+        routeRes = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${pickupCoords[1]},${pickupCoords[0]}|${destCoords[1]},${destCoords[0]}&mode=drive&apiKey=${apiKey}`);
+        routeData = await routeRes.json();
+      }
+
+      if (routeData.features && routeData.features.length > 0) {
+        const props = routeData.features[0].properties;
+        const distKm = props.distance / 1000;
+        const timeMins = props.time / 60;
         
-        if (routeData.features?.length > 0) {
-          const props = routeData.features[0].properties;
-          const distKm = props.distance / 1000;
-          const timeMins = props.time / 60;
-          
-          setRouteInfo({ distance: distKm.toFixed(1), time: timeMins.toFixed(0) });
-          
-          // 4. Custom Pricing Logic: Base $150 + $2.50/km + $40/hr
-          let price = 150 + (distKm * 2.50) + ((timeMins / 60) * 40);
-          
-          // Double the price if it's a round trip
-          if (tripType === 'return') price *= 2;
-          
-          // Round to the nearest $5 for clean numbers
-          setSuggestedPrice(Math.ceil(price / 5) * 5);
-        }
+        setRouteInfo({ distance: distKm.toFixed(1), time: timeMins.toFixed(0) });
+        
+        // 4. Custom Pricing Logic: Base $150 + $2.50/km + $40/hr
+        let price = 150 + (distKm * 2.50) + ((timeMins / 60) * 40);
+        
+        // Double the price if it's a round trip
+        if (tripType === 'return') price *= 2;
+        
+        // Round to the nearest $5 for clean numbers
+        setSuggestedPrice(Math.ceil(price / 5) * 5);
+      } else {
+        console.warn("Geoapify Routing Warning: No route found between these points.");
       }
     } catch (error) {
-      console.error("Geoapify routing error:", error);
+      console.error("Geoapify API Request Error:", error);
     } finally {
       setIsCalculating(false);
     }
@@ -288,7 +301,6 @@ export default function CRMDashboard() {
       const deposit = Number(selectedLead.depositAmount) || 0;
       const balance = total - deposit;
 
-      // CORRECTED autoTable syntax
       autoTable(doc, {
         startY: 75,
         headStyles: { fillColor: [30, 58, 138] },
@@ -302,7 +314,6 @@ export default function CRMDashboard() {
         ],
       });
 
-      // CORRECTED autoTable syntax
       autoTable(doc, {
         startY: doc.lastAutoTable.finalY + 10,
         headStyles: { fillColor: [4, 120, 87] },

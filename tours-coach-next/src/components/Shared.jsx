@@ -339,7 +339,7 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          <GeoapifyContext apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY || ""}>
+          <GeoapifyContext apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_KEY || ""}>
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">

@@ -1,5 +1,5 @@
 export const COMPANY_INFO = {
-  name: "Tours Coach Charters Canada",
+  name: "Canada Tours Coach LTD",
   phone: "(416) 269-9555",
   email: "info@tourscoachcharter.com",
   address: "1315 Pickering Parkway, Suite 300, Pickering, ON L1V 7G5"
@@ -55,7 +55,7 @@ export const NAV_LINKS = [
     ]
   },
   { title: "Winter", id: "winter-destinations" },
-  { title: "FIFA 2026", id: "fifa-world-cup-2026-charters" },
+  { title: "Events", id: "events" }, // <-- Replaced FIFA with Events
   { title: "Contact Us", id: "contact" }
 ];
 
@@ -113,6 +113,7 @@ export const SEO_DATA = {
   "home": { title: "Charter Bus Services Canada | Tours Coach Charters", desc: "Canada's Premier Charter Bus Services. From corporate retreats to school trips, we provide reliable transportation from coast to coast." },
   "about": { title: "About Us | Tours Coach Charters", desc: "Learn about Canada Tours Coach LTD. We provide safe, reliable, and premium charter bus transportation across the country." },
   "contact": { title: "Contact Us | Tours Coach Charters", desc: "Get in touch with Canada Tours Coach LTD for quotes, questions, and group transportation logistics." },
+  "events": { title: "Canadian Event & Festival Charter Bus Transportation | Tours Coach Charters", desc: "Private group bus hire, mini coach charters, and executive Sprinter van shuttles for major festivals and events across Canada." },
   "luxury-coach-bus-charter": { title: "Luxury Coach Bus Charter in Canada | Tours Coach Charters", desc: "Experience ultimate comfort for long-distance group travel with our 56 passenger luxury coaches." },
   "mini-coach-bus-charter": { title: "Mini Coach Bus Charter in Canada | Tours Coach Charters", desc: "Perfect for corporate retreats and medium-sized groups. Book a 24-36 passenger mini coach." },
   "14-passenger-van-service": { title: "14 Passenger Chauffeured Van Service | Tours Coach Charters", desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services." },
@@ -135,8 +136,7 @@ export const SEO_DATA = {
   "charter-bus-service-brantford": { title: "Brantford Charter Bus Services | Tours Coach Charters", desc: "Reliable coach charters in Brantford for Wayne Gretzky Sports Centre tournaments and corporate travel." },
   "charter-bus-service-bolton": { title: "Bolton Coach Charters & Wedding Shuttles | Tours Coach Charters", desc: "Dedicated group transportation for the Caledon Equestrian Park and rustic Bolton wedding venues." },
   "charter-bus-service-barrie": { title: "Barrie Winter Charters & Bus Services | Tours Coach Charters", desc: "Premium group transportation via Highway 400 to Mount St. Louis Moonstone, Snow Valley, and Georgian College." },
-  "winter-destinations": { title: "Winter Destination Charters | Tours Coach Charters", desc: "Dedicated motorcoach services for ski trips to Whistler, Blue Mountain, and Banff." },
-  "fifa-world-cup-2026-charters": { title: "FIFA World Cup 2026 Charters | Tours Coach Charters", desc: "Premium group transportation and team logistics for FIFA World Cup matches at Toronto Stadium (BMO Field)." }
+  "winter-destinations": { title: "Winter Destination Charters | Tours Coach Charters", desc: "Dedicated motorcoach services for ski trips to Whistler, Blue Mountain, and Banff." }
 };
 
 export const DESTINATION_DATA = {
@@ -601,3 +601,123 @@ export const SERVICE_DATA = {
     ]
   }
 };
+
+export const UPCOMING_EVENTS = [
+  {
+    event: "Edmonton Folk Music Festival",
+    location: "Edmonton, Alberta",
+    date: "August 6–9, 2026",
+    services: "Coach Bus, Mini Coach, Festival Shuttle",
+    customers: "Music groups, community organizations, corporate groups"
+  },
+  {
+    event: "ItalfestMTL",
+    location: "Montréal, Quebec",
+    date: "August 7–16, 2026",
+    services: "Mini Coach, Sprinter Van, Family Group Transportation",
+    customers: "Cultural associations, families, tour groups"
+  },
+  {
+    event: "Edmonton International Fringe Theatre Festival",
+    location: "Edmonton, Alberta",
+    date: "August 13–23, 2026",
+    services: "Mini Coach, Sprinter Van, Venue-to-Venue Shuttle",
+    customers: "Theatre groups, performers, schools and tourists"
+  },
+  {
+    event: "Canadian National Exhibition (CNE)",
+    location: "Toronto, Ontario",
+    date: "August 21–September 7, 2026",
+    services: "School Bus, Coach Bus, Mini Coach",
+    customers: "Schools, youth clubs, families, employee outings"
+  },
+  {
+    event: "Indian Food Festival of Ottawa",
+    location: "Ottawa, Ontario",
+    date: "August 21–23, 2026",
+    services: "School Bus, Mini Coach, Sprinter Van",
+    customers: "Cultural groups, families, community organizations"
+  },
+  {
+    event: "Calgary Pride Week & Parade",
+    location: "Calgary, Alberta",
+    date: "Aug 31–Sept 6, 2026 (Parade on Sept 6)",
+    services: "Coach Bus, Mini Coach, Event Shuttle",
+    customers: "Community groups, employers, associations and visitors"
+  },
+  {
+    event: "Toronto International Film Festival (TIFF)",
+    location: "Toronto, Ontario",
+    date: "September 10–20, 2026",
+    services: "Executive Sprinter Van, Mini Coach, VIP Shuttle",
+    customers: "Film companies, corporate guests, production crews and hotels"
+  },
+  {
+    event: "Kitchener-Waterloo Oktoberfest",
+    location: "Kitchener-Waterloo, Ontario",
+    date: "Sept 25–Oct 17, 2026 (Activities not daily)",
+    services: "Coach Bus, Mini Coach, Designated Group Shuttle",
+    customers: "Corporate groups, clubs, families and tour operators"
+  },
+  {
+    event: "Vancouver International Film Festival (VIFF)",
+    location: "Vancouver, BC",
+    date: "October 1–11, 2026",
+    services: "Sprinter Van, Mini Coach, Hotel & Airport Transfers",
+    customers: "Production teams, VIP guests, corporate groups and tourists"
+  },
+  {
+    event: "Celtic Colours International Festival",
+    location: "Cape Breton Island, NS",
+    date: "October 9–17, 2026",
+    services: "Coach Bus, Mini Coach, Multi-Venue Shuttle",
+    customers: "Cultural groups, seniors’ groups, music tours and travel clubs"
+  },
+  {
+    event: "Royal Agricultural Winter Fair",
+    location: "Toronto, Ontario",
+    date: "November 6–15, 2026",
+    services: "School Bus, Coach Bus, Mini Coach",
+    customers: "Schools, agricultural organizations, exhibitors and families"
+  },
+  {
+    event: "Grey Cup Festival & 113th Grey Cup",
+    location: "Calgary, Alberta",
+    date: "Nov 11–15, 2026 (Game on Nov 15)",
+    services: "Coach Bus, Game-day Shuttle, Sprinter Van",
+    customers: "Fan clubs, corporate hospitality groups, teams and sponsors"
+  },
+  {
+    event: "Niagara Falls Winter Festival of Lights",
+    location: "Niagara Falls, Ontario",
+    date: "Nov 14, 2026–Jan 10, 2027",
+    services: "Coach Bus, School Bus, Mini Coach",
+    customers: "Schools, churches, families, senior groups and holiday tours"
+  },
+  {
+    event: "Québec Winter Carnival",
+    location: "Québec City, Quebec",
+    date: "February 5–14, 2027",
+    services: "Coach Bus, Mini Coach, Winter Group Shuttle",
+    customers: "Schools, international tourists, corporate groups and families"
+  }
+];
+
+export const EVERGREEN_EVENTS = [
+  "Calgary Stampede",
+  "Canada Day Celebrations (Ottawa, Toronto, Vancouver & Montréal)",
+  "Toronto Caribbean Carnival",
+  "Montréal International Jazz Festival",
+  "Ottawa Bluesfest",
+  "Canadian Tulip Festival (Ottawa)",
+  "Vancouver Celebration of Light",
+  "Edmonton Heritage Festival",
+  "Toronto Pride, Montréal Pride, Vancouver Pride",
+  "Toronto Christmas Market & Distillery Winter Village",
+  "Vancouver Christmas Market",
+  "Montréal en Lumière",
+  "Winterlude (Ottawa–Gatineau)",
+  "Fan Expo Canada",
+  "Toronto International AutoShow",
+  "Montréal Grand Prix Weekend"
+];

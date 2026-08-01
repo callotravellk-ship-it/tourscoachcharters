@@ -1,5 +1,5 @@
 export const COMPANY_INFO = {
-  name: "Canada Tours Coach LTD",
+  name: "Tours Coach Charters Canada",
   phone: "(416) 269-9555",
   email: "info@tourscoachcharter.com",
   address: "1315 Pickering Parkway, Suite 300, Pickering, ON L1V 7G5"
@@ -12,34 +12,34 @@ export const NAV_LINKS = [
     title: "Our Fleet", 
     id: "fleet",
     dropdown: [
-      { title: "Luxury Coach Bus", id: "luxury-coach-bus-rental" },
-      { title: "Mini Coach Bus", id: "mini-coach-bus-rental" },
-      { title: "14 Passenger Van", id: "14-passenger-van-rental" },
-      { title: "School Bus", id: "school-bus-rental" }
+      { title: "Luxury Coach Bus", id: "luxury-coach-bus-charter" },
+      { title: "Mini Coach Bus", id: "mini-coach-bus-charter" },
+      { title: "14 Passenger Van", id: "14-passenger-van-service" },
+      { title: "School Bus", id: "school-bus-charter" }
     ]
   },
   {
     title: "Destinations",
     id: "destinations",
     dropdown: [
-      { title: "Toronto", id: "charter-bus-rental-toronto" },
-      { title: "Scarborough", id: "charter-bus-rental-scarborough" },
-      { title: "Ajax", id: "charter-bus-rental-ajax" },
-      { title: "Pickering", id: "charter-bus-rental-pickering" },
-      { title: "Hamilton", id: "charter-bus-rental-hamilton" },
-      { title: "North York", id: "charter-bus-rental-north-york" },
-      { title: "Aurora", id: "charter-bus-rental-aurora" },
-      { title: "Woodbridge", id: "charter-bus-rental-woodbridge" },
-      { title: "Vaughan", id: "charter-bus-rental-vaughan" },
-      { title: "Brampton", id: "charter-bus-rental-brampton" },
-      { title: "Milton", id: "charter-bus-rental-milton" },
-      { title: "Mississauga", id: "charter-bus-rental-mississauga" },
-      { title: "Oshawa", id: "charter-bus-rental-oshawa" },
-      { title: "Burlington", id: "charter-bus-rental-burlington" },
-      { title: "Guelph", id: "charter-bus-rental-guelph" },
-      { title: "Brantford", id: "charter-bus-rental-brantford" },
-      { title: "Bolton", id: "charter-bus-rental-bolton" },
-      { title: "Barrie", id: "charter-bus-rental-barrie" }
+      { title: "Toronto", id: "charter-bus-service-toronto" },
+      { title: "Scarborough", id: "charter-bus-service-scarborough" },
+      { title: "Ajax", id: "charter-bus-service-ajax" },
+      { title: "Pickering", id: "charter-bus-service-pickering" },
+      { title: "Hamilton", id: "charter-bus-service-hamilton" },
+      { title: "North York", id: "charter-bus-service-north-york" },
+      { title: "Aurora", id: "charter-bus-service-aurora" },
+      { title: "Woodbridge", id: "charter-bus-service-woodbridge" },
+      { title: "Vaughan", id: "charter-bus-service-vaughan" },
+      { title: "Brampton", id: "charter-bus-service-brampton" },
+      { title: "Milton", id: "charter-bus-service-milton" },
+      { title: "Mississauga", id: "charter-bus-service-mississauga" },
+      { title: "Oshawa", id: "charter-bus-service-oshawa" },
+      { title: "Burlington", id: "charter-bus-service-burlington" },
+      { title: "Guelph", id: "charter-bus-service-guelph" },
+      { title: "Brantford", id: "charter-bus-service-brantford" },
+      { title: "Bolton", id: "charter-bus-service-bolton" },
+      { title: "Barrie", id: "charter-bus-service-barrie" }
     ]
   },
   {
@@ -60,19 +60,19 @@ export const NAV_LINKS = [
 ];
 
 export const FLEET_DATA = {
-  "luxury-coach-bus-rental": {
+  "luxury-coach-bus-charter": {
     name: "Luxury Coach Bus",
     pax: "56 Passengers",
     desc: "Experience ultimate comfort for long-distance group travel. Our luxury coaches are equipped with premium amenities to ensure a smooth and enjoyable ride across Canada.",
     features: ["Reclining seats", "Climate control", "Onboard restroom", "Entertainment systems", "Ample luggage space", "Wi-Fi enabled"],
     img: "/fleet-luxury.jpg",
     reviews: [
-      { author: "Sarah Jenkins, Corporate Events", rating: 5, text: "Absolutely pristine coach! We rented this for a multi-day corporate tour from Toronto to Ottawa. The Wi-Fi and comfortable seats made all the difference for our team." },
+      { author: "Sarah Jenkins, Corporate Events", rating: 5, text: "Absolutely pristine coach! We chartered this for a multi-day corporate tour from Toronto to Ottawa. The Wi-Fi and comfortable seats made all the difference for our team." },
       { author: "Mark D.", rating: 5, text: "Smooth ride all the way. The onboard restroom was very clean and the driver was incredibly professional. Highly recommended for large groups." },
       { author: "Elena R., Wedding Planner", rating: 5, text: "I regularly book these 56-passenger luxury coaches for large weddings. They always arrive spotless, on time, and the climate control is perfect for summer events." }
     ]
   },
-  "mini-coach-bus-rental": {
+  "mini-coach-bus-charter": {
     name: "Mini Coach Bus",
     pax: "24 - 36 Passengers",
     desc: "Perfect for corporate retreats, medium-sized groups, and regional travel. The mini coach offers the amenities of a larger bus in a more compact, agile package.",
@@ -84,7 +84,7 @@ export const FLEET_DATA = {
       { author: "St. Mary's Seniors Club", rating: 5, text: "We used the mini coach for our day trip to the Royal Botanical Gardens. The driver was so patient and the ride was exceptionally comfortable." }
     ]
   },
-  "14-passenger-van-rental": {
+  "14-passenger-van-service": {
     name: "14 Passenger Van",
     pax: "Up to 14 Passengers",
     desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services. Easy to board and surprisingly spacious.",
@@ -95,7 +95,7 @@ export const FLEET_DATA = {
       { author: "Amanda L., Executive Assistant", rating: 5, text: "We use these vans for executive shuttles between our Mississauga and downtown Toronto offices. The high roof makes a big difference for comfort." }
     ]
   },
-  "school-bus-rental": {
+  "school-bus-charter": {
     name: "School Bus",
     pax: "48-56 Children / 30-40 Adults",
     desc: "The most cost-effective transportation solution for large groups, school field trips, and local events. Safe, reliable, and straightforward.",
@@ -103,44 +103,44 @@ export const FLEET_DATA = {
     img: "/fleet-school.jpg",
     reviews: [
       { author: "Principal Harding", rating: 5, text: "Tours Coach Charters is our go-to for all field trips. The drivers are great with the kids, safety is always top priority, and the buses are very clean." },
-      { author: "Tom S., Camp Director", rating: 4, text: "Very affordable and reliable. We used three of these school buses to transport our summer campers to Wonderland. Everything went flawlessly." },
-      { author: "Local Soccer Association", rating: 5, text: "We use these buses every weekend for away games. You can't beat the price for moving 40 players and coaches." }
+      { author: "Tom S., Camp Director", rating: 4, text: "Very affordable and reliable. We chartered three of these school buses to transport our summer campers to Wonderland. Everything went flawlessly." },
+      { author: "Local Soccer Association", rating: 5, text: "We use these buses every weekend for away games. You can't beat the value for moving 40 players and coaches." }
     ]
   }
 };
 
 export const SEO_DATA = {
-  "home": { title: "Charter Bus Rentals Canada | Tours Coach Charters", desc: "Canada's Premier Charter Bus Rentals. From corporate retreats to school trips, we provide reliable transportation from coast to coast." },
+  "home": { title: "Charter Bus Services Canada | Tours Coach Charters", desc: "Canada's Premier Charter Bus Services. From corporate retreats to school trips, we provide reliable transportation from coast to coast." },
   "about": { title: "About Us | Tours Coach Charters", desc: "Learn about Canada Tours Coach LTD. We provide safe, reliable, and premium charter bus transportation across the country." },
   "contact": { title: "Contact Us | Tours Coach Charters", desc: "Get in touch with Canada Tours Coach LTD for quotes, questions, and group transportation logistics." },
-  "luxury-coach-bus-rental": { title: "Luxury Coach Bus Rental in Canada | Tours Coach Charters", desc: "Experience ultimate comfort for long-distance group travel with our 56 passenger luxury coaches." },
-  "mini-coach-bus-rental": { title: "Mini Coach Bus Rental in Canada | Tours Coach Charters", desc: "Perfect for corporate retreats and medium-sized groups. Book a 24-36 passenger mini coach." },
-  "14-passenger-van-rental": { title: "14 Passenger Van Rental in Canada | Tours Coach Charters", desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services." },
-  "school-bus-rental": { title: "School Bus Rental in Canada | Tours Coach Charters", desc: "Cost-effective transportation solution for large groups and school field trips. 48-56 passengers." },
-  "charter-bus-rental-toronto": { title: "Toronto Coach Charters & Bus Rentals | Tours Coach Charters", desc: "Book premium group transportation in Toronto. Executive shuttles to Pearson (YYZ), corporate travel to the Metro Convention Centre, and FIFA 2026 logistics." },
-  "charter-bus-rental-scarborough": { title: "Scarborough Charter Bus Rentals | Tours Coach Charters", desc: "Dependable group travel throughout Scarborough. Shuttles to UTSC, Centennial College, and the Toronto Zoo." },
-  "charter-bus-rental-ajax": { title: "Ajax Coach & Minibus Rentals | Tours Coach Charters", desc: "Group transportation and charter bus rentals serving the Ajax and Durham Region business sectors." },
-  "charter-bus-rental-pickering": { title: "Pickering Charter Bus Services | Tours Coach Charters", desc: "Group transportation from Pickering to downtown Toronto, Pearson Airport, and Pickering Casino Resort." },
-  "charter-bus-rental-hamilton": { title: "Hamilton Coach Charters & Event Shuttles | Tours Coach Charters", desc: "Bus rentals for McMaster University, Tim Hortons Field, and FirstOntario Centre in Hamilton, Ontario." },
-  "charter-bus-rental-north-york": { title: "North York Charter Bus Rentals | Tours Coach Charters", desc: "Premium group shuttles for York University, Downsview Park, and North York corporate parks." },
-  "charter-bus-rental-aurora": { title: "Aurora Charter Bus & Wedding Shuttles | Tours Coach Charters", desc: "Charter rentals for York Region. Ideal for golf outings, weddings, and corporate events in Aurora." },
-  "charter-bus-rental-woodbridge": { title: "Woodbridge Event Shuttles & Coach Rentals | Tours Coach Charters", desc: "Specialized group transportation for Woodbridge banquet halls, Vaughan Mills, and corporate events." },
-  "charter-bus-rental-vaughan": { title: "Vaughan Charter Bus Services | Tours Coach Charters", desc: "Charter rentals for Canada's Wonderland, Vaughan Metropolitan Centre (VMC), and local school trips." },
-  "charter-bus-rental-brampton": { title: "Brampton Coach & School Bus Rentals | Tours Coach Charters", desc: "Group travel for Brampton sports tournaments at the CAA Centre and large family gatherings." },
-  "charter-bus-rental-milton": { title: "Milton Charter Bus Rentals | Tours Coach Charters", desc: "Expert group transportation serving Milton, the Mattamy National Cycling Centre, and Kelso Conservation Area." },
-  "charter-bus-rental-mississauga": { title: "Mississauga Airport Shuttles & Coach Rentals | Tours Coach Charters", desc: "Direct charter bus service to Toronto Pearson Airport (YYZ), Square One, and the International Centre." },
-  "charter-bus-rental-oshawa": { title: "Oshawa Charter Bus Rentals | Tours Coach Charters", desc: "Coach rentals for Ontario Tech University, Durham College, and the Tribute Communities Centre." },
-  "charter-bus-rental-burlington": { title: "Burlington Coach Charters | Tours Coach Charters", desc: "Premium group transportation for the Royal Botanical Gardens, lakefront festivals, and corporate events." },
-  "charter-bus-rental-guelph": { title: "Guelph Charter Bus & Minibus Rentals | Tours Coach Charters", desc: "Expert group travel solutions for the University of Guelph, Sleeman Centre events, and brewery tours." },
-  "charter-bus-rental-brantford": { title: "Brantford Charter Bus Rentals | Tours Coach Charters", desc: "Reliable coach rentals in Brantford for Wayne Gretzky Sports Centre tournaments and corporate travel." },
-  "charter-bus-rental-bolton": { title: "Bolton Coach Charters & Wedding Shuttles | Tours Coach Charters", desc: "Dedicated group transportation for the Caledon Equestrian Park and rustic Bolton wedding venues." },
-  "charter-bus-rental-barrie": { title: "Barrie Winter Charters & Bus Rentals | Tours Coach Charters", desc: "Premium group transportation via Highway 400 to Mount St. Louis Moonstone, Snow Valley, and Georgian College." },
+  "luxury-coach-bus-charter": { title: "Luxury Coach Bus Charter in Canada | Tours Coach Charters", desc: "Experience ultimate comfort for long-distance group travel with our 56 passenger luxury coaches." },
+  "mini-coach-bus-charter": { title: "Mini Coach Bus Charter in Canada | Tours Coach Charters", desc: "Perfect for corporate retreats and medium-sized groups. Book a 24-36 passenger mini coach." },
+  "14-passenger-van-service": { title: "14 Passenger Chauffeured Van Service | Tours Coach Charters", desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services." },
+  "school-bus-charter": { title: "School Bus Charter in Canada | Tours Coach Charters", desc: "Cost-effective transportation solution for large groups and school field trips. 48-56 passengers." },
+  "charter-bus-service-toronto": { title: "Toronto Coach Charters & Bus Services | Tours Coach Charters", desc: "Book premium group transportation in Toronto. Executive shuttles to Pearson (YYZ), corporate travel to the Metro Convention Centre, and FIFA 2026 logistics." },
+  "charter-bus-service-scarborough": { title: "Scarborough Charter Bus Services | Tours Coach Charters", desc: "Dependable group travel throughout Scarborough. Shuttles to UTSC, Centennial College, and the Toronto Zoo." },
+  "charter-bus-service-ajax": { title: "Ajax Coach & Minibus Charters | Tours Coach Charters", desc: "Group transportation and charter bus services serving the Ajax and Durham Region business sectors." },
+  "charter-bus-service-pickering": { title: "Pickering Charter Bus Services | Tours Coach Charters", desc: "Group transportation from Pickering to downtown Toronto, Pearson Airport, and Pickering Casino Resort." },
+  "charter-bus-service-hamilton": { title: "Hamilton Coach Charters & Event Shuttles | Tours Coach Charters", desc: "Bus charters for McMaster University, Tim Hortons Field, and FirstOntario Centre in Hamilton, Ontario." },
+  "charter-bus-service-north-york": { title: "North York Charter Bus Services | Tours Coach Charters", desc: "Premium group shuttles for York University, Downsview Park, and North York corporate parks." },
+  "charter-bus-service-aurora": { title: "Aurora Charter Bus & Wedding Shuttles | Tours Coach Charters", desc: "Charter services for York Region. Ideal for golf outings, weddings, and corporate events in Aurora." },
+  "charter-bus-service-woodbridge": { title: "Woodbridge Event Shuttles & Coach Charters | Tours Coach Charters", desc: "Specialized group transportation for Woodbridge banquet halls, Vaughan Mills, and corporate events." },
+  "charter-bus-service-vaughan": { title: "Vaughan Charter Bus Services | Tours Coach Charters", desc: "Charter services for Canada's Wonderland, Vaughan Metropolitan Centre (VMC), and local school trips." },
+  "charter-bus-service-brampton": { title: "Brampton Coach & School Bus Charters | Tours Coach Charters", desc: "Group travel for Brampton sports tournaments at the CAA Centre and large family gatherings." },
+  "charter-bus-service-milton": { title: "Milton Charter Bus Services | Tours Coach Charters", desc: "Expert group transportation serving Milton, the Mattamy National Cycling Centre, and Kelso Conservation Area." },
+  "charter-bus-service-mississauga": { title: "Mississauga Airport Shuttles & Coach Charters | Tours Coach Charters", desc: "Direct charter bus service to Toronto Pearson Airport (YYZ), Square One, and the International Centre." },
+  "charter-bus-service-oshawa": { title: "Oshawa Charter Bus Services | Tours Coach Charters", desc: "Coach charters for Ontario Tech University, Durham College, and the Tribute Communities Centre." },
+  "charter-bus-service-burlington": { title: "Burlington Coach Charters | Tours Coach Charters", desc: "Premium group transportation for the Royal Botanical Gardens, lakefront festivals, and corporate events." },
+  "charter-bus-service-guelph": { title: "Guelph Charter Bus & Minibus Charters | Tours Coach Charters", desc: "Expert group travel solutions for the University of Guelph, Sleeman Centre events, and brewery tours." },
+  "charter-bus-service-brantford": { title: "Brantford Charter Bus Services | Tours Coach Charters", desc: "Reliable coach charters in Brantford for Wayne Gretzky Sports Centre tournaments and corporate travel." },
+  "charter-bus-service-bolton": { title: "Bolton Coach Charters & Wedding Shuttles | Tours Coach Charters", desc: "Dedicated group transportation for the Caledon Equestrian Park and rustic Bolton wedding venues." },
+  "charter-bus-service-barrie": { title: "Barrie Winter Charters & Bus Services | Tours Coach Charters", desc: "Premium group transportation via Highway 400 to Mount St. Louis Moonstone, Snow Valley, and Georgian College." },
   "winter-destinations": { title: "Winter Destination Charters | Tours Coach Charters", desc: "Dedicated motorcoach services for ski trips to Whistler, Blue Mountain, and Banff." },
   "fifa-world-cup-2026-charters": { title: "FIFA World Cup 2026 Charters | Tours Coach Charters", desc: "Premium group transportation and team logistics for FIFA World Cup matches at Toronto Stadium (BMO Field)." }
 };
 
 export const DESTINATION_DATA = {
-  "charter-bus-rental-toronto": {
+  "charter-bus-service-toronto": {
     city: "Toronto",
     title: "Charter Coach Bus Service in Toronto",
     subtitle: "Premium transportation for the GTA. From FIFA 2026 logistics at BMO Field to corporate summits at the Metro Toronto Convention Centre.",
@@ -151,9 +151,9 @@ export const DESTINATION_DATA = {
       { icon: "Plane", title: "Airport Transfers", desc: "Pearson (YYZ) Terminals 1 & 3 & Billy Bishop (YTZ)" }
     ],
     content: [
-      "Tours Coach Charters is your premier partner for reliable, high-capacity charter bus rentals in Toronto. Whether you require an executive shuttle for VIPs arriving at Toronto Pearson International Airport (YYZ) or a massive fleet coordination for the upcoming FIFA World Cup 2026 matches at Toronto Stadium, our 56-passenger luxury coaches deliver uncompromising reliability.",
+      "Tours Coach Charters is your premier partner for reliable, high-capacity charter bus services in Toronto. Whether you require an executive shuttle for VIPs arriving at Toronto Pearson International Airport (YYZ) or a massive fleet coordination for the upcoming FIFA World Cup 2026 matches at Toronto Stadium, our 56-passenger luxury coaches deliver uncompromising reliability.",
       "Navigating downtown Toronto traffic via the DVP or Gardiner Expressway requires deep local expertise. We streamline corporate travel, shuttling your teams seamlessly to the Financial District, the Metro Toronto Convention Centre, or large-scale conferences at Enercare Centre.",
-      "We also provide affordable school bus rentals for university tours and educational field trips to the Royal Ontario Museum (ROM), the CN Tower, and the University of Toronto (UofT) campus. Leave the complex city logistics, parking, and route management to our professional, fully insured drivers."
+      "We also provide affordable school bus charters for university tours and educational field trips to the Royal Ontario Museum (ROM), the CN Tower, and the University of Toronto (UofT) campus. Leave the complex city logistics, parking, and route management to our professional, fully insured drivers."
     ],
     faqs: [
       { q: "Are you providing shuttle services for the FIFA World Cup 2026 in Toronto?", a: "Yes, we are currently securing logistics contracts for group transportation to Toronto Stadium (BMO Field) and surrounding fan zones. We highly recommend booking your tournament transit as early as possible." },
@@ -162,7 +162,7 @@ export const DESTINATION_DATA = {
       { q: "How do you handle parking at major downtown Toronto venues?", a: "Our logistics team maps out designated charter bus staging areas at venues like Scotiabank Arena and the MTCC, ensuring your group enjoys drop-off right at the entrance while our drivers manage the parking off-site." }
     ]
   },
-  "charter-bus-rental-scarborough": {
+  "charter-bus-service-scarborough": {
     city: "Scarborough",
     title: "Charter Coach Bus Service in Scarborough",
     subtitle: "Dependable group travel connecting the eastern GTA via Highway 401. Ideal for UTSC transit, Toronto Zoo field trips, and Rouge Park excursions.",
@@ -175,15 +175,15 @@ export const DESTINATION_DATA = {
     content: [
       "Experience seamless group transportation with our premier charter bus service in Scarborough. From coordinating massive field trips to the Toronto Zoo to managing daily student shuttles for UofT Scarborough (UTSC) and Centennial College, we understand the specific transit needs of the eastern GTA.",
       "Navigating the Highway 401 corridor can be stressful for large groups. Our professional drivers handle the heavy lifting, providing smooth transit for corporate retreats leaving Scarborough business parks, or wedding parties heading to scenic venues near the Scarborough Bluffs.",
-      "Whether you need an economical school bus rental for a local youth sports tournament or a luxury mini-coach for a private tour of Rouge National Urban Park, our diverse fleet guarantees safety, comfort, and punctuality."
+      "Whether you need an economical school bus charter for a local youth sports tournament or a luxury mini-coach for a private tour of Rouge National Urban Park, our diverse fleet guarantees safety, comfort, and punctuality."
     ],
     faqs: [
       { q: "Do you offer daily or weekly shuttle services for Scarborough campuses?", a: "Yes, we provide ongoing, contract-based shuttle services for universities, colleges, and corporate offices to connect students and staff efficiently to transit hubs like Scarborough Centre." },
-      { q: "Can we book a bus for a trip from Scarborough to downtown Toronto?", a: "Absolutely. We frequently route trips down the DVP into downtown Toronto for sporting events at Scotiabank Arena, theater outings, and corporate conferences." },
+      { q: "Can we charter a bus for a trip from Scarborough to downtown Toronto?", a: "Absolutely. We frequently route trips down the DVP into downtown Toronto for sporting events at Scotiabank Arena, theater outings, and corporate conferences." },
       { q: "What amenities are included on your buses?", a: "Our luxury motorcoaches feature fast Wi-Fi, reclining seating, climate control, and onboard restrooms, ensuring your group stays comfortable even in heavy GTA traffic." }
     ]
   },
-  "charter-bus-rental-ajax": {
+  "charter-bus-service-ajax": {
     city: "Ajax",
     title: "Charter Coach Bus Service in Ajax",
     subtitle: "Premium group transportation serving Ajax and the Durham Region via Highway 401. Perfect for local tournaments and corporate events.",
@@ -202,10 +202,10 @@ export const DESTINATION_DATA = {
       { q: "Do you service corporate events in Ajax?", a: "We frequently provide shuttle services for businesses in Ajax, offering everything from single-day team-building retreat transport to long-term employee commuting contracts." }
     ]
   },
-  "charter-bus-rental-pickering": {
+  "charter-bus-service-pickering": {
     city: "Pickering",
     title: "Charter Coach Bus Service in Pickering",
-    subtitle: "Reliable motorcoach and minibus rentals based in Pickering. Direct transit for Pickering Casino Resort, weddings, and Pearson Airport.",
+    subtitle: "Reliable motorcoach and minibus charters based in Pickering. Direct transit for Pickering Casino Resort, weddings, and Pearson Airport.",
     img: "/pickering-banner.jpg",
     highlights: [
       { icon: "Landmark", title: "Entertainment & Nightlife", desc: "Group trips to Pickering Casino Resort" },
@@ -221,10 +221,10 @@ export const DESTINATION_DATA = {
       { q: "Can we charter a bus from Pickering to downtown Toronto?", a: "Absolutely. We provide direct and efficient transportation from Pickering into the heart of Toronto for concerts, sporting events, and corporate conferences." }
     ]
   },
-  "charter-bus-rental-hamilton": {
+  "charter-bus-service-hamilton": {
     city: "Hamilton",
     title: "Charter Coach Bus Service in Hamilton",
-    subtitle: "Expert charter bus rentals for Hamilton via the QEW. Servicing McMaster University, Tim Hortons Field, and FirstOntario Centre.",
+    subtitle: "Expert charter bus services for Hamilton via the QEW. Servicing McMaster University, Tim Hortons Field, and FirstOntario Centre.",
     img: "/hamilton-banner.jpg",
     highlights: [
       { icon: "Landmark", title: "University Transit", desc: "McMaster University campus shuttles" },
@@ -240,7 +240,7 @@ export const DESTINATION_DATA = {
       { q: "Can you facilitate airport transfers to Hamilton Airport (YHM)?", a: "Certainly. We organize direct group shuttle services for corporate teams and travel groups arriving at or departing from John C. Munro Hamilton International Airport." }
     ]
   },
-  "charter-bus-rental-north-york": {
+  "charter-bus-service-north-york": {
     city: "North York",
     title: "Charter Coach Bus Service in North York",
     subtitle: "Premium group transportation via Highway 401 and the DVP. Specializing in York University transit, Aga Khan Museum tours, and corporate shuttles.",
@@ -259,10 +259,10 @@ export const DESTINATION_DATA = {
       { q: "Are your buses equipped for corporate groups?", a: "Our luxury motorcoaches feature fast Wi-Fi, power outlets at every seat, and climate control, transforming travel time into productive hours for mobile professionals." }
     ]
   },
-  "charter-bus-rental-aurora": {
+  "charter-bus-service-aurora": {
     city: "Aurora",
     title: "Charter Coach Bus Service in Aurora",
-    subtitle: "Dependable charter bus rentals for Aurora and York Region. Ideal for local country club golf outings, rustic weddings, and corporate events.",
+    subtitle: "Dependable charter bus services for Aurora and York Region. Ideal for local country club golf outings, rustic weddings, and corporate events.",
     img: "/aurora-banner.jpg",
     highlights: [
       { icon: "Trophy", title: "Golf Tournaments", desc: "Magna Golf Club & regional courses" },
@@ -278,7 +278,7 @@ export const DESTINATION_DATA = {
       { q: "Do you offer transportation for local minor hockey teams?", a: "Yes, our comfortable mini-coaches and economical school buses are fantastic options for minor sports teams traveling to arenas across York Region." }
     ]
   },
-  "charter-bus-rental-woodbridge": {
+  "charter-bus-service-woodbridge": {
     city: "Woodbridge",
     title: "Charter Coach Bus Service in Woodbridge",
     subtitle: "Specialized group transportation for Woodbridge and Vaughan. The premier choice for banquet hall wedding shuttles and Vaughan Mills shopping tours.",
@@ -294,13 +294,13 @@ export const DESTINATION_DATA = {
     ],
     faqs: [
       { q: "How do you handle late-night wedding transportation?", a: "We offer highly flexible scheduling to ensure safe, late-night return trips. Our drivers will run continuous loops to get your wedding guests safely back to their hotels." },
-      { q: "Can we book a bus for a corporate shopping day at Vaughan Mills?", a: "Yes, we frequently book group shopping excursions. Our luxury coaches feature massive undercarriage storage bays, easily accommodating large shopping hauls." }
+      { q: "Can we charter a bus for a corporate shopping day at Vaughan Mills?", a: "Yes, we frequently book group shopping excursions. Our luxury coaches feature massive undercarriage storage bays, easily accommodating large shopping hauls." }
     ]
   },
-  "charter-bus-rental-vaughan": {
+  "charter-bus-service-vaughan": {
     city: "Vaughan",
     title: "Charter Coach Bus Service in Vaughan",
-    subtitle: "Comprehensive charter rentals via Highway 400. Servicing Canada's Wonderland, Vaughan Metropolitan Centre (VMC), and corporate parks.",
+    subtitle: "Comprehensive charter services via Highway 400. Servicing Canada's Wonderland, Vaughan Metropolitan Centre (VMC), and corporate parks.",
     img: "/vaughan-banner.jpg",
     highlights: [
       { icon: "Landmark", title: "Theme Park Trips", desc: "Large group transit to Canada's Wonderland" },
@@ -312,11 +312,11 @@ export const DESTINATION_DATA = {
       "Our diverse fleet ensures that no matter your group size, we can provide a climate-controlled, comfortable ride. Our professional drivers are experts at navigating the often-congested Highway 400 and Highway 407 corridors, ensuring absolute punctuality."
     ],
     faqs: [
-      { q: "Do you offer school group rates for trips to Canada's Wonderland?", a: "Yes, we offer highly competitive, discounted pricing on our school bus rentals for educational and recreational end-of-year trips to the theme park." },
+      { q: "Do you offer school group rates for trips to Canada's Wonderland?", a: "Yes, we offer highly competitive, discounted pricing on our school bus charters for educational and recreational end-of-year trips to the theme park." },
       { q: "Can you provide daily employee shuttles from the TTC subway?", a: "We frequently map and execute daily 'last-mile' shuttle routes connecting the Vaughan Metropolitan Centre TTC subway station to corporate offices and warehouses throughout Vaughan." }
     ]
   },
-  "charter-bus-rental-brampton": {
+  "charter-bus-service-brampton": {
     city: "Brampton",
     title: "Charter Coach Bus Service in Brampton",
     subtitle: "Dependable group travel for Brampton. Perfect for sports tournaments at the CAA Centre, corporate events, and massive family weddings.",
@@ -335,7 +335,7 @@ export const DESTINATION_DATA = {
       { q: "Can you accommodate very large cultural weddings with hundreds of guests?", a: "Absolutely. We are experienced in mega-event logistics and can deploy a synchronized fleet of multiple vehicles to move hundreds of guests effortlessly." }
     ]
   },
-  "charter-bus-rental-milton": {
+  "charter-bus-service-milton": {
     city: "Milton",
     title: "Charter Coach Bus Service in Milton",
     subtitle: "Expert group transportation serving Milton and the Halton Region. Ideal for the Mattamy National Cycling Centre, Kelso, and corporate retreats.",
@@ -350,14 +350,14 @@ export const DESTINATION_DATA = {
       "Whether you are transporting elite athletes to the Mattamy National Cycling Centre or organizing a massive school field trip to Kelso Conservation Area, our vehicles are meticulously maintained to handle both highway speeds and rural roads safely."
     ],
     faqs: [
-      { q: "Can we book a bus for a hiking trip in Milton?", a: "Yes, we regularly transport school groups and corporate teams to Kelso Conservation Area and Mountsberg, providing secure onboard storage for backpacks and gear." },
+      { q: "Can we charter a bus for a hiking trip in Milton?", a: "Yes, we regularly transport school groups and corporate teams to Kelso Conservation Area and Mountsberg, providing secure onboard storage for backpacks and gear." },
       { q: "Do you offer corporate rates for Milton-based businesses?", a: "We provide competitive quoting, priority dispatch, and dedicated account managers for recurring corporate clients situated along the Milton Highway 401 corridor." }
     ]
   },
-  "charter-bus-rental-mississauga": {
+  "charter-bus-service-mississauga": {
     city: "Mississauga",
     title: "Charter Coach Bus Service in Mississauga",
-    subtitle: "Premium charter rentals for Mississauga and Peel Region. Direct routing to Pearson Airport (YYZ), Square One, and the International Centre.",
+    subtitle: "Premium charter services for Mississauga and Peel Region. Direct routing to Pearson Airport (YYZ), Square One, and the International Centre.",
     img: "/mississauga-banner.jpg",
     highlights: [
       { icon: "Plane", title: "Airport Transfers", desc: "Toronto Pearson International (YYZ) logistics" },
@@ -375,10 +375,10 @@ export const DESTINATION_DATA = {
       { q: "Can you provide shuttle loops for trade shows at the International Centre?", a: "Certainly! We specialize in continuous shuttle loops, moving attendees from overflow parking lots and local hotels directly to the International Centre entrances." }
     ]
   },
-  "charter-bus-rental-oshawa": {
+  "charter-bus-service-oshawa": {
     city: "Oshawa",
     title: "Charter Coach Bus Service in Oshawa",
-    subtitle: "Reliable coach rentals for Oshawa and Durham Region. Servicing Ontario Tech University, Durham College, and the Tribute Communities Centre.",
+    subtitle: "Reliable coach charters for Oshawa and Durham Region. Servicing Ontario Tech University, Durham College, and the Tribute Communities Centre.",
     img: "/oshawa-banner.jpg",
     highlights: [
       { icon: "Landmark", title: "University Travel", desc: "Ontario Tech University & Durham College" },
@@ -387,14 +387,14 @@ export const DESTINATION_DATA = {
     ],
     content: [
       "As the eastern anchor of the GTA, Oshawa hosts numerous major sporting events, university activities, and large corporate functions. Our charter buses provide seamless, stress-free transportation to major venues like the Tribute Communities Centre and local campuses.",
-      "We offer affordable school bus rentals for local Durham Region field trips, as well as premium 56-passenger motorcoaches for long-distance athletic travel, ensuring groups in Oshawa have access to the highest tier of transportation options available."
+      "We offer affordable school bus charters for local Durham Region field trips, as well as premium 56-passenger motorcoaches for long-distance athletic travel, ensuring groups in Oshawa have access to the highest tier of transportation options available."
     ],
     faqs: [
       { q: "Do you provide student transportation for Ontario Tech?", a: "Yes, we regularly transport student associations, academic clubs, and varsity athletic teams for both Ontario Tech University and Durham College." },
-      { q: "Can we rent a bus for a concert in Oshawa?", a: "Absolutely. We offer round-trip transportation for groups attending concerts and OHL hockey games at the Tribute Communities Centre, eliminating parking hassles." }
+      { q: "Can we charter a bus for a concert in Oshawa?", a: "Absolutely. We offer round-trip transportation for groups attending concerts and OHL hockey games at the Tribute Communities Centre, eliminating parking hassles." }
     ]
   },
-  "charter-bus-rental-burlington": {
+  "charter-bus-service-burlington": {
     city: "Burlington",
     title: "Charter Coach Bus Service in Burlington",
     subtitle: "Premium group transportation for Burlington via the QEW. Ideal for Sound of Music Festival shuttles, Royal Botanical Gardens, and corporate events.",
@@ -413,7 +413,7 @@ export const DESTINATION_DATA = {
       { q: "Can you provide shuttle service for large outdoor festivals?", a: "We are experts in event logistics and regularly design and execute park-and-ride shuttle loops for major Burlington events like the Sound of Music Festival." }
     ]
   },
-  "charter-bus-rental-guelph": {
+  "charter-bus-service-guelph": {
     city: "Guelph",
     title: "Charter Coach Bus Service in Guelph",
     subtitle: "Expert group travel solutions for Guelph. Servicing University of Guelph athletics, agricultural tours, and Sleeman Centre events.",
@@ -429,13 +429,13 @@ export const DESTINATION_DATA = {
     ],
     faqs: [
       { q: "Do you provide buses for university athletic teams?", a: "Yes, we have extensive experience transporting OUA varsity teams and intramural clubs to games across the province, with ample storage for athletic gear." },
-      { q: "Can we rent a mini-coach for a private brewery tour?", a: "Absolutely. A 24-36 passenger mini-coach is a safe, responsible, and incredibly fun way to transport your group for local food, agricultural, and beverage tours." }
+      { q: "Can we charter a mini-coach for a private brewery tour?", a: "Absolutely. A 24-36 passenger mini-coach is a safe, responsible, and incredibly fun way to transport your group for local food, agricultural, and beverage tours." }
     ]
   },
-  "charter-bus-rental-brantford": {
+  "charter-bus-service-brantford": {
     city: "Brantford",
     title: "Charter Coach Bus Service in Brantford",
-    subtitle: "Reliable motorcoach rentals in Brantford. Perfect for local minor sports tournaments at Wayne Gretzky Sports Centre and theater outings.",
+    subtitle: "Reliable motorcoach charters in Brantford. Perfect for local minor sports tournaments at Wayne Gretzky Sports Centre and theater outings.",
     img: "/brantford-banner.jpg",
     highlights: [
       { icon: "Trophy", title: "Sports Tournaments", desc: "Transit to Wayne Gretzky Sports Centre" },
@@ -451,7 +451,7 @@ export const DESTINATION_DATA = {
       { q: "Do you offer discounts for recurring sports team travel?", a: "We work directly with athletic directors and coaches to establish competitive, contract-based pricing for entire season schedules and tournament travel." }
     ]
   },
-  "charter-bus-rental-bolton": {
+  "charter-bus-service-bolton": {
     city: "Bolton",
     title: "Charter Coach Bus Service in Bolton",
     subtitle: "Dedicated group transportation for Bolton and Caledon. The premier choice for Caledon Equestrian Park events, rustic weddings, and nature retreats.",
@@ -470,7 +470,7 @@ export const DESTINATION_DATA = {
       { q: "Do you offer shuttle services for large events in Caledon?", a: "Absolutely. We specialize in designing and running continuous shuttle loops to transport attendees from remote parking areas or local hotels directly to the main event venue." }
     ]
   },
-  "charter-bus-rental-barrie": {
+  "charter-bus-service-barrie": {
     city: "Barrie",
     title: "Charter Coach Bus Service in Barrie",
     subtitle: "Premium group transportation for Barrie and Simcoe County via Highway 400. The best choice for ski trips, Georgian College events, and waterfront festivals.",
@@ -512,7 +512,7 @@ export const SERVICE_DATA = {
   },
   "school-trip-transportation": {
     title: "School Trip & University Transportation",
-    subtitle: "Safe, cost-effective, and reliable bus rentals for educational field trips and campus events.",
+    subtitle: "Safe, cost-effective, and reliable bus charters for educational field trips and campus events.",
     img: "/services-school.jpg",
     highlights: [
       { icon: "Landmark", title: "Educational Trips", desc: "ROM, Science Centre & Toronto Zoo" },
@@ -521,7 +521,7 @@ export const SERVICE_DATA = {
     ],
     content: [
       "Safety is our absolute priority when transporting students. We are the trusted transportation partner for school boards and universities across Ontario, providing reliable transit for everything from primary school visits to the Royal Ontario Museum to massive university campus tours.",
-      "We offer highly affordable, high-capacity school bus rentals for local excursions, as well as premium motorcoaches for out-of-town university athletic travel or overnight educational retreats."
+      "We offer highly affordable, high-capacity school bus charters for local excursions, as well as premium motorcoaches for out-of-town university athletic travel or overnight educational retreats."
     ],
     faqs: [
       { q: "Are your drivers certified for school transport?", a: "Yes, all drivers undergo rigorous background checks, vulnerable sector screening, and extensive safety training." },

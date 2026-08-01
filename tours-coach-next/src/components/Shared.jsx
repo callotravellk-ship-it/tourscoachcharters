@@ -158,7 +158,7 @@ export const Footer = () => (
         <Link href="/" className="mb-6 bg-white inline-block p-2 rounded-lg cursor-pointer block">
           <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 w-auto object-contain" />
         </Link>
-        <p className="text-sm mb-4">Canada's Premier Charter Bus Rentals. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
+        <p className="text-sm mb-4">Canada's Premier Charter Bus Service. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
       </div>
       
       <div>
@@ -175,8 +175,8 @@ export const Footer = () => (
         <ul className="space-y-2 text-sm flex flex-col items-start">
           <li><Link href="/about" className="hover:text-red-500 transition">About Us</Link></li>
           <li><Link href="/contact" className="hover:text-red-500 transition">Contact Us</Link></li>
-          <li><Link href="/luxury-coach-bus-rental" className="hover:text-red-500 transition">Our Fleet</Link></li>
-          <li><Link href="/charter-bus-rental-toronto" className="hover:text-red-500 transition">Destinations</Link></li>
+          <li><Link href="/luxury-coach-bus-charter" className="hover:text-red-500 transition">Our Fleet</Link></li>
+          <li><Link href="/charter-bus-service-toronto" className="hover:text-red-500 transition">Destinations</Link></li>
         </ul>
       </div>
 
@@ -222,7 +222,6 @@ export const QuoteForm = ({ onClose }) => {
     payload.tripType = tripType;
 
     try {
-      // 1. TRIGGER THE EMAILS FIRST (Failsafe - never lose a customer request!)
       const response = await fetch('/api/send-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -233,8 +232,6 @@ export const QuoteForm = ({ onClose }) => {
         throw new Error("Email sending failed");
       }
 
-      // 2. SAVE TO CRM IN BACKGROUND
-      // We don't "await" this in the main flow so a missing Vercel env variable won't freeze the button
       if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
         addDoc(collection(db, "leads"), {
           ...payload,
@@ -247,7 +244,6 @@ export const QuoteForm = ({ onClose }) => {
         console.warn("Firebase API Key missing in environment variables. CRM save skipped.");
       }
 
-      // 3. SUCCESS STATE
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'Lead', {
           content_name: 'Charter Bus Quote Request',
@@ -259,7 +255,7 @@ export const QuoteForm = ({ onClose }) => {
       form.reset();
       setTripType('return');
       setDepartDate('');
-      setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-rental' });
+      setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-charter' });
       setTimeout(() => setSubmitted(false), 5000);
 
     } catch (error) {
@@ -286,8 +282,25 @@ export const QuoteForm = ({ onClose }) => {
           <X size={24} />
         </button>
       )}
-      <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Quote</h3>
+      <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Charter Quote</h3>
       <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
+
+      {/* --- SELF-DRIVE DETERRENT BADGE --- */}
+      <div className="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6 rounded-r-lg shadow-sm">
+        <div className="flex items-start">
+          <div className="flex-shrink-0 mt-0.5">
+            <span className="text-lg leading-none">🛡️</span>
+          </div>
+          <div className="ml-3">
+            <h3 className="text-xs font-bold text-blue-900 uppercase tracking-wide">
+              Professional Driver Included
+            </h3>
+            <p className="mt-1 text-xs text-blue-800 leading-snug">
+              Please note: All Tours Coach Charters include a professional, uniformed driver. <strong>We do not offer self-drive services or bareboat leases.</strong>
+            </p>
+          </div>
+        </div>
+      </div>
       
       {submitted ? (
         <div className="bg-green-50 border border-green-200 text-green-700 p-8 rounded-lg text-center my-12 animate-fade-in-up">
@@ -440,7 +453,7 @@ export const QuoteForm = ({ onClose }) => {
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Vehicle Preference <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
+                Select Charter Fleet Type <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
               </label>
               <select 
                 name="vehicle" 
@@ -449,10 +462,10 @@ export const QuoteForm = ({ onClose }) => {
                 className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm"
               >
                 <option value="any">No Preference</option>
-                <option value="luxury-coach-bus-rental">Luxury Coach (56 pax)</option>
-                <option value="mini-coach-bus-rental">Mini Coach (24-36 pax)</option>
-                <option value="14-passenger-van-rental">Passenger Van (14 pax)</option>
-                <option value="school-bus-rental">School Bus</option>
+                <option value="luxury-coach-bus-charter">Luxury Coach (Driver Included)</option>
+                <option value="mini-coach-bus-charter">Mini Coach (Driver Included)</option>
+                <option value="14-passenger-van-service">Passenger Van (Driver Included)</option>
+                <option value="school-bus-charter">School Bus</option>
               </select>
             </div>
           </div>
@@ -463,7 +476,7 @@ export const QuoteForm = ({ onClose }) => {
             <textarea name="info" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="3" placeholder="Any specific requirements, stops, or itinerary details?"></textarea>
           </div>
           <button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-4 flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>
-            {isSending ? 'Sending Request...' : <>Submit Quote Request <ArrowRight className="ml-2" size={18} /></>}
+            {isSending ? 'Sending Request...' : <>Submit Charter Request <ArrowRight className="ml-2" size={18} /></>}
           </button>
           <p className="text-xs text-center text-gray-500 mt-2">
             <ShieldCheck size={12} className="inline mr-1 text-green-600" /> Your information is secure.

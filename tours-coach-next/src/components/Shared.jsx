@@ -285,7 +285,7 @@ export const QuoteForm = ({ onClose }) => {
       <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Charter Quote</h3>
       <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
 
-      {/* --- SELF-DRIVE DETERRENT BADGE --- */}
+{/* --- SELF-DRIVE DETERRENT BADGE --- */}
       <div className="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6 rounded-r-lg shadow-sm">
         <div className="flex items-start">
           <div className="flex-shrink-0 mt-0.5">
@@ -296,7 +296,7 @@ export const QuoteForm = ({ onClose }) => {
               Professional Driver Included
             </h3>
             <p className="mt-1 text-xs text-blue-800 leading-snug">
-              Please note: All Tours Coach Charters include a professional, uniformed driver. <strong>We do not offer self-drive services or bareboat leases.</strong>
+              Please note: All Tours Coach Charters include a professional, uniformed driver. <strong>We do not offer self-drive services.</strong>
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { DESTINATION_DATA, FLEET_DATA, SEO_DATA } from '../../lib/data';
-import { AboutUs, ContactUs, FifaPage, GenericPage, DestinationTemplate, FleetTemplate } from '../../components/Templates';
+import { AboutUs, ContactUs, DestinationTemplate, FleetTemplate } from '../../components/Templates';
 
 // 1. DYNAMIC SERVER-SIDE METADATA FOR GOOGLE SEO
 export async function generateMetadata({ params }) {
@@ -44,8 +44,6 @@ export default async function DynamicPage({ params }) {
 
   if (slug === 'about') return <AboutUs />;
   if (slug === 'contact') return <ContactUs />;
-  if (slug === 'fifa-world-cup-2026-charters') return <FifaPage />;
-  if (slug === 'winter-destinations') return <GenericPage title="Winter Destinations" subtitle="Dedicated charter services to Whistler, Blue Mountain, and Banff." bgImage="/winter-banner.jpg" />;
   
   if (DESTINATION_DATA[slug]) {
     return <DestinationTemplate data={DESTINATION_DATA[slug]} />;

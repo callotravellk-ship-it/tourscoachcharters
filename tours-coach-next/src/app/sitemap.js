@@ -3,11 +3,10 @@ import { FLEET_DATA, NAV_LINKS } from '../lib/data'; // Adjust path if needed
 export default function sitemap() {
   const baseUrl = "https://www.tourscoachcharter.com";
 
-  // 1. Add your Homepage, Search page, and any hidden "standalone" pages here
+  // 1. Add your Homepage and any hidden "standalone" pages here
   // (e.g., if the FIFA page isn't in your top menu, add "/fifa-2026-charter-bus" here)
   const allRoutes = [
     "", 
-    "/search",
     "/request-a-quote" // <-- Added your new lead campaign page here
   ];
 

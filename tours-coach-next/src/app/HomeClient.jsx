@@ -5,7 +5,6 @@ import { useQuote } from '../context/QuoteContext';
 import { Star, CalendarCheck, ShieldCheck, Map, Headphones, BusFront, Users, Briefcase, Trophy, Navigation, Car, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { QuoteForm, TrustStatsBanner } from '../components/Shared';
 import { FLEET_DATA } from '../lib/data';
-import { HeroSearch } from '../components/HeroSearch'; 
 
 export default function HomePage() {
   const { setIsQuoteModalOpen } = useQuote();
@@ -98,13 +97,6 @@ export default function HomePage() {
       <section className="py-24 bg-slate-50 border-t border-slate-200 overflow-hidden relative">
         <div className="container mx-auto px-4">
           
-          {/* SEARCH BAR CENTERED JUST ABOVE THE FLEET TITLE */}
-          <div className="flex justify-center mb-16 relative z-30">
-            <div className="w-full max-w-4xl">
-              <HeroSearch />
-            </div>
-          </div>
-
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">Meet Our Modern Fleet</h2>
             <p className="text-lg text-slate-600">From luxury motorcoaches to efficient passenger vans, we have the perfect vehicle to accommodate your group size and travel needs safely and comfortably.</p>

@@ -5,7 +5,24 @@ import { UPCOMING_EVENTS, EVERGREEN_EVENTS } from '../../lib/data';
 import { Calendar, MapPin, Bus, Users, ArrowRight, ShieldCheck, CheckCircle } from 'lucide-react';
 
 export default function EventsPage() {
-  const { setIsQuoteModalOpen } = useQuote();
+  // 1. ADDED setQuoteData HERE
+  const { setIsQuoteModalOpen, setQuoteData } = useQuote();
+
+  // 2. ADDED THE MISSING FUNCTION HERE
+  const handleBookEvent = (eventName) => {
+    try {
+      if (setQuoteData) {
+        setQuoteData(prev => ({
+          ...(prev || {}),
+          info: `Charter request for event: ${eventName}`
+        }));
+      }
+    } catch (error) {
+      console.error("Error setting quote data:", error);
+    } finally {
+      setIsQuoteModalOpen(true); 
+    }
+  };
 
   return (
     <div className="w-full bg-slate-50 min-h-screen pt-28 pb-20">
@@ -73,14 +90,19 @@ export default function EventsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">{item.customers}</td>
-<td className="px-6 py-4 text-right">
-  <button
-    onClick={() => handleBookEvent(item.event)}
-    className="bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap"
-  >
-    Get Quote
-  </button>
-</td>
+                    <td className="px-6 py-4 text-right relative">
+                      {/* 3. ADDED type="button" AND z-20 TO DESKTOP BUTTON */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleBookEvent(item.event);
+                        }}
+                        className="bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap relative z-20 cursor-pointer"
+                      >
+                        Get Quote
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -90,15 +112,20 @@ export default function EventsPage() {
           {/* Mobile Cards */}
           <div className="md:hidden space-y-4">
             {UPCOMING_EVENTS.map((item, idx) => (
-              <div key={idx} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+              <div key={idx} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 relative">
                 <div className="flex justify-between items-start">
                   <h3 className="font-bold text-base text-slate-900">{item.event}</h3>
-<button
-  onClick={() => handleBookEvent(item.event)}
-  className="bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition"
->
-  Get Quote
-</button>
+                  {/* 4. ADDED type="button" AND z-20 TO MOBILE BUTTON */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleBookEvent(item.event);
+                    }}
+                    className="bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition relative z-20 cursor-pointer"
+                  >
+                    Get Quote
+                  </button>
                 </div>
                 <div className="text-xs text-slate-600 flex items-center">
                   <MapPin size={14} className="mr-1 text-red-600" /> {item.location}
@@ -131,7 +158,7 @@ export default function EventsPage() {
               <div
                 key={idx}
                 className="flex items-center p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-800 font-semibold text-sm hover:border-blue-200 hover:bg-blue-50/50 transition cursor-pointer"
-                onClick={() => setIsQuoteModalOpen(true)}
+                onClick={() => handleBookEvent(name)}
               >
                 <CheckCircle size={16} className="text-green-600 mr-2 shrink-0" />
                 <span>{name}</span>

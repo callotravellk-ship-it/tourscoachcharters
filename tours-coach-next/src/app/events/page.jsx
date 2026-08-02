@@ -5,10 +5,8 @@ import { UPCOMING_EVENTS, EVERGREEN_EVENTS } from '../../lib/data';
 import { Calendar, MapPin, Bus, Users, ArrowRight, ShieldCheck, CheckCircle } from 'lucide-react';
 
 export default function EventsPage() {
-  // 1. ADDED setQuoteData HERE
   const { setIsQuoteModalOpen, setQuoteData } = useQuote();
 
-  // 2. ADDED THE MISSING FUNCTION HERE
   const handleBookEvent = (eventName) => {
     try {
       if (setQuoteData) {
@@ -70,8 +68,7 @@ export default function EventsPage() {
                   <th className="px-6 py-4 text-xs font-bold text-slate-700 uppercase tracking-wider">Event</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-700 uppercase tracking-wider">Location & Date</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-700 uppercase tracking-wider">Recommended Vehicles</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-700 uppercase tracking-wider">Target Groups</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase tracking-wider">Action</th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase tracking-wider"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">
@@ -89,9 +86,7 @@ export default function EventsPage() {
                         <Bus size={12} className="mr-1" /> {item.services}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">{item.customers}</td>
                     <td className="px-6 py-4 text-right relative">
-                      {/* 3. ADDED type="button" AND z-20 TO DESKTOP BUTTON */}
                       <button
                         type="button"
                         onClick={(e) => {
@@ -115,7 +110,6 @@ export default function EventsPage() {
               <div key={idx} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 relative">
                 <div className="flex justify-between items-start">
                   <h3 className="font-bold text-base text-slate-900">{item.event}</h3>
-                  {/* 4. ADDED type="button" AND z-20 TO MOBILE BUTTON */}
                   <button
                     type="button"
                     onClick={(e) => {

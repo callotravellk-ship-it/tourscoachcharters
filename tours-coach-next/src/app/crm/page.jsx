@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { collection, query, orderBy, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { 
   LayoutDashboard, Users, Calendar, MapPin, 
-  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings, Download
+  Phone, Mail, FileText, X, Bus, Clock, ChevronRight, Lock, Unlock, DollarSign, Send, Settings, Download, Edit, Trash2
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -17,7 +17,11 @@ export default function CRMDashboard() {
 
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Modals state
   const [selectedLead, setSelectedLead] = useState(null);
+  const [editingLead, setEditingLead] = useState(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
 
   const [quotePrice, setQuotePrice] = useState('');
   const [depositAmount, setDepositAmount] = useState('');
@@ -27,7 +31,7 @@ export default function CRMDashboard() {
   const [updateStatus, setUpdateStatus] = useState('');
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
-  // --- NEW GEOAPIFY STATES ---
+  // --- GEOAPIFY STATES ---
   const [suggestedPrice, setSuggestedPrice] = useState(null);
   const [routeInfo, setRouteInfo] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -59,7 +63,7 @@ export default function CRMDashboard() {
     if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
 
-  // --- GEOAPIFY AUTOMATED QUOTING ENGINE (WITH FALLBACKS & LOGS) ---
+  // --- GEOAPIFY AUTOMATED QUOTING ENGINE ---
   const calculateRouteAndPrice = async (pickup, destination, tripType) => {
     const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_KEY;
     
@@ -70,12 +74,10 @@ export default function CRMDashboard() {
     
     setIsCalculating(true);
     try {
-      // 1. Geocode Pickup
       const pickupRes = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(pickup)}&apiKey=${apiKey}`);
       const pickupData = await pickupRes.json();
-      const pickupCoords = pickupData.features?.[0]?.geometry?.coordinates; // [lon, lat]
+      const pickupCoords = pickupData.features?.[0]?.geometry?.coordinates; 
 
-      // 2. Geocode Destination
       const destRes = await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(destination)}&apiKey=${apiKey}`);
       const destData = await destRes.json();
       const destCoords = destData.features?.[0]?.geometry?.coordinates;
@@ -85,11 +87,9 @@ export default function CRMDashboard() {
         return;
       }
 
-      // 3. Try Heavy Vehicle Routing ('bus') first
       let routeRes = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${pickupCoords[1]},${pickupCoords[0]}|${destCoords[1]},${destCoords[0]}&mode=bus&apiKey=${apiKey}`);
       let routeData = await routeRes.json();
 
-      // Fallback to standard driving route if bus mode has no coverage or fails
       if (!routeData.features || routeData.features.length === 0) {
         console.warn("Geoapify 'bus' route failed. Falling back to standard 'drive' routing...");
         routeRes = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${pickupCoords[1]},${pickupCoords[0]}|${destCoords[1]},${destCoords[0]}&mode=drive&apiKey=${apiKey}`);
@@ -103,13 +103,10 @@ export default function CRMDashboard() {
         
         setRouteInfo({ distance: distKm.toFixed(1), time: timeMins.toFixed(0) });
         
-        // 4. Custom Pricing Logic: Base $150 + $2.50/km + $40/hr
         let price = 150 + (distKm * 2.50) + ((timeMins / 60) * 40);
         
-        // Double the price if it's a round trip
         if (tripType === 'return') price *= 2;
         
-        // Round to the nearest $5 for clean numbers
         setSuggestedPrice(Math.ceil(price / 5) * 5);
       } else {
         console.warn("Geoapify Routing Warning: No route found between these points.");
@@ -128,7 +125,6 @@ export default function CRMDashboard() {
       setAssignedVehicle(selectedLead.assignedVehicle || (selectedLead.vehicle !== 'any' ? selectedLead.vehicle : 'Luxury Coach (56 pax)'));
       setUpdateStatus(selectedLead.status);
 
-      // Trigger Geoapify Calculation automatically if the lead is brand new
       if (selectedLead.status === 'New') {
         setSuggestedPrice(null);
         setRouteInfo(null);
@@ -156,6 +152,44 @@ export default function CRMDashboard() {
     localStorage.removeItem('crm_auth');
   };
 
+  // --- NEW EDIT & DELETE FUNCTIONS ---
+  const handleDeleteLead = async (id, e) => {
+    e.stopPropagation(); // Prevents the row click from opening the manage modal
+    if (window.confirm("Are you sure you want to permanently delete this quote request?")) {
+      try {
+        await deleteDoc(doc(db, 'leads', id));
+        setLeads(leads.filter(lead => lead.id !== id));
+      } catch (error) {
+        console.error("Error deleting lead:", error);
+        alert("Failed to delete the quote.");
+      }
+    }
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditingLead(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setIsSavingEdit(true);
+    try {
+      const leadRef = doc(db, 'leads', editingLead.id);
+      await updateDoc(leadRef, {
+        ...editingLead,
+        updatedAt: new Date()
+      });
+      await fetchLeads(); // Refresh table to show updated data
+      setEditingLead(null);
+    } catch (error) {
+      console.error("Error updating lead:", error);
+      alert("Failed to update quote.");
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
+
   const handleSendQuote = async (e) => {
     e.preventDefault();
     setIsSendingQuote(true);
@@ -180,7 +214,8 @@ export default function CRMDashboard() {
         quotedPrice: quotePrice,
         depositAmount: depositAmount,
         assignedVehicle: assignedVehicle,
-        quotedAt: new Date()
+        quotedAt: new Date(),
+        updatedAt: new Date()
       });
 
       await fetchLeads();
@@ -496,7 +531,13 @@ export default function CRMDashboard() {
                   {leads.map((lead) => (
                     <tr key={lead.id} className="hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => setSelectedLead(lead)}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                        {formatDate(lead.createdAt)}
+                        <div>{formatDate(lead.createdAt)}</div>
+                        {/* --- NEW LAST EDITED NOTE --- */}
+                        {lead.updatedAt && (
+                          <div className="text-[10px] text-slate-400 italic mt-1 font-medium">
+                            Edited: {formatDate(lead.updatedAt)}
+                          </div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-bold text-slate-900">{lead.firstName} {lead.lastName}</div>
@@ -514,10 +555,27 @@ export default function CRMDashboard() {
                           {lead.status}
                         </span>
                       </td>
+                      {/* --- NEW ACTION MENU --- */}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 flex items-center justify-end w-full">
-                          {lead.status === 'New' ? 'Price Trip' : 'Manage'} <ChevronRight size={16} className="ml-1" />
-                        </button>
+                        <div className="flex items-center justify-end space-x-3">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setEditingLead(lead); }} 
+                            className="text-blue-500 hover:text-blue-700 transition" 
+                            title="Edit Quote"
+                          >
+                            <Edit size={18} />
+                          </button>
+                          <button 
+                            onClick={(e) => handleDeleteLead(lead.id, e)} 
+                            className="text-red-400 hover:text-red-600 transition" 
+                            title="Delete Quote"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                          <button className="text-blue-600 hover:text-blue-900 flex items-center ml-2 border-l border-slate-200 pl-3" onClick={(e) => { e.stopPropagation(); setSelectedLead(lead); }}>
+                            {lead.status === 'New' ? 'Price Trip' : 'Manage'} <ChevronRight size={16} className="ml-1" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -528,6 +586,97 @@ export default function CRMDashboard() {
         </main>
       </div>
 
+      {/* --- NEW EDIT MODAL OVERLAY --- */}
+      {editingLead && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setEditingLead(null)}></div>
+          <div className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="px-6 py-4 bg-blue-900 text-white flex justify-between items-center shrink-0 rounded-t-xl">
+               <h2 className="text-lg font-bold">Edit Quote Request</h2>
+               <button onClick={() => setEditingLead(null)} className="text-slate-300 hover:text-white"><X size={20}/></button>
+            </div>
+            
+            <form onSubmit={handleEditSubmit} className="flex-1 overflow-y-auto p-6 space-y-4">
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">First Name</label>
+                   <input type="text" name="firstName" value={editingLead.firstName || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Last Name</label>
+                   <input type="text" name="lastName" value={editingLead.lastName || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Email</label>
+                   <input type="email" name="email" value={editingLead.email || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Phone</label>
+                   <input type="text" name="phone" value={editingLead.phone || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+               </div>
+
+               <div className="space-y-4 border-t pt-4">
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Pickup Location</label>
+                   <input type="text" name="pickup" value={editingLead.pickup || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Destination Location</label>
+                   <input type="text" name="destination" value={editingLead.destination || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+               </div>
+
+               <div className="grid grid-cols-2 gap-4 border-t pt-4">
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Depart Date</label>
+                   <input type="date" name="departDate" value={editingLead.departDate || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Pick Up Time</label>
+                   <input type="time" name="pickupTime" value={editingLead.pickupTime || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+                 
+                 {editingLead.tripType === 'return' && (
+                   <>
+                     <div>
+                       <label className="block text-xs font-bold text-slate-600 mb-1">Return Date</label>
+                       <input type="date" name="returnDate" value={editingLead.returnDate || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                     </div>
+                     <div>
+                       <label className="block text-xs font-bold text-slate-600 mb-1">Return Time</label>
+                       <input type="time" name="returnTime" value={editingLead.returnTime || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                     </div>
+                   </>
+                 )}
+               </div>
+
+               <div className="grid grid-cols-2 gap-4 border-t pt-4 pb-4">
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Passengers</label>
+                   <input type="number" name="passengers" value={editingLead.passengers || ''} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm" />
+                 </div>
+                 <div>
+                   <label className="block text-xs font-bold text-slate-600 mb-1">Trip Type</label>
+                   <select name="tripType" value={editingLead.tripType || 'return'} onChange={handleEditChange} className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm bg-white">
+                     <option value="return">Round Trip</option>
+                     <option value="oneway">One Way</option>
+                   </select>
+                 </div>
+               </div>
+               
+               <div className="flex justify-end space-x-3 pt-4 border-t">
+                  <button type="button" onClick={() => setEditingLead(null)} className="px-5 py-2 rounded text-slate-600 font-bold hover:bg-slate-100">Cancel</button>
+                  <button type="submit" disabled={isSavingEdit} className={`bg-blue-800 text-white px-6 py-2 rounded font-bold shadow hover:bg-blue-900 ${isSavingEdit ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                    {isSavingEdit ? 'Saving...' : 'Save Changes'}
+                  </button>
+               </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* --- EXISTING MANAGE QUOTE MODAL --- */}
       {selectedLead && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setSelectedLead(null)}></div>
@@ -616,7 +765,6 @@ export default function CRMDashboard() {
                             type="button"
                             onClick={() => {
                                setQuotePrice(suggestedPrice);
-                               // Automatically calculate a standard 20% deposit
                                setDepositAmount(Math.round(suggestedPrice * 0.20)); 
                             }}
                             className="bg-blue-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-blue-700 transition shadow-sm"

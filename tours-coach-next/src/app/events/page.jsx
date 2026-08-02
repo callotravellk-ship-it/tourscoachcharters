@@ -73,14 +73,14 @@ export default function EventsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-xs text-slate-500">{item.customers}</td>
-                    <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => setIsQuoteModalOpen(true)}
-                        className="bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition"
-                      >
-                        Book
-                      </button>
-                    </td>
+<td className="px-6 py-4 text-right">
+  <button
+    onClick={() => handleBookEvent(item.event)}
+    className="bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap"
+  >
+    Get Quote
+  </button>
+</td>
                   </tr>
                 ))}
               </tbody>

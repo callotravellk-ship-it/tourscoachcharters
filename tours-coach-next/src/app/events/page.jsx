@@ -93,12 +93,12 @@ export default function EventsPage() {
               <div key={idx} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
                 <div className="flex justify-between items-start">
                   <h3 className="font-bold text-base text-slate-900">{item.event}</h3>
-                  <button
-                    onClick={() => setIsQuoteModalOpen(true)}
-                    className="bg-blue-800 text-white text-xs font-bold px-3 py-1 rounded"
-                  >
-                    Quote
-                  </button>
+<button
+  onClick={() => handleBookEvent(item.event)}
+  className="bg-blue-800 hover:bg-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition"
+>
+  Get Quote
+</button>
                 </div>
                 <div className="text-xs text-slate-600 flex items-center">
                   <MapPin size={14} className="mr-1 text-red-600" /> {item.location}

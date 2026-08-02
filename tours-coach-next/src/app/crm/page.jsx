@@ -154,11 +154,15 @@ export default function CRMDashboard() {
 
   // --- NEW EDIT & DELETE FUNCTIONS ---
   const handleDeleteLead = async (id, e) => {
-    e.stopPropagation(); // Prevents the row click from opening the manage modal
+    if (e) e.stopPropagation(); // Prevents bubbling if clicked from a table row
     if (window.confirm("Are you sure you want to permanently delete this quote request?")) {
       try {
         await deleteDoc(doc(db, 'leads', id));
         setLeads(leads.filter(lead => lead.id !== id));
+        // Close modal if deleting from within the modal
+        if (selectedLead && selectedLead.id === id) {
+          setSelectedLead(null);
+        }
       } catch (error) {
         console.error("Error deleting lead:", error);
         alert("Failed to delete the quote.");
@@ -682,6 +686,7 @@ export default function CRMDashboard() {
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setSelectedLead(null)}></div>
           <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl flex flex-col max-h-[95vh] animate-fade-in-up overflow-hidden">
             
+            {/* --- UPDATED HEADER WITH EDIT & DELETE BUTTONS --- */}
             <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
               <div className="flex items-center space-x-3">
                 <h2 className="text-lg font-bold">Booking Details</h2>
@@ -689,9 +694,32 @@ export default function CRMDashboard() {
                   {selectedLead.status}
                 </span>
               </div>
-              <button onClick={() => setSelectedLead(null)} className="text-slate-300 hover:text-white transition-colors">
-                <X size={24} />
-              </button>
+              
+              <div className="flex items-center space-x-4">
+                <button 
+                  onClick={() => { 
+                    setEditingLead(selectedLead); 
+                    setSelectedLead(null); 
+                  }} 
+                  className="text-blue-400 hover:text-blue-300 transition flex items-center text-sm font-bold" 
+                  title="Edit Quote"
+                >
+                  <Edit size={16} className="mr-1" /> Edit
+                </button>
+                <button 
+                  onClick={(e) => handleDeleteLead(selectedLead.id, e)} 
+                  className="text-red-400 hover:text-red-300 transition flex items-center text-sm font-bold" 
+                  title="Delete Quote"
+                >
+                  <Trash2 size={16} className="mr-1" /> Delete
+                </button>
+                
+                <div className="w-px h-6 bg-slate-700 mx-1"></div>
+                
+                <button onClick={() => setSelectedLead(null)} className="text-slate-300 hover:text-white transition-colors">
+                  <X size={24} />
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 overflow-y-auto p-6 space-y-6">

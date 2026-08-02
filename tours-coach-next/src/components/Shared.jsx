@@ -104,8 +104,9 @@ export const Header = () => {
         </button>
       </nav>
 
+      {/* --- UPDATED MOBILE MENU CONTAINER --- */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+        <div className="lg:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl h-[calc(100vh-100px)] overflow-y-auto pb-28">
           <div className="flex flex-col p-4 space-y-4">
             {NAV_LINKS.map(link => (
               <div key={link.id}>
@@ -129,7 +130,7 @@ export const Header = () => {
                         key={drop.id}
                         href={`/${drop.id}`}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-left text-gray-600 hover:text-blue-800"
+                        className="block text-left text-gray-600 hover:text-blue-800 py-1"
                       >
                         {drop.title}
                       </Link>

@@ -202,14 +202,25 @@ export const QuoteForm = ({ onClose }) => {
   const [isSending, setIsSending] = useState(false);
   const [tripType, setTripType] = useState('return');
   
+  // NEW: State to hold the route for the success screen display
+  const [submittedRoute, setSubmittedRoute] = useState({ pickup: '', destination: '' });
+  
   const [departDate, setDepartDate] = useState('');
   const today = new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!quoteData.pickup || !quoteData.destination) {
-      alert("Please ensure both Pickup and Destination locations are selected.");
+    // FIX FOR ISSUE 1: Strict guard against double-clicks/duplicate submissions
+    if (isSending) return; 
+    
+    // FIX FOR ISSUE 2: Manually enforce that locations exist before allowing submission
+    if (!quoteData.pickup || quoteData.pickup.trim() === '') {
+      alert("Please enter a valid Pickup Location.");
+      return;
+    }
+    if (!quoteData.destination || quoteData.destination.trim() === '') {
+      alert("Please enter a valid Destination Location.");
       return;
     }
 
@@ -252,12 +263,17 @@ export const QuoteForm = ({ onClose }) => {
         });
       }
 
+      // FIX FOR ISSUE 2: Save the requested route to show the user on the success screen
+      setSubmittedRoute({ pickup: payload.pickup, destination: payload.destination });
+      
       setSubmitted(true);
       form.reset();
       setTripType('return');
       setDepartDate('');
       setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-charter' });
-      setTimeout(() => setSubmitted(false), 5000);
+      
+      // Keep success screen visible for a bit longer so they can read the confirmation
+      setTimeout(() => setSubmitted(false), 7000);
 
     } catch (error) {
       console.error(error);
@@ -272,7 +288,7 @@ export const QuoteForm = ({ onClose }) => {
       
       <style>{`
         .geoapify-autocomplete-input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: none; outline: none; background: transparent; }
-        .geoapify-autocomplete-items { position: absolute; z-index: 99; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
+        .geoapify-autocomplete-items { position: absolute; z-index: 9999; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
         .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; line-height: 1.4; }
         .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }
         .geoapify-close-button { display: none; }
@@ -286,7 +302,7 @@ export const QuoteForm = ({ onClose }) => {
       <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Charter Quote</h3>
       <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
 
-{/* --- SELF-DRIVE DETERRENT BADGE --- */}
+      {/* --- SELF-DRIVE DETERRENT BADGE --- */}
       <div className="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6 rounded-r-lg shadow-sm">
         <div className="flex items-start">
           <div className="flex-shrink-0 mt-0.5">
@@ -303,11 +319,19 @@ export const QuoteForm = ({ onClose }) => {
         </div>
       </div>
       
+      {/* FIX FOR ISSUE 2: Detailed Success Screen */}
       {submitted ? (
-        <div className="bg-green-50 border border-green-200 text-green-700 p-8 rounded-lg text-center my-12 animate-fade-in-up">
-          <CheckCircle className="mx-auto mb-4" size={56} />
-          <h4 className="font-bold text-xl">Request Received!</h4>
-          <p className="text-sm mt-2">Our logistics team is calculating your quote and will contact you via email or phone shortly.</p>
+        <div className="bg-green-50 border border-green-200 text-green-800 p-8 rounded-lg text-center my-8 animate-fade-in-up">
+          <CheckCircle className="mx-auto mb-4 text-green-600" size={56} />
+          <h4 className="font-black text-xl mb-3">Quote Request Received!</h4>
+          
+          <div className="bg-white p-4 rounded-md border border-green-100 text-left mb-4 shadow-sm">
+            <p className="text-xs text-green-600 font-bold uppercase mb-1">Route Details Submitted</p>
+            <p className="text-sm text-slate-700"><strong>From:</strong> {submittedRoute.pickup}</p>
+            <p className="text-sm text-slate-700 mt-1"><strong>To:</strong> {submittedRoute.destination}</p>
+          </div>
+          
+          <p className="text-sm">Our logistics team is calculating your quote and will contact you via email or phone shortly.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -340,46 +364,44 @@ export const QuoteForm = ({ onClose }) => {
             </div>
           </div>
 
-          <GeoapifyContext apiKey={process.env.NEXT_PUBLIC_GEOAPIFY_KEY || ""}>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Pickup Location <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
-                </label>
-                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
-                  <GeoapifyGeocoderAutocomplete
-                    placeholder="Start typing an address..."
-                    filterByCountryCode={["ca"]}
-                    value={quoteData.pickup}
-                    placeSelect={(place) => {
-                      if(place) setQuoteData({ ...quoteData, pickup: place.properties.formatted });
-                    }}
-                    onUserInput={(value) => {
-                      setQuoteData({ ...quoteData, pickup: value });
-                    }}
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Destination <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
-                </label>
-                <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
-                  <GeoapifyGeocoderAutocomplete
-                    placeholder="Start typing an address..."
-                    filterByCountryCode={["ca"]}
-                    value={quoteData.destination}
-                    placeSelect={(place) => {
-                      if(place) setQuoteData({ ...quoteData, destination: place.properties.formatted });
-                    }}
-                    onUserInput={(value) => {
-                      setQuoteData({ ...quoteData, destination: value });
-                    }}
-                  />
-                </div>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Pickup Location <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+                <GeoapifyGeocoderAutocomplete
+                  placeholder="Start typing an address..."
+                  filterByCountryCode={["ca"]}
+                  value={quoteData.pickup}
+                  placeSelect={(place) => {
+                    if(place) setQuoteData({ ...quoteData, pickup: place.properties.formatted });
+                  }}
+                  onUserInput={(value) => {
+                    setQuoteData({ ...quoteData, pickup: value });
+                  }}
+                />
               </div>
             </div>
-          </GeoapifyContext>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Destination <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+                <GeoapifyGeocoderAutocomplete
+                  placeholder="Start typing an address..."
+                  filterByCountryCode={["ca"]}
+                  value={quoteData.destination}
+                  placeSelect={(place) => {
+                    if(place) setQuoteData({ ...quoteData, destination: place.properties.formatted });
+                  }}
+                  onUserInput={(value) => {
+                    setQuoteData({ ...quoteData, destination: value });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
 
           <div className="flex space-x-6 py-1">
             <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">

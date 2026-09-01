@@ -16,17 +16,17 @@ export async function POST(req) {
       from: 'Tours Coach Charters <quotes@tourscoachcharter.com>', 
       to: [agentEmail],
       reply_to: email, 
-      subject: `New Lead Assigned: ${firstName} ${lastName} - ${tripType === 'return' ? 'Round Trip' : 'One Way'}`,
+      subject: `New Lead Received: ${firstName} ${lastName} - ${tripType === 'return' ? 'Round Trip' : 'One Way'}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; line-height: 1.6; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
           <div style="background-color: #0f172a; padding: 24px; text-align: center; color: white;">
-            <h1 style="margin: 0; font-size: 24px;">New Lead Assigned</h1>
-            <p style="margin: 8px 0 0 0; opacity: 0.9;">Tours Coach Charters CRM</p>
+            <h1 style="margin: 0; font-size: 24px;">New Lead Received</h1>
+            <p style="margin: 8px 0 0 0; opacity: 0.9;">Tours Coach Charters</p>
           </div>
           
           <div style="padding: 32px;">
             <p style="font-size: 16px;">Hello,</p>
-            <p style="font-size: 16px;">A new charter quote request has been approved and assigned to you. Please review the details below and contact the customer to provide official pricing.</p>
+            <p style="font-size: 16px;">A new charter quote request has been received. Please review the details below and contact the customer to provide official pricing.</p>
             
             <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 24px 0;">
               <h2 style="margin-top: 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">Customer Contact</h2>
@@ -57,9 +57,6 @@ export async function POST(req) {
             </div>
             ` : ''}
 
-            <p style="font-size: 14px; color: #64748b; margin-top: 32px; text-align: center;">
-              Log into the <a href="https://www.tourscoachcharter.com/crm" style="color: #2563eb;">CRM Dashboard</a> to update this lead's status once quoted.
-            </p>
           </div>
         </div>
       `

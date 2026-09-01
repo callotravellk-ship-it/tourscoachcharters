@@ -264,9 +264,6 @@ export const QuoteForm = ({ onClose }) => {
     }
 
     try {
-      // 1. AUTOMATIC EMAIL REMOVED 
-      // The fetch('/api/send-quote') call has been deleted.
-
       // 2. Save directly to the CRM (Firebase) ONLY
       if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
         await addDoc(collection(db, "leads"), {
@@ -279,6 +276,13 @@ export const QuoteForm = ({ onClose }) => {
       } else {
         console.warn("Firebase API Key missing in environment variables. CRM save skipped.");
       }
+
+      // --- TRIGGER AUTOMATED THANK YOU EMAIL ---
+      fetch('/api/send-auto-reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(err => console.error("Auto-reply failed to send:", err));
 
       // 3. Track the Meta Pixel Event
       if (typeof window !== 'undefined' && window.fbq) {

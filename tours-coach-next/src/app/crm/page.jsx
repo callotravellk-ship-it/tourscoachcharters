@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { 
   LayoutDashboard, Users, Calendar, MapPin, 
@@ -30,6 +30,10 @@ export default function CRMDashboard() {
   
   const [updateStatus, setUpdateStatus] = useState('');
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  // --- AGENT FORWARDING STATES ---
+  const [agentEmail, setAgentEmail] = useState('');
+  const [isSendingAgent, setIsSendingAgent] = useState(false);
 
   // --- GEOAPIFY STATES ---
   const [suggestedPrice, setSuggestedPrice] = useState(null);
@@ -62,6 +66,46 @@ export default function CRMDashboard() {
   useEffect(() => {
     if (isAuthenticated) fetchLeads();
   }, [isAuthenticated]);
+
+  // --- AGENT FORWARDING HANDLER ---
+  const handleForwardToAgent = async (lead) => {
+    if (!agentEmail) {
+      alert("Please enter the agent's email address.");
+      return;
+    }
+    
+    setIsSendingAgent(true);
+    try {
+      // 1. Send the email to the agent 
+      const response = await fetch('/api/send-agent-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...lead, agentEmail }),
+      });
+
+      if (!response.ok) throw new Error('Failed to send email to agent');
+
+      // 2. Update Firebase so the CRM shows it is in the agent's hands
+      const leadRef = doc(db, 'leads', lead.id);
+      await updateDoc(leadRef, {
+        status: 'Sent to Agent',
+        assignedAgent: agentEmail,
+        agentNotifiedAt: serverTimestamp()
+      });
+
+      alert("Lead successfully forwarded to agent!");
+      setAgentEmail(''); 
+      await fetchLeads();
+      
+      // Update local selected lead to reflect changes
+      setSelectedLead({ ...lead, status: 'Sent to Agent', assignedAgent: agentEmail });
+    } catch (error) {
+      console.error("Error forwarding lead:", error);
+      alert("Failed to forward lead. Check console.");
+    } finally {
+      setIsSendingAgent(false);
+    }
+  };
 
   // --- GEOAPIFY AUTOMATED QUOTING ENGINE ---
   const calculateRouteAndPrice = async (pickup, destination, tripType) => {
@@ -125,7 +169,7 @@ export default function CRMDashboard() {
       setAssignedVehicle(selectedLead.assignedVehicle || (selectedLead.vehicle !== 'any' ? selectedLead.vehicle : 'Luxury Coach (56 pax)'));
       setUpdateStatus(selectedLead.status);
 
-      if (selectedLead.status === 'New') {
+      if (['New', 'Sent to Agent'].includes(selectedLead.status)) {
         setSuggestedPrice(null);
         setRouteInfo(null);
         calculateRouteAndPrice(selectedLead.pickup, selectedLead.destination, selectedLead.tripType);
@@ -152,14 +196,12 @@ export default function CRMDashboard() {
     localStorage.removeItem('crm_auth');
   };
 
-  // --- NEW EDIT & DELETE FUNCTIONS ---
   const handleDeleteLead = async (id, e) => {
-    if (e) e.stopPropagation(); // Prevents bubbling if clicked from a table row
+    if (e) e.stopPropagation(); 
     if (window.confirm("Are you sure you want to permanently delete this quote request?")) {
       try {
         await deleteDoc(doc(db, 'leads', id));
         setLeads(leads.filter(lead => lead.id !== id));
-        // Close modal if deleting from within the modal
         if (selectedLead && selectedLead.id === id) {
           setSelectedLead(null);
         }
@@ -184,7 +226,7 @@ export default function CRMDashboard() {
         ...editingLead,
         updatedAt: new Date()
       });
-      await fetchLeads(); // Refresh table to show updated data
+      await fetchLeads(); 
       setEditingLead(null);
     } catch (error) {
       console.error("Error updating lead:", error);
@@ -265,6 +307,7 @@ export default function CRMDashboard() {
   const getStatusColor = (status) => {
     switch (status) {
       case 'New': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      case 'Sent to Agent': return 'bg-cyan-100 text-cyan-800 border-cyan-200';
       case 'Quoted': return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'Advance Paid': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'Fully Paid': return 'bg-teal-100 text-teal-800 border-teal-200';
@@ -276,7 +319,7 @@ export default function CRMDashboard() {
   };
 
   const renderFinancials = (lead) => {
-    if (lead.status === 'New') return <span className="text-xs text-slate-400 italic">Pending Quote</span>;
+    if (['New', 'Sent to Agent'].includes(lead.status)) return <span className="text-xs text-slate-400 italic">Pending Quote</span>;
     
     const total = Number(lead.quotedPrice) || 0;
     const deposit = Number(lead.depositAmount) || 0;
@@ -379,6 +422,7 @@ export default function CRMDashboard() {
 
   const stats = {
     new: leads.filter(l => l.status === 'New').length,
+    sentToAgent: leads.filter(l => l.status === 'Sent to Agent').length,
     quoted: leads.filter(l => l.status === 'Quoted').length,
     advancePaid: leads.filter(l => l.status === 'Advance Paid').length,
     fullyPaid: leads.filter(l => l.status === 'Fully Paid').length,
@@ -465,6 +509,10 @@ export default function CRMDashboard() {
                 <span className="bg-emerald-500/20 text-emerald-400 py-0.5 px-2 rounded text-xs font-bold">{stats.new}</span>
               </div>
               <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
+                <span className="text-sm text-slate-300">Sent to Agent</span>
+                <span className="bg-cyan-500/20 text-cyan-400 py-0.5 px-2 rounded text-xs font-bold">{stats.sentToAgent}</span>
+              </div>
+              <div className="flex justify-between items-center px-3 py-2 rounded-lg bg-slate-800/40 border border-slate-700/50">
                 <span className="text-sm text-slate-300">Quoted</span>
                 <span className="bg-purple-500/20 text-purple-400 py-0.5 px-2 rounded text-xs font-bold">{stats.quoted}</span>
               </div>
@@ -536,7 +584,6 @@ export default function CRMDashboard() {
                     <tr key={lead.id} className="hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => setSelectedLead(lead)}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                         <div>{formatDate(lead.createdAt)}</div>
-                        {/* --- NEW LAST EDITED NOTE --- */}
                         {lead.updatedAt && (
                           <div className="text-[10px] text-slate-400 italic mt-1 font-medium">
                             Edited: {formatDate(lead.updatedAt)}
@@ -559,7 +606,6 @@ export default function CRMDashboard() {
                           {lead.status}
                         </span>
                       </td>
-                      {/* --- NEW ACTION MENU --- */}
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end space-x-3">
                           <button 
@@ -577,7 +623,7 @@ export default function CRMDashboard() {
                             <Trash2 size={18} />
                           </button>
                           <button className="text-blue-600 hover:text-blue-900 flex items-center ml-2 border-l border-slate-200 pl-3" onClick={(e) => { e.stopPropagation(); setSelectedLead(lead); }}>
-                            {lead.status === 'New' ? 'Price Trip' : 'Manage'} <ChevronRight size={16} className="ml-1" />
+                            {['New', 'Sent to Agent'].includes(lead.status) ? 'Price Trip' : 'Manage'} <ChevronRight size={16} className="ml-1" />
                           </button>
                         </div>
                       </td>
@@ -590,7 +636,6 @@ export default function CRMDashboard() {
         </main>
       </div>
 
-      {/* --- NEW EDIT MODAL OVERLAY --- */}
       {editingLead && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setEditingLead(null)}></div>
@@ -680,13 +725,11 @@ export default function CRMDashboard() {
         </div>
       )}
 
-      {/* --- EXISTING MANAGE QUOTE MODAL --- */}
       {selectedLead && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setSelectedLead(null)}></div>
           <div className="relative w-full max-w-xl bg-white rounded-xl shadow-2xl flex flex-col max-h-[95vh] animate-fade-in-up overflow-hidden">
             
-            {/* --- UPDATED HEADER WITH EDIT & DELETE BUTTONS --- */}
             <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
               <div className="flex items-center space-x-3">
                 <h2 className="text-lg font-bold">Booking Details</h2>
@@ -766,13 +809,41 @@ export default function CRMDashboard() {
               )}
 
               <div className="border-t border-slate-200 pt-6">
-                {selectedLead.status === 'New' ? (
+                
+                {/* --- NEW: ASSIGN TO AGENT SECTION --- */}
+                <div className="mb-8 border-b border-gray-100 pb-6">
+                  <h4 className="flex items-center text-xs font-bold text-slate-500 tracking-wider mb-4 uppercase">
+                    <span className="text-blue-600 mr-2">👤</span> Forward Lead to Agent
+                  </h4>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <input 
+                      type="email" 
+                      placeholder="agent@tourscoach.ca" 
+                      value={agentEmail}
+                      onChange={(e) => setAgentEmail(e.target.value)}
+                      className="flex-grow px-3 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-600 outline-none text-sm"
+                    />
+                    <button 
+                      onClick={() => handleForwardToAgent(selectedLead)} 
+                      disabled={isSendingAgent}
+                      className={`px-4 py-2 bg-blue-800 text-white font-bold rounded shadow transition flex justify-center items-center text-sm ${isSendingAgent ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-900'}`}
+                    >
+                      {isSendingAgent ? 'Sending...' : 'Approve & Send to Agent'}
+                    </button>
+                  </div>
+                  {selectedLead?.assignedAgent && (
+                    <p className="text-xs text-green-600 mt-2 font-medium">
+                      ✓ Previously sent to: {selectedLead.assignedAgent}
+                    </p>
+                  )}
+                </div>
+
+                {['New', 'Sent to Agent'].includes(selectedLead.status) ? (
                   <>
                     <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
                       <DollarSign size={16} className="mr-2 text-green-600"/> Price This Trip
                     </h3>
                     
-                    {/* --- SMART GEOAPIFY QUOTE PANEL --- */}
                     {isCalculating ? (
                       <div className="bg-blue-50 text-blue-800 p-3 rounded-lg mb-6 text-sm flex items-center animate-pulse border border-blue-100">
                         <Clock size={16} className="mr-2" /> Geoapify is analyzing route & traffic...

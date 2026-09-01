@@ -234,28 +234,23 @@ export const QuoteForm = ({ onClose }) => {
     payload.tripType = tripType;
 
     try {
-      const response = await fetch('/api/send-quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      // 1. AUTOMATIC EMAIL REMOVED 
+      // The fetch('/api/send-quote') call has been deleted.
 
-      if (!response.ok) {
-        throw new Error("Email sending failed");
-      }
-
+      // 2. Save directly to the CRM (Firebase) ONLY
       if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-        addDoc(collection(db, "leads"), {
+        await addDoc(collection(db, "leads"), {
           ...payload,
           status: "New",
           createdAt: serverTimestamp(),
           quotedPrice: null,
           assignedVehicle: "",
-        }).catch(err => console.error("Firebase save error:", err));
+        });
       } else {
         console.warn("Firebase API Key missing in environment variables. CRM save skipped.");
       }
 
+      // 3. Track the Meta Pixel Event
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'Lead', {
           content_name: 'Charter Bus Quote Request',
@@ -263,21 +258,19 @@ export const QuoteForm = ({ onClose }) => {
         });
       }
 
-      // FIX FOR ISSUE 2: Save the requested route to show the user on the success screen
+      // 4. Update UI Success State
       setSubmittedRoute({ pickup: payload.pickup, destination: payload.destination });
-      
       setSubmitted(true);
       form.reset();
       setTripType('return');
       setDepartDate('');
       setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-charter' });
       
-      // Keep success screen visible for a bit longer so they can read the confirmation
       setTimeout(() => setSubmitted(false), 7000);
 
     } catch (error) {
-      console.error(error);
-      alert("Network error. Please try again.");
+      console.error("Error saving lead to CRM:", error);
+      alert("Error submitting request. Please try again.");
     } finally {
       setIsSending(false);
     }

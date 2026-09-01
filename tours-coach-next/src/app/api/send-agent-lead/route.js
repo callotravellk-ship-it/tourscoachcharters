@@ -15,7 +15,7 @@ export async function POST(req) {
     const { data, error } = await resend.emails.send({
       from: 'Tours Coach Charters <quotes@tourscoachcharter.com>', 
       to: [agentEmail],
-      reply_to: email, // Allows the agent to hit "Reply" and email the customer directly
+      reply_to: email, // Kept as a fallback for clients that support it
       subject: `New Lead Assigned: ${firstName} ${lastName} - ${tripType === 'return' ? 'Round Trip' : 'One Way'}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; line-height: 1.6; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
@@ -28,11 +28,19 @@ export async function POST(req) {
             <p style="font-size: 16px;">Hello,</p>
             <p style="font-size: 16px;">A new charter quote request has been approved and assigned to you. Please review the details below and contact the customer to provide official pricing.</p>
             
+            <!-- FOOLPROOF REPLY BUTTON -->
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="mailto:${email}?subject=Your Charter Quote Request: ${pickup} to ${destination}" 
+                 style="background-color: #2563eb; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                Reply Directly to Customer
+              </a>
+            </div>
+
             <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 24px 0;">
               <h2 style="margin-top: 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">Customer Contact</h2>
               <p style="margin: 4px 0;"><strong>Name:</strong> ${firstName} ${lastName}</p>
-              <p style="margin: 4px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-              <p style="margin: 4px 0;"><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
+              <p style="margin: 4px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #2563eb;">${email}</a></p>
+              <p style="margin: 4px 0;"><strong>Phone:</strong> <a href="tel:${phone}" style="color: #2563eb;">${phone}</a></p>
             </div>
 
             <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 24px 0;">

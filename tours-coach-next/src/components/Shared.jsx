@@ -14,6 +14,10 @@ import '@geoapify/geocoder-autocomplete/styles/minimal.css';
 import { db } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
+// --- DATEPICKER IMPORTS ---
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 export const Facebook = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
 );
@@ -205,22 +209,40 @@ export const QuoteForm = ({ onClose }) => {
   // NEW: State to hold the route for the success screen display
   const [submittedRoute, setSubmittedRoute] = useState({ pickup: '', destination: '' });
   
-  const [departDate, setDepartDate] = useState('');
-  const today = new Date().toISOString().split('T')[0];
+  // DATEPICKER STATES
+  const [departDate, setDepartDate] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
+  const today = new Date();
+
+  const formatDateForCRM = (dateObj) => {
+    if (!dateObj) return '';
+    const d = dateObj.getDate().toString().padStart(2, '0');
+    const m = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const y = dateObj.getFullYear();
+    return `${d}/${m}/${y}`;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // FIX FOR ISSUE 1: Strict guard against double-clicks/duplicate submissions
+    // Strict guard against double-clicks/duplicate submissions
     if (isSending) return; 
     
-    // FIX FOR ISSUE 2: Manually enforce that locations exist before allowing submission
+    // Manually enforce that locations & dates exist before allowing submission
     if (!quoteData.pickup || quoteData.pickup.trim() === '') {
       alert("Please enter a valid Pickup Location.");
       return;
     }
     if (!quoteData.destination || quoteData.destination.trim() === '') {
       alert("Please enter a valid Destination Location.");
+      return;
+    }
+    if (!departDate) {
+      alert("Please select a Departure Date.");
+      return;
+    }
+    if (tripType === 'return' && !returnDate) {
+      alert("Please select a Return Date.");
       return;
     }
 
@@ -232,6 +254,14 @@ export const QuoteForm = ({ onClose }) => {
     payload.pickup = quoteData.pickup;
     payload.destination = quoteData.destination;
     payload.tripType = tripType;
+    
+    // Format the dates securely as DD/MM/YYYY for the CRM
+    payload.departDate = formatDateForCRM(departDate);
+    if (tripType === 'return') {
+      payload.returnDate = formatDateForCRM(returnDate);
+    } else {
+      payload.returnDate = "N/A";
+    }
 
     try {
       // 1. AUTOMATIC EMAIL REMOVED 
@@ -263,7 +293,8 @@ export const QuoteForm = ({ onClose }) => {
       setSubmitted(true);
       form.reset();
       setTripType('return');
-      setDepartDate('');
+      setDepartDate(null);
+      setReturnDate(null);
       setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-charter' });
       
       setTimeout(() => setSubmitted(false), 7000);
@@ -285,6 +316,8 @@ export const QuoteForm = ({ onClose }) => {
         .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; line-height: 1.4; }
         .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }
         .geoapify-close-button { display: none; }
+        /* Fix for Datepicker expanding properly */
+        .react-datepicker-wrapper { width: 100%; }
       `}</style>
 
       {onClose && (
@@ -312,7 +345,7 @@ export const QuoteForm = ({ onClose }) => {
         </div>
       </div>
       
-      {/* FIX FOR ISSUE 2: Detailed Success Screen */}
+      {/* Detailed Success Screen */}
       {submitted ? (
         <div className="bg-green-50 border border-green-200 text-green-800 p-8 rounded-lg text-center my-8 animate-fade-in-up">
           <CheckCircle className="mx-auto mb-4 text-green-600" size={56} />
@@ -408,31 +441,33 @@ export const QuoteForm = ({ onClose }) => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+            <div className="w-full">
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
                 Departure Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
-              <input 
-                required 
-                name="departDate" 
-                type="date" 
-                min={today}
-                value={departDate}
-                onChange={(e) => setDepartDate(e.target.value)}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+              <DatePicker 
+                selected={departDate}
+                onChange={(date) => setDepartDate(date)}
+                dateFormat="dd/MM/yyyy"
+                minDate={today}
+                placeholderText="dd/mm/yyyy"
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
+                required
               />
             </div>
             {tripType === 'return' && (
-              <div className="animate-fade-in-up">
+              <div className="animate-fade-in-up w-full">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
                   Return Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
                 </label>
-                <input 
-                  required 
-                  name="returnDate" 
-                  type="date" 
-                  min={departDate || today} 
-                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+                <DatePicker 
+                  selected={returnDate}
+                  onChange={(date) => setReturnDate(date)}
+                  dateFormat="dd/MM/yyyy"
+                  minDate={departDate || today}
+                  placeholderText="dd/mm/yyyy"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
+                  required
                 />
               </div>
             )}

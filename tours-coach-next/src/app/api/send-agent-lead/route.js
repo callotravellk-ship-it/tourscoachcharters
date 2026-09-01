@@ -15,8 +15,7 @@ export async function POST(req) {
     const { data, error } = await resend.emails.send({
       from: 'Tours Coach Charters <quotes@tourscoachcharter.com>', 
       to: [agentEmail],
-      // Strictly formatted to force Gmail to recognize the customer as the reply target
-      reply_to: `${firstName} ${lastName} <${email}>`, 
+      reply_to: email, 
       subject: `New Lead Assigned: ${firstName} ${lastName} - ${tripType === 'return' ? 'Round Trip' : 'One Way'}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1e293b; line-height: 1.6; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
@@ -29,10 +28,6 @@ export async function POST(req) {
             <p style="font-size: 16px;">Hello,</p>
             <p style="font-size: 16px;">A new charter quote request has been approved and assigned to you. Please review the details below and contact the customer to provide official pricing.</p>
             
-            <p style="font-size: 14px; color: #dc2626; font-weight: bold; padding: 10px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px;">
-              ⚠️ To reply to the customer, hit your email client's native "Reply" button. Be sure to delete this internal notification text from the bottom of your draft before sending!
-            </p>
-
             <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 24px 0;">
               <h2 style="margin-top: 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">Customer Contact</h2>
               <p style="margin: 4px 0;"><strong>Name:</strong> ${firstName} ${lastName}</p>

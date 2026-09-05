@@ -108,7 +108,6 @@ export const Header = () => {
         </button>
       </nav>
 
-      {/* --- UPDATED MOBILE MENU CONTAINER --- */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl h-[calc(100vh-100px)] overflow-y-auto pb-28">
           <div className="flex flex-col p-4 space-y-4">
@@ -195,8 +194,16 @@ export const Footer = () => (
         </form>
       </div>
     </div>
-    <div className="container mx-auto px-4 mt-8 pt-8 border-t border-gray-800 text-sm text-center">
-      &copy; {new Date().getFullYear()} Canada Tours Coach LTD. All rights reserved.
+    
+    {/* --- LEGAL & COPYRIGHT SECTION --- */}
+    <div className="container mx-auto px-4 mt-10 pt-8 border-t border-gray-800 flex flex-col items-center text-center">
+      <p className="text-sm text-gray-400 mb-3">
+        &copy; {new Date().getFullYear()} Tours Coach Charters. All rights reserved.
+      </p>
+      <div className="text-xs text-gray-500 bg-gray-800/50 p-4 rounded-lg inline-block">
+        <p className="mb-1">Tours Coach Charters is a subsidiary of <strong>CANADA TOURS COACH LTD.</strong></p>
+        <p className="font-mono">Business Number (BN): 833253503 <span className="mx-2 text-gray-600">|</span> Registry ID: 2315881</p>
+      </div>
     </div>
   </footer>
 );

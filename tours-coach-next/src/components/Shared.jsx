@@ -159,11 +159,18 @@ export const Header = () => {
 export const Footer = () => (
   <footer className="bg-gray-900 text-gray-300 py-12 border-t-4 border-red-600">
     <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      {/* Left Column: Logo, Description & Legal Details */}
       <div>
-        <Link href="/" className="mb-6 bg-white inline-block p-2 rounded-lg cursor-pointer block">
+        <Link href="/" className="mb-6 bg-white inline-block p-2 rounded-lg cursor-pointer block w-max">
           <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 w-auto object-contain" />
         </Link>
-        <p className="text-sm mb-4">Canada's Premier Charter Bus Service. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
+        <p className="text-sm mb-6">Canada's Premier Charter Bus Service. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
+        
+        <div className="text-xs text-gray-400 bg-gray-800/40 p-3.5 rounded-lg border border-gray-800 inline-block">
+          <p className="mb-1.5">A subsidiary of <strong className="text-gray-300 font-bold">CANADA TOURS COACH LTD.</strong></p>
+          <p className="font-mono">BN: 833253503 <span className="mx-1.5 text-gray-600">|</span> ID: 2315881</p>
+        </div>
       </div>
       
       <div>
@@ -195,15 +202,8 @@ export const Footer = () => (
       </div>
     </div>
     
-    {/* --- LEGAL & COPYRIGHT SECTION --- */}
-    <div className="container mx-auto px-4 mt-10 pt-8 border-t border-gray-800 flex flex-col items-center text-center">
-      <p className="text-sm text-gray-400 mb-3">
-        &copy; {new Date().getFullYear()} Tours Coach Charters. All rights reserved.
-      </p>
-      <div className="text-xs text-gray-500 bg-gray-800/50 p-4 rounded-lg inline-block">
-        <p className="mb-1">Tours Coach Charters is a subsidiary of <strong>CANADA TOURS COACH LTD.</strong></p>
-        <p className="font-mono">Business Number (BN): 833253503 <span className="mx-2 text-gray-600">|</span> Registry ID: 2315881</p>
-      </div>
+    <div className="container mx-auto px-4 mt-8 pt-8 border-t border-gray-800 text-sm text-center text-gray-500">
+      &copy; {new Date().getFullYear()} Tours Coach Charters. All rights reserved.
     </div>
   </footer>
 );

@@ -176,9 +176,9 @@ export const Footer = () => (
       <div>
         <h4 className="text-white font-bold text-lg mb-4">Contact Info</h4>
         <ul className="space-y-3 text-sm">
-          <li className="flex items-start"><Map size={18} className="mr-2 text-red-600 mt-1 flex-shrink-0" /> {COMPANY_INFO.address}</li>
-          <li className="flex items-center"><Phone size={18} className="mr-2 text-red-600" /> {COMPANY_INFO.phone}</li>
-          <li className="flex items-center"><Mail size={18} className="mr-2 text-red-600" /> {COMPANY_INFO.email}</li>
+          <li className="flex items-start"><Map size={18} className="mr-2 text-red-400 mt-1 flex-shrink-0" /> {COMPANY_INFO.address}</li>
+          <li className="flex items-center"><Phone size={18} className="mr-2 text-red-400" /> {COMPANY_INFO.phone}</li>
+          <li className="flex items-center"><Mail size={18} className="mr-2 text-red-400" /> {COMPANY_INFO.email}</li>
         </ul>
       </div>
 
@@ -382,7 +382,7 @@ export const QuoteForm = ({ onClose }) => {
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Last Name <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Last Name <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="lastName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
             </div>
@@ -390,13 +390,13 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Email Address <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Email Address <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="email" type="email" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Phone Number <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Phone Number <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="phone" type="tel" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
             </div>
@@ -405,7 +405,7 @@ export const QuoteForm = ({ onClose }) => {
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Pickup Location <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Pickup Location <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
                 <GeoapifyGeocoderAutocomplete
@@ -423,7 +423,7 @@ export const QuoteForm = ({ onClose }) => {
             </div>
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Destination <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Destination <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
                 <GeoapifyGeocoderAutocomplete
@@ -455,7 +455,7 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="w-full">
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Departure Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Departure Date <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <DatePicker 
                 selected={departDate}
@@ -470,7 +470,7 @@ export const QuoteForm = ({ onClose }) => {
             {tripType === 'return' && (
               <div className="animate-fade-in-up w-full">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Return Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                  Return Date <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
                 </label>
                 <DatePicker 
                   selected={returnDate}
@@ -488,14 +488,14 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Pick Up Time <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Pick Up Time <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="pickupTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
             {tripType === 'return' && (
               <div className="animate-fade-in-up">
                 <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Return Time <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                  Return Time <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
                 </label>
                 <input 
                   required 
@@ -510,7 +510,7 @@ export const QuoteForm = ({ onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              <div>
               <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Passengers <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                Passengers <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
               </label>
               <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
             </div>

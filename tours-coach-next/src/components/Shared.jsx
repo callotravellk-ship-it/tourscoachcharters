@@ -538,9 +538,9 @@ export const QuoteForm = ({ onClose }) => {
             </label>
             <textarea name="info" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="3" placeholder="Any specific requirements, stops, or itinerary details?"></textarea>
           </div>
-          <button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-4 flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>
-            {isSending ? 'Sending Request...' : <>Submit Charter Request <ArrowRight className="ml-2" size={18} /></>}
-          </button>
+<button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-4 flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>
+  {isSending ? 'Checking...' : <>Check Availability & Pricing <ArrowRight className="ml-2" size={18} /></>}
+</button>
           <p className="text-xs text-center text-gray-500 mt-2">
             <ShieldCheck size={12} className="inline mr-1 text-green-600" /> Your information is secure.
           </p>

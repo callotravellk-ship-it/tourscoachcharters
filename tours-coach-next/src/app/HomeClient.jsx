@@ -16,28 +16,33 @@ export default function HomePage() {
 
   return (
     <div className="w-full">
-      <section className="relative pt-32 pb-28 lg:pt-40 lg:pb-36 bg-blue-800">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-black/60 z-10"></div>
-          <img src="/home-hero.jpg" alt="Coach bus on road" className="absolute inset-0 w-full h-full object-cover" />
-        </div>
-        <div className="container mx-auto px-4 relative z-20">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            <div className="lg:w-1/2 text-white">
-              <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6">Canada's Premier Charter Bus Rentals</div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6">Trusted Coach Charters for Group Travel in Canada.</h1>
-              <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-xl">Whether you need a coach for a large group or a minibus for a smaller trip, we've got you covered anywhere in Canada. Greater Toronto Area and beyond.</p>
-              <div className="bg-white/15 backdrop-blur-md border border-white/20 p-4 rounded-lg flex items-start">
-                <Star className="text-yellow-400 mr-4 flex-shrink-0 mt-1 fill-current" />
-                <p className="text-sm font-medium italic">"With our price-beat guarantee, we promise to beat any competitor's comparable quote by 5%."</p>
-              </div>
-            </div>
-            <div className="lg:w-1/2 w-full max-w-md lg:max-w-none">
-              <QuoteForm />
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900">
+  <div className="container mx-auto px-4 relative z-10">
+    
+    {/* ADD 'items-center' TO THIS GRID CONTAINER */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      
+      {/* Left Column: Headline */}
+      <div>
+        <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+          Canada's Premier Charter Bus Rentals
+        </span>
+        <h1 className="text-4xl lg:text-6xl font-black text-white leading-tight mb-6">
+          Trusted Coach Charters for Group Travel in Canada.
+        </h1>
+        <p className="text-lg text-slate-300 mb-8">
+          Whether you need a coach for a large group or a minibus for a smaller trip, we've got you covered anywhere in Canada.
+        </p>
+      </div>
+
+      {/* Right Column: Compacted Quote Form */}
+      <div className="w-full max-w-lg mx-auto lg:ml-auto">
+        <QuoteForm />
+      </div>
+
+    </div>
+  </div>
+</section>
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">

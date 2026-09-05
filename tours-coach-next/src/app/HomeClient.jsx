@@ -16,21 +16,23 @@ export default function HomePage() {
 
   return (
     <div className="w-full">
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900">
+     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900 bg-[url('/home-hero.jpg')] bg-cover bg-center bg-no-repeat">
+  
+  {/* Dark overlay to ensure text readability against the image */}
+  <div className="absolute inset-0 bg-slate-900/60 z-0"></div>
+
   <div className="container mx-auto px-4 relative z-10">
-    
-    {/* ADD 'items-center' TO THIS GRID CONTAINER */}
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       
       {/* Left Column: Headline */}
       <div>
-        <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+        <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block shadow-sm">
           Canada's Premier Charter Bus Rentals
         </span>
-        <h1 className="text-4xl lg:text-6xl font-black text-white leading-tight mb-6">
+        <h1 className="text-4xl lg:text-6xl font-black text-white leading-tight mb-6 drop-shadow-md">
           Trusted Coach Charters for Group Travel in Canada.
         </h1>
-        <p className="text-lg text-slate-300 mb-8">
+        <p className="text-lg text-slate-200 mb-8 drop-shadow">
           Whether you need a coach for a large group or a minibus for a smaller trip, we've got you covered anywhere in Canada.
         </p>
       </div>

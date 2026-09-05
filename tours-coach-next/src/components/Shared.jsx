@@ -95,12 +95,12 @@ export const Header = () => {
               )}
             </div>
           ))}
-          <button 
-            onClick={() => setIsQuoteModalOpen(true)}
-            className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition font-bold shadow-md"
+          <Link 
+            href="/request-a-quote"
+            className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition font-bold shadow-md inline-block text-center"
           >
             Get Free Quote
-          </button>
+          </Link>
         </div>
 
         <button className="lg:hidden text-blue-800" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -143,12 +143,13 @@ export const Header = () => {
                 )}
               </div>
             ))}
-              <button 
-                onClick={() => { setIsQuoteModalOpen(true); setIsMobileMenuOpen(false); }}
-                className="bg-red-600 text-white w-full py-3 rounded-md font-bold mt-4 shadow-md hover:bg-red-700"
+              <Link 
+                href="/request-a-quote"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="bg-red-600 text-white w-full py-3 rounded-md font-bold mt-4 shadow-md hover:bg-red-700 block text-center"
               >
                 Get Free Quote
-              </button>
+              </Link>
           </div>
         </div>
       )}
@@ -205,7 +206,11 @@ export const QuoteForm = ({ onClose }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [tripType, setTripType] = useState('return');
+  
+  // NEW: State to hold the route for the success screen display
   const [submittedRoute, setSubmittedRoute] = useState({ pickup: '', destination: '' });
+  
+  // DATEPICKER STATES
   const [departDate, setDepartDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const today = new Date();
@@ -220,8 +225,11 @@ export const QuoteForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Strict guard against double-clicks/duplicate submissions
     if (isSending) return; 
-
+    
+    // Manually enforce that locations & dates exist before allowing submission
     if (!quoteData.pickup || quoteData.pickup.trim() === '') {
       alert("Please enter a valid Pickup Location.");
       return;
@@ -247,10 +255,17 @@ export const QuoteForm = ({ onClose }) => {
     payload.pickup = quoteData.pickup;
     payload.destination = quoteData.destination;
     payload.tripType = tripType;
+    
+    // Format the dates securely as DD/MM/YYYY for the CRM
     payload.departDate = formatDateForCRM(departDate);
-    payload.returnDate = tripType === 'return' ? formatDateForCRM(returnDate) : "N/A";
+    if (tripType === 'return') {
+      payload.returnDate = formatDateForCRM(returnDate);
+    } else {
+      payload.returnDate = "N/A";
+    }
 
     try {
+      // 2. Save directly to the CRM (Firebase) ONLY
       if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
         await addDoc(collection(db, "leads"), {
           ...payload,
@@ -259,14 +274,18 @@ export const QuoteForm = ({ onClose }) => {
           quotedPrice: null,
           assignedVehicle: "",
         });
+      } else {
+        console.warn("Firebase API Key missing in environment variables. CRM save skipped.");
       }
 
+      // --- TRIGGER AUTOMATED THANK YOU EMAIL ---
       fetch('/api/send-auto-reply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       }).catch(err => console.error("Auto-reply failed to send:", err));
 
+      // 3. Track the Meta Pixel Event
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'Lead', {
           content_name: 'Charter Bus Quote Request',
@@ -274,6 +293,7 @@ export const QuoteForm = ({ onClose }) => {
         });
       }
 
+      // 4. Update UI Success State
       setSubmittedRoute({ pickup: payload.pickup, destination: payload.destination });
       setSubmitted(true);
       form.reset();
@@ -281,7 +301,9 @@ export const QuoteForm = ({ onClose }) => {
       setDepartDate(null);
       setReturnDate(null);
       setQuoteData({ pickup: '', destination: '', vehicle: 'luxury-coach-bus-charter' });
+      
       setTimeout(() => setSubmitted(false), 7000);
+
     } catch (error) {
       console.error("Error saving lead to CRM:", error);
       alert("Error submitting request. Please try again.");
@@ -291,188 +313,229 @@ export const QuoteForm = ({ onClose }) => {
   };
 
   return (
-    <div className={`bg-white p-4 md:p-5 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 ${onClose ? 'max-h-[580px] overflow-y-auto custom-scrollbar' : ''}`}>
+    <div className={`bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600 ${onClose ? 'max-h-[600px] overflow-y-auto custom-scrollbar' : ''}`}>
+      
       <style>{`
-        .geoapify-autocomplete-input { width: 100%; padding: 0.35rem 0.6rem; font-size: 0.8rem; border: none; outline: none; background: transparent; }
-        .geoapify-autocomplete-items { position: absolute; z-index: 9999; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.375rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 2px; }
-        .geoapify-autocomplete-item { padding: 0.35rem 0.6rem; cursor: pointer; font-size: 0.8rem; color: #334155; }
+        .geoapify-autocomplete-input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: none; outline: none; background: transparent; }
+        .geoapify-autocomplete-items { position: absolute; z-index: 9999; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
+        .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; line-height: 1.4; }
         .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }
         .geoapify-close-button { display: none; }
+        /* Fix for Datepicker expanding properly */
         .react-datepicker-wrapper { width: 100%; }
       `}</style>
 
       {onClose && (
-        <button onClick={onClose} className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors z-20">
-          <X size={20} />
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors z-20">
+          <X size={24} />
         </button>
       )}
+      <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Charter Quote</h3>
+      <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
 
-      <h3 className="text-xl font-bold text-blue-800 leading-tight">Request a Charter Quote</h3>
-      <p className="text-gray-500 text-xs mb-2.5">Fill out the details below to receive your accurate price.</p>
-
-      {/* COMPACT DRIVER BADGE */}
-      <div className="bg-blue-50 border-l-4 border-blue-600 p-2 mb-3 rounded-r flex items-center text-xs text-blue-900">
-        <span className="mr-2 text-sm">🛡️</span>
-        <span><strong>Driver Included:</strong> All charters include a professional driver (no self-drive).</span>
+      {/* --- SELF-DRIVE DETERRENT BADGE --- */}
+      <div className="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6 rounded-r-lg shadow-sm">
+        <div className="flex items-start">
+          <div className="flex-shrink-0 mt-0.5">
+            <span className="text-lg leading-none">🛡️</span>
+          </div>
+          <div className="ml-3">
+            <h3 className="text-xs font-bold text-blue-900 uppercase tracking-wide">
+              Professional Driver Included
+            </h3>
+            <p className="mt-1 text-xs text-blue-800 leading-snug">
+              Please note: All Tours Coach Charters include a professional, uniformed driver. <strong>We do not offer self-drive services.</strong>
+            </p>
+          </div>
+        </div>
       </div>
-
+      
+      {/* Detailed Success Screen */}
       {submitted ? (
-        <div className="bg-green-50 border border-green-200 text-green-800 p-6 rounded-lg text-center my-4">
-          <CheckCircle className="mx-auto mb-2 text-green-600" size={44} />
-          <h4 className="font-black text-lg mb-2">Quote Request Received!</h4>
-          <p className="text-xs text-slate-700 mb-1"><strong>Route:</strong> {submittedRoute.pickup} &rarr; {submittedRoute.destination}</p>
-          <p className="text-xs text-gray-600">Our logistics team will contact you shortly.</p>
+        <div className="bg-green-50 border border-green-200 text-green-800 p-8 rounded-lg text-center my-8 animate-fade-in-up">
+          <CheckCircle className="mx-auto mb-4 text-green-600" size={56} />
+          <h4 className="font-black text-xl mb-3">Quote Request Received!</h4>
+          
+          <div className="bg-white p-4 rounded-md border border-green-100 text-left mb-4 shadow-sm">
+            <p className="text-xs text-green-600 font-bold uppercase mb-1">Route Details Submitted</p>
+            <p className="text-sm text-slate-700"><strong>From:</strong> {submittedRoute.pickup}</p>
+            <p className="text-sm text-slate-700 mt-1"><strong>To:</strong> {submittedRoute.destination}</p>
+          </div>
+          
+          <p className="text-sm">Our logistics team is calculating your quote and will contact you via email or phone shortly.</p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-2.5">
-          {/* Row 1: First / Last Name */}
-          <div className="grid grid-cols-2 gap-2.5">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">First Name <span className="text-red-600 normal-case">*</span></label>
-              <input required name="firstName" type="text" className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none" placeholder="John" />
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                First Name <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <input required name="firstName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John" />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Last Name <span className="text-red-600 normal-case">*</span></label>
-              <input required name="lastName" type="text" className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none" placeholder="Doe" />
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Last Name <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <input required name="lastName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Email Address <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <input required name="email" type="email" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Phone Number <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <input required name="phone" type="tel" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
             </div>
           </div>
 
-          {/* Row 2: Email / Phone */}
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="space-y-4">
             <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Email <span className="text-red-600 normal-case">*</span></label>
-              <input required name="email" type="email" className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none" placeholder="john@example.com" />
-            </div>
-            <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Phone <span className="text-red-600 normal-case">*</span></label>
-              <input required name="phone" type="tel" className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none" placeholder="(555) 123-4567" />
-            </div>
-          </div>
-
-          {/* Row 3: Pickup & Destination (Side-by-Side to cut an entire block height) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Pickup Location <span className="text-red-600 normal-case">*</span></label>
-              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-1 focus-within:ring-blue-800 text-xs">
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Pickup Location <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
                 <GeoapifyGeocoderAutocomplete
-                  placeholder="Pickup address..."
+                  placeholder="Start typing an address..."
                   filterByCountryCode={["ca"]}
                   value={quoteData.pickup}
-                  placeSelect={(place) => place && setQuoteData({ ...quoteData, pickup: place.properties.formatted })}
-                  onUserInput={(value) => setQuoteData({ ...quoteData, pickup: value })}
+                  placeSelect={(place) => {
+                    if(place) setQuoteData({ ...quoteData, pickup: place.properties.formatted });
+                  }}
+                  onUserInput={(value) => {
+                    setQuoteData({ ...quoteData, pickup: value });
+                  }}
                 />
               </div>
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Destination <span className="text-red-600 normal-case">*</span></label>
-              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-1 focus-within:ring-blue-800 text-xs">
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Destination <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
                 <GeoapifyGeocoderAutocomplete
-                  placeholder="Drop-off address..."
+                  placeholder="Start typing an address..."
                   filterByCountryCode={["ca"]}
                   value={quoteData.destination}
-                  placeSelect={(place) => place && setQuoteData({ ...quoteData, destination: place.properties.formatted })}
-                  onUserInput={(value) => setQuoteData({ ...quoteData, destination: value })}
+                  placeSelect={(place) => {
+                    if(place) setQuoteData({ ...quoteData, destination: place.properties.formatted });
+                  }}
+                  onUserInput={(value) => {
+                    setQuoteData({ ...quoteData, destination: value });
+                  }}
                 />
               </div>
             </div>
           </div>
 
-          {/* Row 4: Trip Type Radio Buttons */}
-          <div className="flex space-x-6 py-0.5">
-            <label className="flex items-center text-xs font-bold text-gray-700 cursor-pointer">
-              <input type="radio" name="tripType" value="return" checked={tripType === 'return'} onChange={() => setTripType('return')} className="mr-1.5 w-3.5 h-3.5 text-blue-800" />
+          <div className="flex space-x-6 py-1">
+            <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
+              <input type="radio" name="tripType" value="return" checked={tripType === 'return'} onChange={() => setTripType('return')} className="mr-2 w-4 h-4 text-blue-800 border-gray-300" />
               Round Trip
             </label>
-            <label className="flex items-center text-xs font-bold text-gray-700 cursor-pointer">
-              <input type="radio" name="tripType" value="oneway" checked={tripType === 'oneway'} onChange={() => setTripType('oneway')} className="mr-1.5 w-3.5 h-3.5 text-blue-800" />
+            <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
+              <input type="radio" name="tripType" value="oneway" checked={tripType === 'oneway'} onChange={() => setTripType('oneway')} className="mr-2 w-4 h-4 text-blue-800 border-gray-300" />
               One Way
             </label>
           </div>
-
-          {/* Row 5: Dates */}
-          <div className="grid grid-cols-2 gap-2.5">
-            <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Depart Date <span className="text-red-600 normal-case">*</span></label>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="w-full">
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Departure Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
               <DatePicker 
                 selected={departDate}
                 onChange={(date) => setDepartDate(date)}
                 dateFormat="dd/MM/yyyy"
                 minDate={today}
                 placeholderText="dd/mm/yyyy"
-                className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none"
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
                 required
               />
             </div>
-            {tripType === 'return' ? (
-              <div>
-                <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Return Date <span className="text-red-600 normal-case">*</span></label>
+            {tripType === 'return' && (
+              <div className="animate-fade-in-up w-full">
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Return Date <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                </label>
                 <DatePicker 
                   selected={returnDate}
                   onChange={(date) => setReturnDate(date)}
                   dateFormat="dd/MM/yyyy"
                   minDate={departDate || today}
                   placeholderText="dd/mm/yyyy"
-                  className="w-full px-2.5 py-1.5 text-xs text-gray-900 bg-white border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none"
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
                   required
                 />
               </div>
-            ) : (
-              <div></div>
             )}
           </div>
-
-          {/* Row 6: Times */}
-          <div className="grid grid-cols-2 gap-2.5">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Pickup Time <span className="text-red-600 normal-case">*</span></label>
-              <input required name="pickupTime" type="time" className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none" />
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Pick Up Time <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <input required name="pickupTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
             </div>
-            {tripType === 'return' ? (
-              <div>
-                <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Return Time <span className="text-red-600 normal-case">*</span></label>
-                <input required name="returnTime" type="time" className="w-full px-2.5 py-1.5 text-xs text-gray-900 bg-white border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none" />
+            {tripType === 'return' && (
+              <div className="animate-fade-in-up">
+                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                  Return Time <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+                </label>
+                <input 
+                  required 
+                  name="returnTime" 
+                  type="time" 
+                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
+                />
               </div>
-            ) : (
-              <div></div>
             )}
           </div>
 
-          {/* Row 7: Passengers & Fleet */}
-          <div className="grid grid-cols-2 gap-2.5">
-            <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Passengers <span className="text-red-600 normal-case">*</span></label>
-              <input required name="passengers" type="number" min="1" className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none" placeholder="e.g. 45" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Passengers <span className="text-red-600 normal-case tracking-normal font-normal ml-1">(Required)</span>
+              </label>
+              <input required name="passengers" type="number" min="1" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="e.g. 45" />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Fleet Preference</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+                Select Charter Fleet Type <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
+              </label>
               <select 
                 name="vehicle" 
                 value={quoteData.vehicle}
                 onChange={(e) => setQuoteData({ ...quoteData, vehicle: e.target.value })}
-                className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none bg-white"
+                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm"
               >
                 <option value="any">No Preference</option>
-                <option value="luxury-coach-bus-charter">Luxury Coach (56 pax)</option>
-                <option value="mini-coach-bus-charter">Mini Coach (32 pax)</option>
-                <option value="14-passenger-van-service">Passenger Van (14 pax)</option>
-                <option value="school-bus-charter">School Bus (48 pax)</option>
+                <option value="luxury-coach-bus-charter">Luxury Coach (Driver Included)</option>
+                <option value="mini-coach-bus-charter">Mini Coach (Driver Included)</option>
+                <option value="14-passenger-van-service">Passenger Van (Driver Included)</option>
+                <option value="school-bus-charter">School Bus</option>
               </select>
             </div>
           </div>
-
-          {/* Row 8: Notes */}
           <div>
-            <label className="block text-[11px] font-bold text-gray-700 mb-0.5 uppercase">Trip Notes <span className="text-gray-400 font-normal normal-case">(Optional)</span></label>
-            <textarea name="info" className="w-full px-2.5 py-1.5 text-xs text-gray-900 border border-gray-300 rounded focus:ring-1 focus:ring-blue-800 outline-none resize-none" rows="2" placeholder="Specific itinerary stops or requests..."></textarea>
+            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+              Additional Information <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
+            </label>
+            <textarea name="info" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="3" placeholder="Any specific requirements, stops, or itinerary details?"></textarea>
           </div>
-
-          {/* Submit Button */}
-          <button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-2.5 rounded hover:bg-blue-900 transition shadow text-xs uppercase tracking-wide flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>
-            {isSending ? 'Sending Request...' : <>Submit Charter Request <ArrowRight className="ml-1.5" size={14} /></>}
+          <button disabled={isSending} type="submit" className={`w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-4 flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}>
+            {isSending ? 'Sending Request...' : <>Submit Charter Request <ArrowRight className="ml-2" size={18} /></>}
           </button>
-
-          <p className="text-[11px] text-center text-gray-500 pt-0.5">
-            <ShieldCheck size={11} className="inline mr-1 text-green-600" /> Your information is secure.
+          <p className="text-xs text-center text-gray-500 mt-2">
+            <ShieldCheck size={12} className="inline mr-1 text-green-600" /> Your information is secure.
           </p>
         </form>
       )}

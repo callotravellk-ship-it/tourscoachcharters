@@ -592,10 +592,10 @@ export const TrustStatsBanner = () => (
     </div>
     <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-6 lg:gap-12 text-center">
       {[
-        { value: 15, suffix: "+", label: "Years Experience", icon: Award },
-        { value: 5000, suffix: "+", label: "Successful Trips", icon: Route },
-        { value: 100, suffix: "%", label: "Fully Insured", icon: ShieldCheck },
-        { value: 24, suffix: "/7", label: "Client Support", icon: Headphones }
+        { value: "15", suffix: "+", label: "Years Experience", icon: Award },
+        { value: "5000", suffix: "+", label: "Successful Trips", icon: Route },
+        { value: "100", suffix: "%", label: "Fully Insured", icon: ShieldCheck },
+        { value: "24", suffix: "/7", label: "Client Support", icon: Headphones }
       ].map((stat, i) => (
         <div key={i} className="flex flex-col items-center group cursor-default">
           <div className="relative mb-6">
@@ -605,7 +605,8 @@ export const TrustStatsBanner = () => (
             </div>
           </div>
           <div className="text-5xl md:text-5xl lg:text-6xl font-black bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent mb-3 leading-none tracking-tight group-hover:scale-105 transition-transform duration-500">
-            <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+            {/* Display static values instead of AnimatedCounter */}
+            <span>{stat.value}{stat.suffix}</span>
           </div>
           <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300 transition-colors duration-300">{stat.label}</div>
         </div>

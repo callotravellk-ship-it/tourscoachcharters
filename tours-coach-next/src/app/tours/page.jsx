@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Header, Footer } from '../../components/Shared';
-import { FEATURED_TOURS } from '../../lib/toursData';
-import { Clock, MapPin, CheckCircle } from 'lucide-react';
+import { FEATURED_TOURS } from '../../lib/data';
+import { Clock, MapPin, CheckCircle, ArrowRight } from 'lucide-react';
 
 export const metadata = {
   title: 'Ontario Group Tours & Day Trips | Tours Coach Charters',
@@ -21,7 +21,7 @@ export default function ToursPage() {
             Private group day tours and event transportation from the GTA. Travel with your group—not the crowd.
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm font-bold uppercase tracking-wider text-blue-100 mb-8">
-            <span className="bg-blue-800/50 px-4 py-2 rounded-full border border-blue-700">7 Featured Packages</span>
+            <span className="bg-blue-800/50 px-4 py-2 rounded-full border border-blue-700">17 Featured Packages</span>
             <span className="bg-blue-800/50 px-4 py-2 rounded-full border border-blue-700">3 Vehicle Categories</span>
             <span className="bg-blue-800/50 px-4 py-2 rounded-full border border-blue-700">GTA Convenient Pickup</span>
           </div>
@@ -35,26 +35,43 @@ export default function ToursPage() {
         {/* Tour Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {FEATURED_TOURS.map((tour) => (
-            <div key={tour.id} className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col hover:shadow-xl transition-shadow">
-              <div className="h-48 bg-slate-200 relative">
-                {/* Fallback gradient if images aren't loaded yet */}
+            <div key={tour.id} className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col hover:shadow-xl transition-shadow group">
+              
+              {/* Clickable Image */}
+              <Link href={`/tours/${tour.id}`} className="h-48 bg-slate-200 relative overflow-hidden block">
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-300 to-slate-400"></div>
-                {/* Uncomment when images are ready: <img src={tour.image} alt={tour.title} className="w-full h-full object-cover relative z-10" /> */}
-              </div>
+                {/* <img src={tour.image} alt={tour.title} className="w-full h-full object-cover relative z-10 group-hover:scale-105 transition-transform duration-500" /> */}
+              </Link>
+
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-blue-900 mb-2 leading-tight">{tour.title}</h3>
+                {/* Clickable Title */}
+                <Link href={`/tours/${tour.id}`}>
+                  <h3 className="text-xl font-bold text-blue-900 mb-2 leading-tight group-hover:text-red-600 transition-colors">
+                    {tour.title}
+                  </h3>
+                </Link>
+                
                 <div className="flex flex-col space-y-1 mb-4 text-xs text-slate-600 font-semibold uppercase tracking-wide">
                   <span className="flex items-center"><Clock size={14} className="mr-1 text-red-600"/> {tour.duration}</span>
                   <span className="flex items-center"><MapPin size={14} className="mr-1 text-red-600"/> {tour.route}</span>
                 </div>
-                <p className="text-sm text-slate-600 mb-6 flex-grow">{tour.description}</p>
+                
+                <p className="text-sm text-slate-600 mb-6 flex-grow line-clamp-3">
+                  {tour.description}
+                </p>
+                
                 <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-100">
                   <div className="flex flex-col">
                     <span className="text-xs text-slate-500 uppercase">Starting From</span>
                     <span className="text-lg font-black text-blue-800">{tour.startingPrice} <span className="text-xs font-normal text-slate-500">+ HST</span></span>
                   </div>
-                  <Link href="/request-a-quote" className="bg-slate-100 text-blue-800 hover:bg-blue-800 hover:text-white px-4 py-2 rounded font-bold text-sm transition-colors border border-slate-200">
-                    Get Quote
+                  
+                  {/* Clickable View Tour Button */}
+                  <Link 
+                    href={`/tours/${tour.id}`} 
+                    className="flex items-center bg-blue-50 text-blue-800 hover:bg-blue-800 hover:text-white px-4 py-2 rounded font-bold text-sm transition-colors border border-blue-100"
+                  >
+                    View Tour <ArrowRight size={14} className="ml-1" />
                   </Link>
                 </div>
               </div>

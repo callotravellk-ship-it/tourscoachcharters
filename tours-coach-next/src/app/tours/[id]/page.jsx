@@ -4,16 +4,17 @@ import { Header, Footer } from '../../../components/Shared';
 import { FEATURED_TOURS } from '../../../lib/data';
 import { Clock, MapPin, CheckCircle, XCircle, ArrowRight, AlertTriangle } from 'lucide-react';
 
-// Generates the static routes for all 17 tours at build time
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return FEATURED_TOURS.map((tour) => ({
     id: tour.id,
   }));
 }
 
-// Dynamically sets the SEO meta title and description for each tour
-export function generateMetadata({ params }) {
-  const tour = FEATURED_TOURS.find((t) => t.id === params.id);
+export async function generateMetadata({ params }) {
+  // Await params for Next.js 15 compatibility
+  const resolvedParams = await params;
+  const tour = FEATURED_TOURS.find((t) => t.id === resolvedParams.id);
+  
   if (!tour) return { title: 'Tour Not Found | Tours Coach Charters' };
   
   return {
@@ -22,10 +23,11 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function TourDetailPage({ params }) {
-  const tour = FEATURED_TOURS.find((t) => t.id === params.id);
+export default async function TourDetailPage({ params }) {
+  // Await params for Next.js 15 compatibility
+  const resolvedParams = await params;
+  const tour = FEATURED_TOURS.find((t) => t.id === resolvedParams.id);
 
-  // Show a 404 page if the URL doesn't match any tour ID
   if (!tour) {
     notFound();
   }
@@ -37,7 +39,6 @@ export default function TourDetailPage({ params }) {
       {/* Tour Hero Banner */}
       <section className="pt-32 pb-16 bg-blue-900 text-white border-b-4 border-red-600 relative overflow-hidden">
         <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
-        {/* Fallback pattern if images aren't loaded yet */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-slate-800 z-0"></div>
         
         <div className="container mx-auto px-4 relative z-20">
@@ -63,7 +64,6 @@ export default function TourDetailPage({ params }) {
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-12">
           
-          {/* Left Column: Details */}
           <div className="lg:w-2/3">
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-8">
               <h2 className="text-2xl font-black text-blue-900 mb-4">Tour Overview</h2>
@@ -82,7 +82,6 @@ export default function TourDetailPage({ params }) {
               </ul>
             </div>
 
-            {/* Global Inclusions & Exclusions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               <div className="bg-green-50 p-6 rounded-xl border border-green-100">
                 <h4 className="font-bold text-green-900 mb-4 flex items-center">
@@ -110,7 +109,6 @@ export default function TourDetailPage({ params }) {
             </div>
           </div>
 
-          {/* Right Column: Sticky Pricing & Booking Card */}
           <div className="lg:w-1/3">
             <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-xl sticky top-28 border border-slate-800">
               <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Starting From</h3>

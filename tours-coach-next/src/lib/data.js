@@ -8,9 +8,9 @@ export const COMPANY_INFO = {
 export const NAV_LINKS = [
   { title: "Home", id: "" },
   { title: "Tours", id: "tours" },
-  { title: "Multi-Day", id: "multi-day-tours" }, // <-- ADD THIS LINE
+  { title: "Multi-Day", id: "multi-day-tours" },
   { 
-    title: "Our Fleet", 
+    title: "Fleet", 
     id: "fleet",
     dropdown: [
       { title: "Luxury Coach Bus", id: "luxury-coach-bus-charter" },
@@ -56,8 +56,7 @@ export const NAV_LINKS = [
     ]
   },
   { title: "Winter", id: "winter-destinations" },
-  { title: "Events", id: "events" },
-  { title: "Contact Us", id: "contact" }
+  { title: "Events", id: "events" }
 ];
 
 export const FLEET_DATA = {

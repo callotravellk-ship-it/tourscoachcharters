@@ -7,8 +7,8 @@ export const COMPANY_INFO = {
 
 export const NAV_LINKS = [
   { title: "Home", id: "" },
-  { title: "About Us", id: "about" },
-  { title: "Tours", id: "tours" }, // <-- Added Tours link
+  // "About Us" has been removed from here
+  { title: "Tours", id: "tours" },
   { 
     title: "Our Fleet", 
     id: "fleet",

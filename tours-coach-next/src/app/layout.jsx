@@ -2,7 +2,7 @@
 import './globals.css';
 import { QuoteProvider, useQuote } from '../context/QuoteContext';
 import { Header, Footer, ChatWidget, QuoteForm } from '../components/Shared';
-import Script from 'next/script'; // <-- Imported Next.js Script Component
+import Script from 'next/script'; 
 
 function AppContent({ children }) {
   const { isQuoteModalOpen, setIsQuoteModalOpen } = useQuote();
@@ -92,16 +92,21 @@ export default function RootLayout({ children }) {
            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
          />
 
-         {/* 1. GOOGLE ADS TRACKING SCRIPT */}
+         {/* 1. COMBINED GOOGLE ANALYTICS & GOOGLE ADS SCRIPT */}
          <Script 
-           src="https://www.googletagmanager.com/gtag/js?id=AW-18421379566" 
+           src="https://www.googletagmanager.com/gtag/js?id=G-42VZGH60KM" 
            strategy="afterInteractive" 
          />
-         <Script id="google-ads-init" strategy="afterInteractive">
+         <Script id="google-tags-init" strategy="afterInteractive">
            {`
              window.dataLayer = window.dataLayer || [];
              function gtag(){dataLayer.push(arguments);}
              gtag('js', new Date());
+             
+             // Initialize Google Analytics
+             gtag('config', 'G-42VZGH60KM');
+             
+             // Initialize Google Ads
              gtag('config', 'AW-18421379566');
            `}
          </Script>

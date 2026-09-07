@@ -141,9 +141,8 @@ export default async function TourDetailPage({ params }) {
               <p className="text-sm text-slate-400 mb-8 pb-8 border-b border-slate-700">
                 Final pricing depends on travel dates, group size, and vehicle selection.
               </p>
-
-              <Link 
-                href="/request-a-quote" 
+<Link 
+                href={`/tour-quote?tour=${encodeURIComponent(tour.title)}`} 
                 className="w-full bg-red-600 text-white font-bold py-4 rounded-lg hover:bg-red-700 transition shadow-lg flex justify-center items-center mb-4"
               >
                 Request a Custom Quote <ArrowRight className="ml-2" size={18} />

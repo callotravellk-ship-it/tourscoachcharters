@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Header, Footer } from '../../components/Shared';
+import { Header, Footer, TourImage } from '../../components/Shared';
 import { FEATURED_TOURS } from '../../lib/data';
 import { Clock, MapPin, CheckCircle, ArrowRight } from 'lucide-react';
 
@@ -37,10 +37,9 @@ export default function ToursPage() {
           {FEATURED_TOURS.map((tour) => (
             <div key={tour.id} className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col hover:shadow-xl transition-shadow group">
               
-              {/* Clickable Image */}
-              <Link href={`/tours/${tour.id}`} className="h-48 bg-slate-200 relative overflow-hidden block">
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-300 to-slate-400"></div>
-                {/* <img src={tour.image} alt={tour.title} className="w-full h-full object-cover relative z-10 group-hover:scale-105 transition-transform duration-500" /> */}
+{/* Clickable Image */}
+              <Link href={`/tours/${tour.id}`} className=" group" h-48 overflow-hidden relative>
+                <TourImage alt="{tour.title}" className="group-hover:scale-105 transition-transform duration-500" src="{tour.image}"/>
               </Link>
 
               <div className="p-6 flex flex-col flex-grow">

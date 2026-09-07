@@ -592,3 +592,37 @@ export const ChatWidget = () => {
     />
   );
 };
+
+export const TourImage = ({ src, alt, className = "", isHero = false }) => {
+  const [error, setError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className="absolute inset-0 w-full h-full">
+      {/* Fallback Placeholder (Visible if image is missing) */}
+      {(!loaded || error) && (
+        <div className={`absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0 ${isHero ? 'bg-slate-800' : 'bg-slate-200'}`}>
+          <div className={`border-2 border-dashed ${isHero ? 'border-slate-500' : 'border-slate-400'} w-full h-full flex flex-col items-center justify-center rounded p-2`}>
+            <span className={`font-mono font-bold ${isHero ? 'text-slate-300 text-lg' : 'text-slate-600 text-[10px] sm:text-xs bg-white/80 px-2 py-1 rounded shadow-sm'} mb-1 sm:mb-2`}>
+              {src}
+            </span>
+            <span className={`font-bold ${isHero ? 'text-slate-400 text-sm' : 'text-slate-500 text-[10px] sm:text-xs'}`}>
+              Ratio: {isHero ? '16:9 or 21:9 (Min 1920x1080)' : '16:9 (e.g., 800x450)'}
+            </span>
+          </div>
+        </div>
+      )}
+      
+      {/* Actual Image (Hides itself if broken) */}
+      {!error && (
+        <img 
+          src={src} 
+          alt={alt} 
+          className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} w-full h-full object-cover relative z-10`}
+          onLoad={() => setLoaded(true)}
+          onError={() => setError(true)}
+        />
+      )}
+    </div>
+  );
+};

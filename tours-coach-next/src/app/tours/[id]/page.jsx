@@ -1,36 +1,44 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Header, Footer } from '../../../components/Shared';
-import { FEATURED_TOURS } from '../../../lib/data';
+import { FEATURED_TOURS, MULTI_DAY_TOURS, FLORIDA_TOURS, SEO_DATA } from '../../../lib/data';
 import { Clock, MapPin, CheckCircle, XCircle, ArrowRight, AlertTriangle } from 'lucide-react';
 
+// Combine all tour categories so every single tour route is recognized
+const ALL_TOURS = [
+  ...FEATURED_TOURS,
+  ...(MULTI_DAY_TOURS || []),
+  ...(FLORIDA_TOURS || [])
+];
+
 export async function generateStaticParams() {
-  return FEATURED_TOURS.map((tour) => ({
+  return ALL_TOURS.map((tour) => ({
     id: tour.id,
   }));
 }
 
 export async function generateMetadata({ params }) {
-  // Await params for Next.js 15 compatibility
   const resolvedParams = await params;
-  const tour = FEATURED_TOURS.find((t) => t.id === resolvedParams.id);
-  
+  const tour = ALL_TOURS.find((t) => t.id === resolvedParams.id);
+  const seoInfo = SEO_DATA ? SEO_DATA[resolvedParams.id] : null;
+
   if (!tour) return { title: 'Tour Not Found | Tours Coach Charters' };
-  
+
   return {
-    title: `${tour.title} | Tours Coach Charters`,
-    description: tour.description,
+    title: seoInfo ? seoInfo.title : `${tour.title} | Tours Coach Charters`,
+    description: seoInfo ? seoInfo.desc : tour.description,
   };
 }
 
 export default async function TourDetailPage({ params }) {
-  // Await params for Next.js 15 compatibility
   const resolvedParams = await params;
-  const tour = FEATURED_TOURS.find((t) => t.id === resolvedParams.id);
+  const tour = ALL_TOURS.find((t) => t.id === resolvedParams.id);
 
   if (!tour) {
     notFound();
   }
+
+  const isCustomQuote = tour.startingPrice?.toLowerCase().includes('quote');
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
@@ -43,8 +51,11 @@ export default async function TourDetailPage({ params }) {
         
         <div className="container mx-auto px-4 relative z-20">
           <div className="max-w-4xl">
-            <Link href="/tours" className="text-blue-300 hover:text-white text-sm font-bold uppercase tracking-widest mb-6 inline-block transition-colors">
-              &larr; Back to All Tours
+            <Link 
+              href={tour.category ? "/multi-day-tours" : "/tours"} 
+              className="text-blue-300 hover:text-white text-sm font-bold uppercase tracking-widest mb-6 inline-block transition-colors"
+            >
+              &larr; Back to {tour.category ? "Multi-Day Tours" : "All Tours"}
             </Link>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight drop-shadow-md">
               {tour.title}
@@ -64,6 +75,7 @@ export default async function TourDetailPage({ params }) {
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-12">
           
+          {/* Left Column: Details */}
           <div className="lg:w-2/3">
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mb-8">
               <h2 className="text-2xl font-black text-blue-900 mb-4">Tour Overview</h2>
@@ -71,17 +83,22 @@ export default async function TourDetailPage({ params }) {
                 {tour.description}
               </p>
 
-              <h3 className="text-xl font-bold text-blue-900 mb-4 border-b border-slate-100 pb-2">Itinerary Highlights</h3>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                {tour.highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="text-red-600 mr-3 mt-0.5 flex-shrink-0" size={20} />
-                    <span className="text-slate-700 font-medium">{highlight}</span>
-                  </li>
-                ))}
-              </ul>
+              {tour.highlights && tour.highlights.length > 0 && (
+                <>
+                  <h3 className="text-xl font-bold text-blue-900 mb-4 border-b border-slate-100 pb-2">Itinerary Highlights</h3>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    {tour.highlights.map((highlight, index) => (
+                      <li key={index} className="flex items-start">
+                        <CheckCircle className="text-red-600 mr-3 mt-0.5 flex-shrink-0" size={20} />
+                        <span className="text-slate-700 font-medium">{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
 
+            {/* Global Inclusions & Exclusions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               <div className="bg-green-50 p-6 rounded-xl border border-green-100">
                 <h4 className="font-bold text-green-900 mb-4 flex items-center">
@@ -109,11 +126,12 @@ export default async function TourDetailPage({ params }) {
             </div>
           </div>
 
+          {/* Right Column: Pricing & Booking Card */}
           <div className="lg:w-1/3">
             <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-xl sticky top-28 border border-slate-800">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Starting From</h3>
-              <div className="text-5xl font-black text-white mb-2">
-                {tour.startingPrice} <span className="text-xl text-slate-400 font-medium">+ HST</span>
+              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Pricing</h3>
+              <div className="text-4xl md:text-5xl font-black text-white mb-2">
+                {tour.startingPrice} {!isCustomQuote && <span className="text-xl text-slate-400 font-medium">+ HST</span>}
               </div>
               <p className="text-sm text-slate-400 mb-8 pb-8 border-b border-slate-700">
                 Final pricing depends on travel dates, group size, and vehicle selection.
@@ -129,7 +147,7 @@ export default async function TourDetailPage({ params }) {
               <div className="bg-slate-800 p-4 rounded-lg flex items-start mt-6 text-xs text-slate-400 leading-relaxed">
                 <AlertTriangle size={16} className="text-amber-500 mr-3 flex-shrink-0 mt-0.5" />
                 <p>
-                  Prices shown are starting rates in CAD. A written quote from Canada Tours Coach Ltd is required to confirm availability and price.
+                  A written quote from Canada Tours Coach LTD is required to confirm vehicle availability, route feasibility, and final pricing.
                 </p>
               </div>
             </div>

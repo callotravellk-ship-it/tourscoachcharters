@@ -7,8 +7,8 @@ export const COMPANY_INFO = {
 
 export const NAV_LINKS = [
   { title: "Home", id: "" },
-  // "About Us" has been removed from here
   { title: "Tours", id: "tours" },
+  { title: "Multi-Day", id: "multi-day-tours" }, // <-- ADD THIS LINE
   { 
     title: "Our Fleet", 
     id: "fleet",
@@ -113,7 +113,7 @@ export const FLEET_DATA = {
 export const SEO_DATA = {
   "home": { title: "Charter Bus Services Canada | Tours Coach Charters", desc: "Canada's Premier Charter Bus Services. From corporate retreats to school trips, we provide reliable transportation from coast to coast." },
   "about": { title: "About Us | Tours Coach Charters", desc: "Learn about Canada Tours Coach LTD. We provide safe, reliable, and premium charter bus transportation across the country." },
-  "tours": { title: "Ontario Group Tours & Day Trips | Tours Coach Charters", desc: "Private group day tours and event transportation from the GTA. Travel with your group—not the crowd." }, // <-- Added Tours SEO
+  "tours": { title: "Ontario Group Tours & Day Trips | Tours Coach Charters", desc: "Private group day tours and event transportation from the GTA. Travel with your group—not the crowd." },
   "contact": { title: "Contact Us | Tours Coach Charters", desc: "Get in touch with Canada Tours Coach LTD for quotes, questions, and group transportation logistics." },
   "events": { title: "Canadian Event & Festival Charter Bus Transportation | Tours Coach Charters", desc: "Private group bus hire, mini coach charters, and executive Sprinter van shuttles for major festivals and events across Canada." },
   "luxury-coach-bus-charter": { title: "Luxury Coach Bus Charter in Canada | Tours Coach Charters", desc: "Experience ultimate comfort for long-distance group travel with our 56 passenger luxury coaches." },
@@ -138,7 +138,26 @@ export const SEO_DATA = {
   "charter-bus-service-brantford": { title: "Brantford Charter Bus Services | Tours Coach Charters", desc: "Reliable coach charters in Brantford for Wayne Gretzky Sports Centre tournaments and corporate travel." },
   "charter-bus-service-bolton": { title: "Bolton Coach Charters & Wedding Shuttles | Tours Coach Charters", desc: "Dedicated group transportation for the Caledon Equestrian Park and rustic Bolton wedding venues." },
   "charter-bus-service-barrie": { title: "Barrie Winter Charters & Bus Services | Tours Coach Charters", desc: "Premium group transportation via Highway 400 to Mount St. Louis Moonstone, Snow Valley, and Georgian College." },
-  "winter-destinations": { title: "Winter Destination Charters | Tours Coach Charters", desc: "Dedicated motorcoach services for ski trips to Whistler, Blue Mountain, and Banff." }
+  "winter-destinations": { title: "Winter Destination Charters | Tours Coach Charters", desc: "Dedicated motorcoach services for ski trips to Whistler, Blue Mountain, and Banff." },
+  
+  // DOCUMENT IMPLEMENTATION: NEW TOUR SEO TITLES
+  "toronto-highlights": { title: "Private Toronto City Tour & Group Charter from the GTA | Tours Coach Charters", desc: "Discover Toronto your way with private group transportation and a flexible itinerary." },
+  "niagara-falls-experience": { title: "Private Niagara Falls Bus Tour from Toronto & the GTA | Tours Coach Charters", desc: "Experience the power of Niagara Falls and the charm of Niagara-on-the-Lake in one private day trip." },
+  "muskoka-algonquin-escape": { title: "Muskoka & Algonquin Group Day Trip Transportation | Tours Coach Charters", desc: "Trade the city for lakes, forests, and classic Ontario scenery with private day trip transportation." },
+  "ottawa-capital-tour": { title: "Private Ottawa Group Tour Transportation from Toronto | Tours Coach Charters", desc: "Visit Canada's capital with private round-trip group transportation from the GTA." },
+  "kingston-thousand-islands": { title: "Kingston & Thousand Islands Group Charter Tour | Tours Coach Charters", desc: "Combine Kingston's historic waterfront with the beauty of the Thousand Islands." },
+  "blue-mountain-getaway": { title: "Blue Mountain & Collingwood Group Transportation | Tours Coach Charters", desc: "Plan a refreshing group getaway to Blue Mountain and Collingwood with private transportation." },
+  "toronto-sports-events": { title: "Toronto Sports & Event Group Transportation | Tours Coach Charters", desc: "Keep your group together from pickup to the final whistle with private event transportation." },
+  "prince-edward-county": { title: "Prince Edward County & Sandbanks Group Day Tour | Tours Coach Charters", desc: "Discover the beaches, rural scenery, and welcoming towns of Prince Edward County." },
+  "tobermory-bruce-peninsula": { title: "Tobermory & Bruce Peninsula Group Transportation | Tours Coach Charters", desc: "Travel to the clear waters, rugged shoreline, and harbour scenery of the Bruce Peninsula." },
+  "elora-gorge-fergus": { title: "Elora Gorge & Fergus Private Group Tour | Tours Coach Charters", desc: "Pair dramatic Grand River scenery with the limestone architecture of Elora and Fergus." },
+  "stratford-theatre": { title: "Stratford Theatre Group Transportation from the GTA | Tours Coach Charters", desc: "Enjoy Stratford's theatre culture, gardens, and walkable heritage district." },
+  "st-jacobs-market": { title: "St. Jacobs Market Group Bus Tour | Tours Coach Charters", desc: "Plan an easy group outing to the St. Jacobs market district, village shops, and Waterloo Region." },
+  "hamilton-waterfalls": { title: "Hamilton Waterfalls & Gardens Group Tour | Tours Coach Charters", desc: "Create a nature-focused day around Hamilton's escarpment scenery and the gardens of Burlington." },
+  "peterborough-kawarthas": { title: "Peterborough & Kawarthas Group Day Trip | Tours Coach Charters", desc: "Explore lift-lock heritage, lakeside communities, trails, and local food stops." },
+  "wasaga-beach": { title: "Wasaga Beach Group Transportation from the GTA | Tours Coach Charters", desc: "Make your group beach day simple with private round-trip transportation to Wasaga Beach." },
+  "african-lion-safari": { title: "African Lion Safari Group Transportation | Tours Coach Charters", desc: "Give your group a full day of wildlife experiences with comfortable round-trip transportation." },
+  "canadas-wonderland": { title: "Canada's Wonderland Group Transportation | Tours Coach Charters", desc: "Keep your group together with scheduled transportation to and from Canada's Wonderland." }
 };
 
 export const DESTINATION_DATA = {
@@ -894,5 +913,88 @@ export const FEATURED_TOURS = [
     description: "Keep school, youth, family, and corporate groups together with scheduled transportation to and from Canada's Wonderland.",
     highlights: ["Canada's Wonderland", "Seasonal festivals", "Group entrance coordination", "Scheduled return pickup"],
     image: "/tours/wonderland.jpg"
+  }
+];
+
+export const MULTI_DAY_TOURS = [
+  {
+    id: "eastern-canada-express",
+    title: "Eastern Canada Express",
+    duration: "3 Days / 2 Nights",
+    route: "Toronto • Thousand Islands • Ottawa • Montréal • Québec City",
+    startingPrice: "Custom Quote",
+    description: "A compact highlights tour for groups that want to experience the Thousand Islands, Canada’s capital, Montréal, and Québec City in three days. This package ends in Québec City.",
+    highlights: ["Thousand Islands cruise option", "Parliament Hill & ByWard Market", "Old Montréal & Old Port", "Old Québec & Dufferin Terrace"],
+    image: "/tours/eastern-express.jpg",
+    category: "Eastern Canada"
+  },
+  {
+    id: "eastern-canada-grand-circuit",
+    title: "Eastern Canada Grand Circuit",
+    duration: "4 Days / 3 Nights",
+    route: "Toronto • Thousand Islands • Ottawa • Montréal • Québec City • Toronto",
+    startingPrice: "Custom Quote",
+    description: "A practical four-day round trip covering the major highlights of Eastern Ontario and Québec. This is the minimum recommended duration for completing the full route and returning to Toronto.",
+    highlights: ["Parliament Hill surroundings", "Montréal downtown & Old Port", "Québec City Place-Royale", "Direct return journey to Toronto"],
+    image: "/tours/eastern-circuit.jpg",
+    category: "Eastern Canada"
+  },
+  {
+    id: "eastern-canada-signature",
+    title: "Eastern Canada Signature Tour",
+    duration: "5 Days / 4 Nights",
+    route: "Toronto • Thousand Islands • Ottawa • Montréal • Québec City • Toronto",
+    startingPrice: "Custom Quote",
+    description: "The strongest all-around package for leisure, school, community, and international groups. Five days provide a better balance of travel time, city sightseeing, and rest.",
+    highlights: ["2 Nights in Montréal", "Extended Mount Royal & Old Montréal visits", "Montmorency Falls option in Québec", "Comfortable return to GTA"],
+    image: "/tours/eastern-signature.jpg",
+    category: "Eastern Canada"
+  }
+];
+
+export const FLORIDA_TOURS = [
+  {
+    id: "orlando-essential",
+    title: "Orlando Essential",
+    duration: "7 Days / 6 Nights",
+    route: "Toronto • Orlando • Theme parks",
+    startingPrice: "Custom Quote",
+    description: "Entry package for groups prioritizing Orlando. Choose between a fast direct-relay driving operation or a comfortable midpoint-hotel overnight journey.",
+    highlights: ["2 Full Theme Park Days", "Kennedy Space Center option", "Flexible transportation strategy"],
+    image: "/tours/florida-essential.jpg",
+    category: "Florida"
+  },
+  {
+    id: "orlando-family-explorer",
+    title: "Orlando Family Explorer",
+    duration: "8 Days / 7 Nights",
+    route: "Orlando • Kennedy Space Center • Cocoa Beach",
+    startingPrice: "Custom Quote",
+    description: "Recommended minimum for Orlando plus Kennedy Space Center. Direct-relay service provides more recovery time than the midpoint plan.",
+    highlights: ["Dedicated Space Coast Day", "Cocoa Beach time", "2 Full Orlando Attraction Days"],
+    image: "/tours/florida-explorer.jpg",
+    category: "Florida"
+  },
+  {
+    id: "orlando-gulf-coast-discovery",
+    title: "Orlando & Gulf Coast Discovery",
+    duration: "9 Days / 8 Nights",
+    route: "Orlando • Kennedy Space Center • Tampa Bay",
+    startingPrice: "Custom Quote",
+    description: "Combines Central Florida with a Gulf Coast day. A strong all-around package for groups wanting variety without moving hotels within Florida.",
+    highlights: ["Tampa Bay waterfront day trip", "Kennedy Space Center", "Central Florida Theme Parks"],
+    image: "/tours/florida-discovery.jpg",
+    category: "Florida"
+  },
+  {
+    id: "florida-signature-tour",
+    title: "Florida Signature Tour",
+    duration: "10 Days / 9 Nights",
+    route: "Orlando • Kennedy Space Center • Tampa Bay • Miami option",
+    startingPrice: "Custom Quote",
+    description: "Premium program with the most flexibility. Includes an optional Miami extension for groups willing to expand their itinerary.",
+    highlights: ["Optional Miami extension", "Gulf Coast attraction", "Extended Orlando leisure time"],
+    image: "/tours/florida-signature.jpg",
+    category: "Florida"
   }
 ];

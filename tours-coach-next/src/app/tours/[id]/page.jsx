@@ -152,7 +152,7 @@ export default async function TourDetailPage({ params }) {
               <div className="bg-slate-800 p-4 rounded-lg flex items-start mt-6 text-xs text-slate-400 leading-relaxed">
                 <AlertTriangle size={16} className="text-amber-500 mr-3 flex-shrink-0 mt-0.5" />
                 <p>
-                  A written quote from Canada Tours Coach LTD is required to confirm vehicle availability, route feasibility, and final pricing.
+                  All tours require a custom quote to confirm availability and final pricing.
                 </p>
               </div>
             </div>

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuote } from '../context/QuoteContext';
-import { Star, CalendarCheck, ShieldCheck, Map, Headphones, BusFront, Users, Briefcase, Trophy, Navigation, Car, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, CalendarCheck, ShieldCheck, Map, Headphones, BusFront, Users, Briefcase, Trophy, Navigation, Car, ArrowRight, ChevronLeft, ChevronRight, Clock, Phone } from 'lucide-react';
 import { TrustStatsBanner } from '../components/Shared';
 import { FLEET_DATA } from '../lib/data';
 
@@ -37,27 +37,57 @@ export default function HomeClient() {
               </p>
             </div>
 
-            {/* Right Column: Trigger Button Card */}
+            {/* Right Column: Trigger Button Card matching reference image */}
             <div className="w-full max-w-lg mx-auto lg:ml-auto">
-              <div className="bg-white/95 backdrop-blur-md p-8 md:p-10 rounded-2xl shadow-2xl border-t-4 border-red-600 text-center mx-auto">
-                <h3 className="text-3xl font-black text-blue-900 mb-4 tracking-tight">
-                  Ready to Roll?
-                </h3>
-                <p className="text-slate-600 mb-8 leading-relaxed">
-                  Get an accurate, personalized estimate for your group's next charter trip in minutes.
-                </p>
+              <div className="bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl text-left mx-auto">
                 
-                <button 
-                  onClick={() => setIsQuoteModalOpen(true)}
-                  className="w-full bg-red-600 text-white font-black text-lg py-4 rounded-lg hover:bg-red-700 transition-all shadow-xl hover:shadow-2xl flex justify-center items-center group"
-                >
-                  Get My Free Quote 
-                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
-                </button>
-                
-                <p className="text-xs text-slate-500 mt-4 font-medium uppercase tracking-wider">
-                  No obligation • Professional Drivers Included
-                </p>
+                {/* 2x2 Trust Badges */}
+                <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-8">
+                  <div className="flex items-center">
+                    <div className="bg-white shadow-sm border border-slate-100 p-2.5 rounded-xl mr-3 flex-shrink-0">
+                      <ShieldCheck size={22} className="text-blue-600" />
+                    </div>
+                    <span className="text-sm text-slate-700 font-semibold leading-tight">Globally Insured & Licensed</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="bg-white shadow-sm border border-slate-100 p-2.5 rounded-xl mr-3 flex-shrink-0">
+                      <Clock size={22} className="text-blue-600" />
+                    </div>
+                    <span className="text-sm text-slate-700 font-semibold leading-tight">On Time, Every Time</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="bg-white shadow-sm border border-slate-100 p-2.5 rounded-xl mr-3 flex-shrink-0">
+                      <Users size={22} className="text-blue-600" />
+                    </div>
+                    <span className="text-sm text-slate-700 font-semibold leading-tight">Hand-Picked Professional Drivers</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="bg-white shadow-sm border border-slate-100 p-2.5 rounded-xl mr-3 flex-shrink-0">
+                      <Star size={22} className="text-blue-600" />
+                    </div>
+                    <span className="text-sm text-slate-700 font-semibold leading-tight">Rated 4.9/5 Nationwide</span>
+                  </div>
+                </div>
+
+                {/* Side-by-Side Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button 
+                    onClick={() => setIsQuoteModalOpen(true)}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center group"
+                  >
+                    Get Free Quote 
+                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                  </button>
+                  
+                  <a 
+                    href="tel:4162699555"
+                    className="flex-1 bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50 font-bold py-3.5 px-4 rounded-xl transition-all flex justify-center items-center"
+                  >
+                    <Phone className="mr-2" size={18} />
+                    Call (416) 269-9555
+                  </a>
+                </div>
+
               </div>
             </div>
 

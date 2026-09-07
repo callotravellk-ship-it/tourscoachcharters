@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Header, Footer, TourImage } from '../../components/Shared';
+import { TourImage } from '../../components/Shared';
 import { MULTI_DAY_TOURS, FLORIDA_TOURS } from '../../lib/data';
 import { Clock, MapPin, ArrowRight } from 'lucide-react';
 
@@ -17,7 +17,7 @@ const TourGrid = ({ tours, sectionTitle, sectionDesc }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {tours.map((tour) => (
         <div key={tour.id} className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col hover:shadow-xl transition-shadow group">
-<Link href={`/tours/${tour.id}`} className="h-48 relative overflow-hidden block group">
+          <Link href={`/tours/${tour.id}`} className="h-48 relative overflow-hidden block group">
             <TourImage alt={tour.title} className="group-hover:scale-105 transition-transform duration-500" src={tour.image} />
           </Link>
           <div className="p-6 flex flex-col flex-grow">
@@ -50,7 +50,6 @@ const TourGrid = ({ tours, sectionTitle, sectionDesc }) => (
 export default function MultiDayToursPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
-      <Header />
       
       <section className="pt-32 pb-20 bg-blue-900 text-white border-b-4 border-red-600">
         <div className="container mx-auto px-4 text-center">
@@ -74,7 +73,6 @@ export default function MultiDayToursPage() {
         />
       </main>
 
-      <Footer />
     </div>
   );
 }

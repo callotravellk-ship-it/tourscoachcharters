@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Header, Footer, TourImage } from '../../../components/Shared';
+import { TourImage } from '../../../components/Shared';
 import { FEATURED_TOURS, MULTI_DAY_TOURS, FLORIDA_TOURS, SEO_DATA } from '../../../lib/data';
 import { Clock, MapPin, CheckCircle, XCircle, ArrowRight, AlertTriangle } from 'lucide-react';
 
@@ -42,12 +42,11 @@ export default async function TourDetailPage({ params }) {
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
-      <Header />
       
-{/* Tour Hero Banner */}
+      {/* Tour Hero Banner */}
       <section className="pt-32 pb-16 bg-blue-900 text-white border-b-4 border-red-600 relative overflow-hidden">
         
-{/* Background Image Container with Fallback */}
+        {/* Background Image Container with Fallback */}
         <div className="absolute inset-0 z-0 opacity-40 mix-blend-overlay">
           <TourImage alt={tour.title} isHero={true} src={tour.image} />
         </div>
@@ -162,7 +161,6 @@ export default async function TourDetailPage({ params }) {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

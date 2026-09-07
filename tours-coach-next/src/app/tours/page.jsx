@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Header, Footer, TourImage } from '../../components/Shared';
+import { TourImage } from '../../components/Shared';
 import { FEATURED_TOURS } from '../../lib/data';
 import { Clock, MapPin, CheckCircle, ArrowRight } from 'lucide-react';
 
@@ -11,7 +11,6 @@ export const metadata = {
 export default function ToursPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
-      <Header />
       
       {/* Hero Section */}
       <section className="pt-32 pb-20 bg-blue-900 text-white border-b-4 border-red-600">
@@ -37,7 +36,7 @@ export default function ToursPage() {
           {FEATURED_TOURS.map((tour) => (
             <div key={tour.id} className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col hover:shadow-xl transition-shadow group">
               
-{/* Clickable Image */}
+              {/* Clickable Image */}
               <Link href={`/tours/${tour.id}`} className="group h-48 overflow-hidden relative block">
                 <TourImage alt={tour.title} className="group-hover:scale-105 transition-transform duration-500" src={tour.image} />
               </Link>
@@ -98,7 +97,6 @@ export default function ToursPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

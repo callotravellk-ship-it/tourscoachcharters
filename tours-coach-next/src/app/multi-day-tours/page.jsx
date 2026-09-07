@@ -17,8 +17,8 @@ const TourGrid = ({ tours, sectionTitle, sectionDesc }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {tours.map((tour) => (
         <div key={tour.id} className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col hover:shadow-xl transition-shadow group">
-<Link className="h-48 relative overflow-hidden block group" href="{`/tours/${tour.id}`}">
-            <TourImage alt="{tour.title}" className="group-hover:scale-105 transition-transform duration-500" src="{tour.image}"/>
+<Link href={`/tours/${tour.id}`} className="h-48 relative overflow-hidden block group">
+            <TourImage alt={tour.title} className="group-hover:scale-105 transition-transform duration-500" src={tour.image} />
           </Link>
           <div className="p-6 flex flex-col flex-grow">
             <Link href={`/tours/${tour.id}`}>

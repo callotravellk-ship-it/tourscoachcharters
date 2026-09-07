@@ -38,8 +38,8 @@ export default function ToursPage() {
             <div key={tour.id} className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col hover:shadow-xl transition-shadow group">
               
 {/* Clickable Image */}
-              <Link href={`/tours/${tour.id}`} className=" group" h-48 overflow-hidden relative>
-                <TourImage alt="{tour.title}" className="group-hover:scale-105 transition-transform duration-500" src="{tour.image}"/>
+              <Link href={`/tours/${tour.id}`} className="group h-48 overflow-hidden relative block">
+                <TourImage alt={tour.title} className="group-hover:scale-105 transition-transform duration-500" src={tour.image} />
               </Link>
 
               <div className="p-6 flex flex-col flex-grow">

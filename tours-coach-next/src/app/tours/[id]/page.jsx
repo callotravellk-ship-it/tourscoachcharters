@@ -47,9 +47,9 @@ export default async function TourDetailPage({ params }) {
 {/* Tour Hero Banner */}
       <section className="pt-32 pb-16 bg-blue-900 text-white border-b-4 border-red-600 relative overflow-hidden">
         
-        {/* Background Image Container with Fallback */}
+{/* Background Image Container with Fallback */}
         <div className="absolute inset-0 z-0 opacity-40 mix-blend-overlay">
-          <TourImage alt="{tour.title}" isHero="{true}" src="{tour.image}"/>
+          <TourImage alt={tour.title} isHero={true} src={tour.image} />
         </div>
         
         {/* Dark overlay to ensure text is always readable */}

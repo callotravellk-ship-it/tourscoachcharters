@@ -346,20 +346,15 @@ export const QuoteForm = ({ onClose }) => {
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-              First Name <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-            </label>
-            <input required name="firstName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John" />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-              Last Name <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-            </label>
-            <input required name="lastName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="Doe" />
-          </div>
+        
+        {/* NEW SINGLE "YOUR NAME" FIELD */}
+        <div>
+          <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
+            Your Name <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
+          </label>
+          <input required name="fullName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John Doe" />
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">

@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuote } from '../context/QuoteContext';
 import { Star, CalendarCheck, ShieldCheck, Map, Headphones, BusFront, Users, Briefcase, Trophy, Navigation, Car, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { QuoteForm, TrustStatsBanner } from '../components/Shared';
+import { TrustStatsBanner } from '../components/Shared';
 import { FLEET_DATA } from '../lib/data';
 
-export default function HomePage() {
+export default function HomeClient() {
   const { setIsQuoteModalOpen } = useQuote();
   const [currentFleetIdx, setCurrentFleetIdx] = useState(0);
   const fleetList = Object.entries(FLEET_DATA);
@@ -16,35 +16,54 @@ export default function HomePage() {
 
   return (
     <div className="w-full">
-     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900 bg-[url('/home-hero.jpg')] bg-cover bg-center bg-no-repeat">
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-900 bg-[url('/home-hero.jpg')] bg-cover bg-center bg-no-repeat">
   
-  {/* Dark overlay to ensure text readability against the image */}
-  <div className="absolute inset-0 bg-slate-900/60 z-0"></div>
+        {/* Dark overlay to ensure text readability against the image */}
+        <div className="absolute inset-0 bg-slate-900/60 z-0"></div>
 
-  <div className="container mx-auto px-4 relative z-10">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      
-      {/* Left Column: Headline */}
-      <div>
-        <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block shadow-sm">
-          Canada's Premier Charter Bus Rentals
-        </span>
-        <h1 className="text-4xl lg:text-6xl font-black text-white leading-tight mb-6 drop-shadow-md">
-          Trusted Coach Charters for Group Travel in Canada.
-        </h1>
-        <p className="text-lg text-slate-200 mb-8 drop-shadow">
-          Whether you need a coach for a large group or a minibus for a smaller trip, we've got you covered anywhere in Canada.
-        </p>
-      </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left Column: Headline */}
+            <div>
+              <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block shadow-sm">
+                Canada's Premier Charter Bus Rentals
+              </span>
+              <h1 className="text-4xl lg:text-6xl font-black text-white leading-tight mb-6 drop-shadow-md">
+                Trusted Coach Charters for Group Travel in Canada.
+              </h1>
+              <p className="text-lg text-slate-200 mb-8 drop-shadow">
+                Whether you need a coach for a large group or a minibus for a smaller trip, we've got you covered anywhere in Canada.
+              </p>
+            </div>
 
-      {/* Right Column: Compacted Quote Form */}
-      <div className="w-full max-w-lg mx-auto lg:ml-auto">
-        <QuoteForm />
-      </div>
+            {/* Right Column: Trigger Button Card */}
+            <div className="w-full max-w-lg mx-auto lg:ml-auto">
+              <div className="bg-white/95 backdrop-blur-md p-8 md:p-10 rounded-2xl shadow-2xl border-t-4 border-red-600 text-center mx-auto">
+                <h3 className="text-3xl font-black text-blue-900 mb-4 tracking-tight">
+                  Ready to Roll?
+                </h3>
+                <p className="text-slate-600 mb-8 leading-relaxed">
+                  Get an accurate, personalized estimate for your group's next charter trip in minutes.
+                </p>
+                
+                <button 
+                  onClick={() => setIsQuoteModalOpen(true)}
+                  className="w-full bg-red-600 text-white font-black text-lg py-4 rounded-lg hover:bg-red-700 transition-all shadow-xl hover:shadow-2xl flex justify-center items-center group"
+                >
+                  Get My Free Quote 
+                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+                </button>
+                
+                <p className="text-xs text-slate-500 mt-4 font-medium uppercase tracking-wider">
+                  No obligation • Professional Drivers Included
+                </p>
+              </div>
+            </div>
 
-    </div>
-  </div>
-</section>
+          </div>
+        </div>
+      </section>
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">

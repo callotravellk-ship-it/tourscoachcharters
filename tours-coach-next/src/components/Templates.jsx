@@ -31,7 +31,7 @@ export const AboutUs = () => {
               <button onClick={() => setIsQuoteModalOpen(true)} className="inline-flex items-center justify-center bg-red-600 text-white font-bold py-3.5 px-8 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                 Book Your Journey <ArrowRight size={18} className="ml-2" />
               </button>
-              <a href="tel:4162699555" className="inline-flex items-center justify-center bg-white text-blue-800 font-bold py-3.5 px-8 rounded-xl border-2 border-blue-800 hover:bg-blue-50 transition-all duration-300 shadow-sm">
+              <a href="tel:(416) 269-9555" className="inline-flex items-center justify-center bg-white text-blue-800 font-bold py-3.5 px-8 rounded-xl border-2 border-blue-800 hover:bg-blue-50 transition-all duration-300 shadow-sm">
                 <Phone size={18} className="mr-2" /> Call (416) 269-9555
               </a>
             </div>
@@ -100,7 +100,7 @@ export const ContactUs = () => {
                   <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800"><Phone size={24} /></div>
                   <div>
                     <h3 className="font-bold text-slate-900 mb-1">Phone Number</h3>
-                    <p className="text-slate-600 leading-relaxed text-sm">Call us anytime for immediate assistance or booking inquiries.<br/><a href="tel:4162699555" className="text-blue-800 font-bold hover:text-red-600 transition-colors text-lg mt-1 block">(416) 269-9555</a></p>
+                    <p className="text-slate-600 leading-relaxed text-sm">Call us anytime for immediate assistance or booking inquiries.<br/><a href="tel:(416) 269-9555" className="text-blue-800 font-bold hover:text-red-600 transition-colors text-lg mt-1 block">(416) 269-9555</a></p>
                   </div>
                 </div>
                 <div className="flex items-start group">
@@ -115,7 +115,7 @@ export const ContactUs = () => {
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2">
                   Get an Instant Quote <ArrowRight size={20} />
                 </button>
-                <a href="tel:4162699555" className="w-full bg-white text-slate-700 font-bold py-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 shadow-sm text-lg">
+                <a href="tel:(416) 269-9555" className="w-full bg-white text-slate-700 font-bold py-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 shadow-sm text-lg">
                   <Phone size={20} className="text-blue-800" /> Or call (416) 269-9555
                 </a>
               </div>
@@ -230,7 +230,7 @@ export const FifaPage = () => {
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 rounded-lg hover:bg-red-700 transition shadow-[0_0_20px_rgba(220,38,38,0.4)] flex justify-center items-center overflow-hidden relative animate-shine group">
                   <span className="relative z-10 flex items-center">Secure Your Fleet <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></span>
                 </button>
-                <a href="tel:4162699555" className="w-full bg-blue-900 text-white font-bold py-3.5 rounded-lg hover:bg-blue-950 transition border border-blue-700 flex justify-center items-center gap-2">
+                <a href="tel:(416) 269-9555" className="w-full bg-blue-900 text-white font-bold py-3.5 rounded-lg hover:bg-blue-950 transition border border-blue-700 flex justify-center items-center gap-2">
                   <Phone size={18} /> Call (416) 269-9555
                 </a>
               </div>
@@ -277,7 +277,7 @@ export const FleetTemplate = ({ data }) => {
               <button onClick={() => setIsQuoteModalOpen(true)} className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white font-bold py-4 px-8 rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2">
                 Request a Quote <ArrowRight size={20} />
               </button>
-              <a href="tel:4162699555" className="w-full sm:w-auto bg-white text-slate-700 font-bold py-4 px-8 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 text-lg">
+              <a href="tel:(416) 269-9555" className="w-full sm:w-auto bg-white text-slate-700 font-bold py-4 px-8 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 text-lg">
                 <Phone size={20} className="text-blue-800" /> (416) 269-9555
               </a>
             </div>
@@ -341,7 +341,7 @@ export const GenericPage = ({ title, subtitle, bgImage }) => {
               <button onClick={() => setIsQuoteModalOpen(true)} className="bg-blue-800 text-white px-6 py-3 rounded hover:bg-blue-900 transition font-bold shadow-md whitespace-nowrap">
                 Get a Free Quote
               </button>
-              <a href="tel:4162699555" className="text-center font-bold text-blue-800 hover:text-red-600 transition flex items-center justify-center gap-2">
+              <a href="tel:(416) 269-9555" className="text-center font-bold text-blue-800 hover:text-red-600 transition flex items-center justify-center gap-2">
                 <Phone size={16} /> Call (416) 269-9555
               </a>
             </div>
@@ -414,7 +414,7 @@ export const DestinationTemplate = ({ data }) => {
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-blue-800 text-white font-bold py-4 rounded-lg hover:bg-blue-900 transition shadow-lg flex justify-center items-center">
                   Request a Quote <ArrowRight size={18} className="ml-2" />
                 </button>
-                <a href="tel:4162699555" className="w-full bg-white text-blue-800 font-bold py-3.5 rounded-lg hover:bg-gray-50 transition border border-gray-200 shadow-sm flex justify-center items-center gap-2">
+                <a href="tel:(416) 269-9555" className="w-full bg-white text-blue-800 font-bold py-3.5 rounded-lg hover:bg-gray-50 transition border border-gray-200 shadow-sm flex justify-center items-center gap-2">
                   <Phone size={18} /> Call (416) 269-9555
                 </a>
               </div>
@@ -497,7 +497,7 @@ export const ServiceTemplate = ({ data }) => {
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 px-6 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 flex justify-center items-center gap-2">
                   Get an Instant Quote <ArrowRight size={20} />
                 </button>
-                <a href="tel:4162699555" className="w-full bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-blue-950 transition-all border border-blue-700 flex justify-center items-center gap-2">
+                <a href="tel:(416) 269-9555" className="w-full bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-blue-950 transition-all border border-blue-700 flex justify-center items-center gap-2">
                   <Phone size={18} /> Call (416) 269-9555
                 </a>
               </div>

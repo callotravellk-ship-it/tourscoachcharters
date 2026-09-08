@@ -137,7 +137,7 @@ export default function WinterDestinationsClient() {
               Get Free Winter Quote <ArrowRight size={18} className="ml-2" />
             </button>
             <a
-              href="tel:4162699555"
+              href="tel:(416) 269-9555"
               className="bg-slate-800/80 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-xl border border-slate-700 transition flex items-center justify-center text-base"
             >
               <PhoneCall size={18} className="mr-2 text-red-500" /> (416) 269-9555

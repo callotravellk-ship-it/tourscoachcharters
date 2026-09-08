@@ -57,7 +57,7 @@ export default function RequestQuotePage() {
                 Need immediate booking assistance or managing complex multi-bus itineraries? Call our dispatch office directly.
               </p>
               <a 
-                href="tel:4162699555" 
+                href="tel:(416) 269-9555" 
                 className="w-full bg-blue-800 text-white font-bold py-4 px-6 rounded-xl hover:bg-blue-900 transition-all shadow-lg flex items-center justify-center gap-2 text-lg"
               >
                 <Phone size={22} className="text-red-400" /> (416) 269-9555

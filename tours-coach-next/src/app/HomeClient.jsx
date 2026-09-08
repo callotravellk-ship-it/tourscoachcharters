@@ -80,7 +80,7 @@ export default function HomeClient() {
                   </button>
                   
                   <a 
-                    href="tel:4162699555"
+                    href="tel:(416) 269-9555"
                     className="flex-1 bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50 font-bold py-3.5 px-4 rounded-xl transition-all flex justify-center items-center"
                   >
                     <Phone className="mr-2" size={18} />

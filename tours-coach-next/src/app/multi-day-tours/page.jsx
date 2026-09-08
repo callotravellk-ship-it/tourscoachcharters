@@ -36,7 +36,10 @@ const TourGrid = ({ tours, sectionTitle, sectionDesc }) => (
                 <span className="text-xs text-slate-500 uppercase">Pricing</span>
                 <span className="text-lg font-black text-blue-800">{tour.startingPrice}</span>
               </div>
-              <Link href="/request-a-quote" className="flex items-center bg-red-50 text-red-700 hover:bg-red-600 hover:text-white px-4 py-2 rounded font-bold text-sm transition-colors border border-red-100">
+              <Link 
+                href={`/tour-quote?tour=${encodeURIComponent(tour.title)}`} 
+                className="flex items-center bg-red-50 text-red-700 hover:bg-red-600 hover:text-white px-4 py-2 rounded font-bold text-sm transition-colors border border-red-100"
+              >
                 Get Quote <ArrowRight size={14} className="ml-1" />
               </Link>
             </div>

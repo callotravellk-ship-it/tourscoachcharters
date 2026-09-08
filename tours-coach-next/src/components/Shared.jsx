@@ -4,7 +4,19 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQuote } from '../context/QuoteContext';
 import { Phone, Mail, ChevronDown, Menu, X, ShieldCheck, Map, Headphones, Award, Route, Send, ArrowRight, CheckCircle } from 'lucide-react';
-import { COMPANY_INFO, NAV_LINKS } from '../lib/data';
+// 1. Add this import at the top of your file if it's not there already
+import { COMPANY_INFO } from '../lib/data'; // Adjust the path depending on the file location
+
+// ... inside your component ...
+
+// 2. Replace your hardcoded phone button with this dynamic one:
+<a 
+  href="tel:4162699555" 
+  className="flex items-center justify-center border-2 border-blue-600 text-blue-600 font-bold rounded-lg px-6 py-3 hover:bg-blue-50 transition"
+>
+  <Phone size={20} className="mr-2" />
+  Call {COMPANY_INFO.phone}
+</a>
 
 // --- GEOAPIFY IMPORTS ---
 import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete';

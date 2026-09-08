@@ -93,8 +93,9 @@ export default function RootLayout({ children }) {
          />
 
          {/* 1. COMBINED GOOGLE ANALYTICS & GOOGLE ADS SCRIPT */}
+         {/* Changed src ID to AW-18421379566 so Tag Assistant detects the Ads container */}
          <Script 
-           src="https://www.googletagmanager.com/gtag/js?id=G-42VZGH60KM" 
+           src="https://www.googletagmanager.com/gtag/js?id=AW-18421379566" 
            strategy="afterInteractive" 
          />
          <Script 

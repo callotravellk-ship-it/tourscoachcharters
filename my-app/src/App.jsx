@@ -992,27 +992,15 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
               <div className="space-y-8">
                 <div className="flex items-start group">
                   <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800">
-                    <Map size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-slate-900 mb-1">Head Office</h3>
-                    <p className="text-slate-600 leading-relaxed text-sm">
-                      <strong>Canada Tours Coach LTD</strong><br/>
-                      1315 Pickering Parkway, Suite 300<br/>
-                      Pickering, ON L1V 7G5
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start group">
-                  <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800">
                     <Phone size={24} />
                   </div>
                   <div>
                     <h3 className="font-bold text-slate-900 mb-1">Phone Number</h3>
                     <p className="text-slate-600 leading-relaxed text-sm">
                       Call us anytime for immediate assistance or booking inquiries.<br/>
-                      <a href="tel:4162699555" className="text-blue-800 font-bold hover:text-red-600 transition-colors text-lg mt-1 block">(416) 269-9555</a>
+                      <a href="tel:4162699555" className="text-blue-800 font-bold hover:text-red-600 transition-colors text-lg mt-1 block">
+                        {COMPANY_INFO.phone}
+                      </a>
                     </p>
                   </div>
                 </div>
@@ -1025,19 +1013,28 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
                     <h3 className="font-bold text-slate-900 mb-1">Email Address</h3>
                     <p className="text-slate-600 leading-relaxed text-sm">
                       Send us an email and our logistics team will respond promptly.<br/>
-                      <a href="mailto:info@tourscoachcharter.com" className="text-blue-800 font-bold hover:text-red-600 transition-colors block mt-1">info@tourscoachcharter.com</a>
+                      <a href={`mailto:${COMPANY_INFO.email}`} className="text-blue-800 font-bold hover:text-red-600 transition-colors block mt-1">
+                        {COMPANY_INFO.email}
+                      </a>
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-12 pt-8 border-t border-slate-100">
+              <div className="mt-12 pt-8 border-t border-slate-100 space-y-4">
                 <button 
                   onClick={() => setIsQuoteModalOpen(true)}
                   className="w-full bg-red-600 text-white font-bold py-4 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2"
                 >
                   Get an Instant Quote <ArrowRight size={20} />
                 </button>
+                <a 
+                  href="tel:4162699555" 
+                  className="w-full flex items-center justify-center border-2 border-slate-200 text-blue-900 font-bold rounded-xl px-6 py-4 hover:bg-slate-50 transition-colors text-lg"
+                >
+                  <Phone size={20} className="mr-2 text-blue-700" />
+                  Or call {COMPANY_INFO.phone}
+                </a>
               </div>
             </div>
           </div>

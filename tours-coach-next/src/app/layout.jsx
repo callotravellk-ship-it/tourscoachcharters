@@ -108,6 +108,11 @@ export default function RootLayout({ children }) {
              
              // Initialize Google Ads
              gtag('config', 'AW-18421379566');
+
+             // Google Ads Phone Conversion Tracking
+             gtag('config', 'AW-18421379566/hkc2COWC-fAcEO7j_89E', {
+               'phone_conversion_number': '(416) 269-9555'
+             });
            `}
          </Script>
 

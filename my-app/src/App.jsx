@@ -622,7 +622,7 @@ const Header = ({ currentPage, setPage, setIsQuoteModalOpen }) => {
                 )}
               </div>
             ))}
-             <button 
+              <button 
                 onClick={() => { setIsQuoteModalOpen(true); setIsMobileMenuOpen(false); }}
                 className="bg-red-600 text-white w-full py-3 rounded-md font-bold mt-4 shadow-md hover:bg-red-700"
               >
@@ -992,13 +992,27 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
               <div className="space-y-8">
                 <div className="flex items-start group">
                   <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800">
+                    <Map size={24} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-1">Head Office</h3>
+                    <p className="text-slate-600 leading-relaxed text-sm">
+                      <strong>Canada Tours Coach LTD</strong><br/>
+                      1315 Pickering Parkway, Suite 300<br/>
+                      Pickering, ON L1V 7G5
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start group">
+                  <div className="bg-blue-50 p-4 rounded-2xl mr-5 group-hover:bg-blue-100 transition-colors text-blue-800">
                     <Phone size={24} />
                   </div>
                   <div>
                     <h3 className="font-bold text-slate-900 mb-1">Phone Number</h3>
                     <p className="text-slate-600 leading-relaxed text-sm">
                       Call us anytime for immediate assistance or booking inquiries.<br/>
-                      <a href="tel:4162699555" className="text-blue-800 font-bold hover:text-red-600 transition-colors text-lg mt-1 block">
+                      <a href={`tel:${COMPANY_INFO.phone}`} className="text-blue-800 font-bold hover:text-red-600 transition-colors text-lg mt-1 block">
                         {COMPANY_INFO.phone}
                       </a>
                     </p>
@@ -1029,7 +1043,7 @@ const ContactUs = ({ setIsQuoteModalOpen }) => {
                   Get an Instant Quote <ArrowRight size={20} />
                 </button>
                 <a 
-                  href="tel:4162699555" 
+                  href={`tel:${COMPANY_INFO.phone}`} 
                   className="w-full flex items-center justify-center border-2 border-slate-200 text-blue-900 font-bold rounded-xl px-6 py-4 hover:bg-slate-50 transition-colors text-lg"
                 >
                   <Phone size={20} className="mr-2 text-blue-700" />
@@ -1616,7 +1630,7 @@ const GenericPage = ({ title, subtitle, bgImage, setPage, setIsQuoteModalOpen })
         <div className="bg-blue-50 border-l-4 border-red-600 p-6 rounded-r-lg flex flex-col sm:flex-row justify-between items-center gap-4">
           <div>
             <h3 className="font-bold text-lg mb-1">Ready to book your trip to {title}?</h3>
-            <p className="text-sm text-gray-700">Fill out our quote form or call us directly at <strong>{COMPANY_INFO.phone}</strong>.</p>
+            <p className="text-sm text-gray-700">Fill out our quote form or call us directly at <a href={`tel:${COMPANY_INFO.phone}`} className="font-bold text-blue-800 hover:underline">{COMPANY_INFO.phone}</a>.</p>
           </div>
           <button onClick={() => setIsQuoteModalOpen(true)} className="bg-blue-800 text-white px-6 py-3 rounded hover:bg-blue-900 transition font-bold shadow-md whitespace-nowrap">
             Get a Free Quote
@@ -1710,8 +1724,8 @@ const Footer = ({ setPage }) => (
         <h4 className="text-white font-bold text-lg mb-4">Contact Info</h4>
         <ul className="space-y-3 text-sm">
           <li className="flex items-start"><Map size={18} className="mr-2 text-red-600 mt-1 flex-shrink-0" /> {COMPANY_INFO.address}</li>
-          <li className="flex items-center"><Phone size={18} className="mr-2 text-red-600" /> {COMPANY_INFO.phone}</li>
-          <li className="flex items-center"><Mail size={18} className="mr-2 text-red-600" /> {COMPANY_INFO.email}</li>
+          <li className="flex items-center"><Phone size={18} className="mr-2 text-red-600" /> <a href={`tel:${COMPANY_INFO.phone}`} className="hover:text-white transition">{COMPANY_INFO.phone}</a></li>
+          <li className="flex items-center"><Mail size={18} className="mr-2 text-red-600" /> <a href={`mailto:${COMPANY_INFO.email}`} className="hover:text-white transition">{COMPANY_INFO.email}</a></li>
         </ul>
       </div>
 
@@ -1770,7 +1784,7 @@ const ChatWidget = () => {
 };
 
 export default function App() {
-  // NEW: Check the URL on first load so refreshes stay on the correct page
+  // Check the URL on first load so refreshes stay on the correct page
   const [currentPage, setCurrentPage] = useState(() => {
     if (typeof window !== 'undefined') {
       const path = window.location.pathname.replace(/^\/+|\/+$/g, ''); // Removes slashes

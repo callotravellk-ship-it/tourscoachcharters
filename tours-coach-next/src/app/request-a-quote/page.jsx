@@ -1,5 +1,5 @@
 import React from 'react';
-import { QuoteForm, TrustStatsBanner } from '../../components/Shared';
+import { QuoteForm, TrustStatsBanner, ClientLogos } from '../../components/Shared';
 import { Star, ShieldCheck, Phone, CheckCircle, Headphones, Award } from 'lucide-react';
 
 // SEO & Campaign Metadata
@@ -107,6 +107,11 @@ export default function RequestQuotePage() {
       <section className="container mx-auto px-4 pt-8">
         <TrustStatsBanner />
       </section>
+
+      {/* Client Logos Section */}
+      <div className="mt-16">
+        <ClientLogos />
+      </div>
 
     </div>
   );

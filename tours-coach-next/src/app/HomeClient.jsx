@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuote } from '../context/QuoteContext';
 import { Star, CalendarCheck, ShieldCheck, Map, Headphones, BusFront, Users, Briefcase, Trophy, Navigation, Car, ArrowRight, ChevronLeft, ChevronRight, Clock, Phone } from 'lucide-react';
-import { TrustStatsBanner } from '../components/Shared';
+// 1. ADDED ClientLogos TO THE IMPORT HERE:
+import { TrustStatsBanner, ClientLogos } from '../components/Shared';
 import { FLEET_DATA } from '../lib/data';
 
 export default function HomeClient() {
@@ -192,7 +193,12 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50 px-4 border-b border-gray-200"><TrustStatsBanner /></section>
+      <section className="py-16 bg-gray-50 px-4 border-b border-gray-200">
+        <TrustStatsBanner />
+      </section>
+      
+      {/* 2. ADDED THE ClientLogos COMPONENT HERE */}
+      <ClientLogos />
     </div>
   );
 }

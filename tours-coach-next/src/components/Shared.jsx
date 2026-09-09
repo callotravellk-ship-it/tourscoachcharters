@@ -32,7 +32,8 @@ const COMPANY_INFO = {
 
 const NAV_LINKS = [
   { title: "Home", id: "home" },
-  { title: "About Us", id: "about" },
+  { title: "Tours", id: "tours" },
+  { title: "Multi-Day", id: "multi-day-tours" },
   { 
     title: "Our Fleet", 
     id: "fleet",
@@ -67,9 +68,7 @@ const NAV_LINKS = [
       { title: "Barrie", id: "charter-bus-rental-barrie" }
     ]
   },
-  { title: "Winter", id: "winter-destinations" },
-  { title: "FIFA 2026", id: "fifa-world-cup-2026-charters" },
-  { title: "Contact Us", id: "contact" }
+  { title: "Winter", id: "winter-destinations" }
 ];
 
 const FLEET_DATA = {

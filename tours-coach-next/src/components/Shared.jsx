@@ -798,7 +798,7 @@ export const QuoteForm = ({ onClose }) => {
           <X size={24} />
         </button>
       )}
-      <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Charter Quote</h3>
+      <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Free Quote</h3>
       <p className="text-gray-600 text-sm mb-6">Fill out the details below to get your accurate price.</p>
 
       <div className="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6 rounded-r-lg shadow-sm">

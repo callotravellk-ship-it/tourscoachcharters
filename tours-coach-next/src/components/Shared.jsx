@@ -779,8 +779,16 @@ export const QuoteForm = ({ onClose }) => {
   return (
     <div className="bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600">
       
-      <style>{`
-        .geoapify-autocomplete-input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: none; outline: none; background: transparent; }
+<style>{`
+        .geoapify-autocomplete-input { 
+          width: 100%; 
+          padding: 0.5rem 0.75rem; 
+          font-size: 0.875rem; 
+          border: none; 
+          outline: none; 
+          background: transparent; 
+          color: #111827; /* This forces the typed text to be dark gray */
+        }
         .geoapify-autocomplete-items { position: absolute; z-index: 9999; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
         .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; line-height: 1.4; }
         .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }

@@ -1,11 +1,33 @@
 "use client";
 import './globals.css';
+import { useEffect } from 'react'; // 1. Added useEffect import
 import { QuoteProvider, useQuote } from '../context/QuoteContext';
 import { Header, Footer, ChatWidget, QuoteForm } from '../components/Shared';
 import Script from 'next/script'; 
 
 function AppContent({ children }) {
   const { isQuoteModalOpen, setIsQuoteModalOpen } = useQuote();
+
+  // 2. Add the Exit Intent Logic
+  useEffect(() => {
+    const handleExitIntent = (e) => {
+      // Trigger if the mouse moves above the top of the viewport
+      if (e.clientY <= 0) {
+        const hasSeenPopup = sessionStorage.getItem('exitIntentShown');
+        
+        if (!hasSeenPopup) {
+          setIsQuoteModalOpen(true);
+          sessionStorage.setItem('exitIntentShown', 'true'); // Prevents it from showing twice in one session
+        }
+      }
+    };
+
+    document.addEventListener('mouseleave', handleExitIntent);
+    
+    return () => {
+      document.removeEventListener('mouseleave', handleExitIntent);
+    };
+  }, [setIsQuoteModalOpen]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans selection:bg-red-600 selection:text-white relative">

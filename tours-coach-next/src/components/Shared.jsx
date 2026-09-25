@@ -766,13 +766,17 @@ export const QuoteForm = ({ onClose }) => {
         });
       }
 
+      // --- ADD THIS LINE TO CLOSE THE MODAL ---
+      if (onClose) onClose(); 
+      
+      // Then navigate to the thank you page
       router.push('/thank-you'); 
 
     } catch (error) {
       console.error("Error saving lead to CRM:", error);
       alert("Error submitting request. Please try again.");
       setIsSending(false); 
-    } 
+    }
   };
 
   return (

@@ -31,7 +31,6 @@ const COMPANY_INFO = {
 };
 
 const NAV_LINKS = [
-  { title: "Home", id: "home" },
   { title: "Tours", id: "tours" },
   { title: "Multi-Day", id: "multi-day-tours" },
   { 

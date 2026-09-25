@@ -1005,7 +1005,7 @@ export const QuoteForm = ({ onClose }) => {
               type="submit" 
               className={`w-2/3 bg-red-600 text-white font-bold py-3 rounded-md hover:bg-red-700 transition shadow-lg flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}
             >
-              {isSending ? 'Sending...' : <>Book Now <CheckCircle className="ml-2" size={18} /></>}
+              {isSending ? 'Sending...' : <>Submit Request <CheckCircle className="ml-2" size={18} /></>}
             </button>
           </div>
         </div>

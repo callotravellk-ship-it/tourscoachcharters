@@ -495,7 +495,7 @@ export const ServiceTemplate = ({ data }) => {
               </p>
               <div className="flex flex-col gap-3">
                 <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-red-600 text-white font-bold py-4 px-6 rounded-xl hover:bg-red-700 transition-all duration-300 shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 flex justify-center items-center gap-2">
-                  Get an Instant Quote <ArrowRight size={20} />
+                  Get an Instant Free Quote <ArrowRight size={20} />
                 </button>
                 <a href="tel:(416) 269-9555" className="w-full bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-blue-950 transition-all border border-blue-700 flex justify-center items-center gap-2">
                   <Phone size={18} /> Call (416) 269-9555

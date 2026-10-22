@@ -8,7 +8,8 @@ import {
   ShieldCheck, CalendarCheck, Map, Headphones, BusFront, Users, 
   Briefcase, Trophy, Navigation, Car, Star, CheckCircle, ArrowRight,
   Plane, Landmark, Building2, ChevronLeft, ChevronRight,
-  Award, Route, Send 
+  Award, Route, Send,
+  ArrowLeftRight, Clock, Sparkles, AlertCircle, Check, Calendar, Minus, Plus
 } from 'lucide-react';
 
 // --- GEOAPIFY IMPORTS ---
@@ -734,13 +735,105 @@ export const QuoteForm = ({ onClose }) => {
   const router = useRouter(); 
   const { quoteData, setQuoteData } = useQuote();
   const [isSending, setIsSending] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [tripType, setTripType] = useState('return');
-  const [step, setStep] = useState(1); // Controls the multi-step flow
-  const [passengers, setPassengers] = useState('');
+  const [step, setStep] = useState(1);
+  const [passengers, setPassengers] = useState(quoteData.passengers || '45');
+  const [selectedVehicle, setSelectedVehicle] = useState(quoteData.vehicle || 'luxury-coach-bus-charter');
   
   const [departDate, setDepartDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
+  const [pickupTime, setPickupTime] = useState('09:00');
+  const [returnTime, setReturnTime] = useState('18:00');
+  const [specialNotes, setSpecialNotes] = useState('');
+  const [errors, setErrors] = useState({});
+
   const today = new Date();
+
+  // Quick preset data
+  const QUICK_PICKUPS = [
+    "Toronto / GTA",
+    "Mississauga",
+    "Brampton",
+    "Markham",
+    "YYZ Airport",
+    "Pickering / Durham"
+  ];
+
+  const QUICK_DESTINATIONS = [
+    "Niagara Falls, ON",
+    "Downtown Toronto",
+    "Montreal, QC",
+    "Ottawa, ON",
+    "Blue Mountain",
+    "Muskoka / Algonquin"
+  ];
+
+  const PASSENGER_PRESETS = [
+    { label: "1-14", count: "14", vehicle: "14-passenger-van-service" },
+    { label: "15-28", count: "28", vehicle: "mini-coach-bus-charter" },
+    { label: "29-36", count: "36", vehicle: "mini-coach-bus-charter" },
+    { label: "37-56", count: "56", vehicle: "luxury-coach-bus-charter" },
+    { label: "56+", count: "100", vehicle: "luxury-coach-bus-charter" }
+  ];
+
+  const FLEET_TYPES = [
+    {
+      id: "luxury-coach-bus-charter",
+      name: "Luxury Coach Bus",
+      seats: "47 - 56 Seats",
+      icon: BusFront,
+      tag: "Most Popular",
+      desc: "Restroom, Wi-Fi, 110V outlets & large luggage hold"
+    },
+    {
+      id: "mini-coach-bus-charter",
+      name: "Executive Mini Coach",
+      seats: "24 - 36 Seats",
+      icon: BusFront,
+      tag: "Corporate & Weddings",
+      desc: "Leather seating, panoramic windows, overhead luggage"
+    },
+    {
+      id: "14-passenger-van-service",
+      name: "14-Passenger Van",
+      seats: "Up to 14 Seats",
+      icon: Car,
+      tag: "Airport & VIP",
+      desc: "High-roof Mercedes Sprinter, airport luggage"
+    },
+    {
+      id: "school-bus-charter",
+      name: "Standard School Bus",
+      seats: "Up to 70 Seats",
+      icon: BusFront,
+      tag: "Budget Friendly",
+      desc: "Economical & safe student or team transit"
+    },
+    {
+      id: "any",
+      name: "Best Value Match",
+      seats: "Optimal Fleet",
+      icon: Sparkles,
+      tag: "Lowest Price",
+      desc: "Dispatch team selects optimal vehicle"
+    }
+  ];
+
+  const TIME_PRESETS = [
+    { label: "Morning (8:00 AM)", value: "08:00" },
+    { label: "Midday (11:00 AM)", value: "11:00" },
+    { label: "Afternoon (2:00 PM)", value: "14:00" },
+    { label: "Evening (5:00 PM)", value: "17:00" }
+  ];
+
+  const QUICK_TAGS = [
+    "Airport Luggage Assistance",
+    "Multiple Scheduled Stops",
+    "Luggage Trailer Required",
+    "Wedding Shuttle Timetable",
+    "Wheelchair Accessibility Lift"
+  ];
 
   const formatDateForCRM = (dateObj) => {
     if (!dateObj) return '';
@@ -750,14 +843,112 @@ export const QuoteForm = ({ onClose }) => {
     return `${d}/${m}/${y}`;
   };
 
-  // Validates Step 1 before moving to Step 2
-  const handleNextStep = () => {
-    if (!quoteData.pickup || quoteData.pickup.trim() === '') return alert("Please enter a valid Pickup Location.");
-    if (!quoteData.destination || quoteData.destination.trim() === '') return alert("Please enter a valid Destination Location.");
-    if (!departDate) return alert("Please select a Departure Date.");
-    if (tripType === 'return' && !returnDate) return alert("Please select a Return Date.");
-    if (!passengers || passengers < 1) return alert("Please enter the number of passengers.");
+  const formatDateDisplay = (dateObj) => {
+    if (!dateObj) return '';
+    return dateObj.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  // Adjust passenger count via stepper
+  const adjustPassengers = (delta) => {
+    const current = parseInt(passengers) || 45;
+    const next = Math.max(1, current + delta);
+    setPassengers(next.toString());
+    setErrors(prev => ({ ...prev, passengers: undefined }));
     
+    // Auto-recommend vehicle
+    if (next <= 14) setSelectedVehicle("14-passenger-van-service");
+    else if (next <= 36) setSelectedVehicle("mini-coach-bus-charter");
+    else setSelectedVehicle("luxury-coach-bus-charter");
+  };
+
+  // Swap pickup & destination
+  const handleSwapLocations = () => {
+    const currentPickup = quoteData.pickup || '';
+    const currentDest = quoteData.destination || '';
+    setQuoteData({
+      ...quoteData,
+      pickup: currentDest,
+      destination: currentPickup
+    });
+    setErrors(prev => ({ ...prev, pickup: undefined, destination: undefined }));
+  };
+
+  // Smart Date Preset
+  const handleDatePreset = (presetType) => {
+    const d = new Date();
+    if (presetType === 'tomorrow') {
+      d.setDate(d.getDate() + 1);
+      setDepartDate(d);
+      if (tripType === 'return') {
+        const ret = new Date(d);
+        ret.setDate(ret.getDate() + 1);
+        setReturnDate(ret);
+      }
+    } else if (presetType === 'weekend') {
+      const day = d.getDay();
+      const diff = (6 - day + 7) % 7 || 7;
+      d.setDate(d.getDate() + diff);
+      setDepartDate(d);
+      if (tripType === 'return') {
+        const ret = new Date(d);
+        ret.setDate(ret.getDate() + 1);
+        setReturnDate(ret);
+      }
+    } else if (presetType === 'next-weekend') {
+      const day = d.getDay();
+      const diff = ((6 - day + 7) % 7 || 7) + 7;
+      d.setDate(d.getDate() + diff);
+      setDepartDate(d);
+      if (tripType === 'return') {
+        const ret = new Date(d);
+        ret.setDate(ret.getDate() + 1);
+        setReturnDate(ret);
+      }
+    } else if (presetType === 'next-month') {
+      d.setDate(d.getDate() + 30);
+      setDepartDate(d);
+      if (tripType === 'return') {
+        const ret = new Date(d);
+        ret.setDate(ret.getDate() + 2);
+        setReturnDate(ret);
+      }
+    }
+    setErrors(prev => ({ ...prev, departDate: undefined, returnDate: undefined }));
+  };
+
+  // Append a quick tag to the notes
+  const handleAddTag = (tag) => {
+    setSpecialNotes(prev => {
+      if (prev.includes(tag)) return prev;
+      return prev ? `${prev}; ${tag}` : tag;
+    });
+  };
+
+  // Validation before step 2 (without annoying alert popups)
+  const handleNextStep = () => {
+    const newErrors = {};
+    if (!quoteData.pickup || quoteData.pickup.trim() === '') {
+      newErrors.pickup = "Please enter or pick a pickup location";
+    }
+    if (!quoteData.destination || quoteData.destination.trim() === '') {
+      newErrors.destination = "Please enter or pick a destination";
+    }
+    if (!departDate) {
+      newErrors.departDate = "Please choose a departure date";
+    }
+    if (tripType === 'return' && !returnDate) {
+      newErrors.returnDate = "Please choose a return date";
+    }
+    if (!passengers || parseInt(passengers) < 1) {
+      newErrors.passengers = "Please enter the number of passengers";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setStep(2);
   };
 
@@ -774,12 +965,17 @@ export const QuoteForm = ({ onClose }) => {
     payload.destination = quoteData.destination;
     payload.tripType = tripType;
     payload.passengers = passengers;
+    payload.vehicle = selectedVehicle;
+    payload.pickupTime = pickupTime;
+    payload.info = specialNotes ? (payload.info ? `${payload.info}\nSpecial Notes: ${specialNotes}` : specialNotes) : (payload.info || '');
     
     payload.departDate = formatDateForCRM(departDate);
     if (tripType === 'return') {
       payload.returnDate = formatDateForCRM(returnDate);
+      payload.returnTime = returnTime;
     } else {
       payload.returnDate = "N/A";
+      payload.returnTime = "N/A";
     }
 
     try {
@@ -789,7 +985,7 @@ export const QuoteForm = ({ onClose }) => {
           status: "New",
           createdAt: serverTimestamp(),
           quotedPrice: null,
-          assignedVehicle: "",
+          assignedVehicle: selectedVehicle,
         });
       }
 
@@ -806,254 +1002,767 @@ export const QuoteForm = ({ onClose }) => {
         });
       }
 
-      // --- ADD THIS LINE TO CLOSE THE MODAL ---
-      if (onClose) onClose(); 
-      
-      // Then navigate to the thank you page
-      router.push('/thank-you'); 
+      setIsSuccess(true);
+
+      setTimeout(() => {
+        if (onClose) onClose();
+        router.push('/thank-you');
+      }, 2000);
 
     } catch (error) {
       console.error("Error saving lead to CRM:", error);
-      alert("Error submitting request. Please try again.");
+      alert("Error submitting request. Please try again or call dispatch at (647) 948-8424.");
       setIsSending(false); 
     }
   };
 
   return (
-    <div className="bg-white p-6 md:p-8 rounded-lg shadow-2xl relative z-10 border-t-4 border-red-600">
+    <div className="bg-white p-5 sm:p-7 md:p-8 rounded-2xl shadow-2xl relative z-10 border-t-4 border-red-600 max-h-[92vh] overflow-y-auto">
       
-<style>{`
+      <style>{`
         .geoapify-autocomplete-input { 
           width: 100%; 
-          padding: 0.5rem 0.75rem; 
+          padding: 0.65rem 0.85rem; 
           font-size: 0.875rem; 
           border: none; 
           outline: none; 
           background: transparent; 
-          color: #111827; /* This forces the typed text to be dark gray */
+          color: #111827;
         }
-        .geoapify-autocomplete-items { position: absolute; z-index: 9999; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); margin-top: 4px; }
-        .geoapify-autocomplete-item { padding: 0.5rem 0.75rem; cursor: pointer; font-size: 0.875rem; color: #334155; line-height: 1.4; }
-        .geoapify-autocomplete-item:hover { background-color: #f1f5f9; color: #1e3a8a; font-weight: 600; }
+        .geoapify-autocomplete-items { 
+          position: absolute; 
+          z-index: 9999; 
+          width: 100%; 
+          background: white; 
+          border: 1px solid #e2e8f0; 
+          border-radius: 0.5rem; 
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15); 
+          margin-top: 4px; 
+          max-height: 220px;
+          overflow-y: auto;
+        }
+        .geoapify-autocomplete-item { 
+          padding: 0.6rem 0.85rem; 
+          cursor: pointer; 
+          font-size: 0.875rem; 
+          color: #334155; 
+          line-height: 1.4; 
+          border-bottom: 1px solid #f8fafc;
+        }
+        .geoapify-autocomplete-item:hover { 
+          background-color: #f1f5f9; 
+          color: #1e3a8a; 
+          font-weight: 600; 
+        }
         .geoapify-close-button { display: none; }
         .react-datepicker-wrapper { width: 100%; }
       `}</style>
 
       {onClose && (
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors z-20">
-          <X size={24} />
+        <button 
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 hover:bg-gray-100 p-1.5 rounded-full transition-colors z-20"
+          aria-label="Close dialog"
+        >
+          <X size={20} />
         </button>
       )}
-      
-      <h3 className="text-2xl font-bold text-blue-800 mb-2">Request a Free Quote</h3>
-      <p className="text-gray-600 text-sm mb-4">
-        {step === 1 ? "Step 1: Where are you heading?" : "Step 2: Who are we sending the quote to?"}
-      </p>
 
-      {/* Progress Bar */}
-      <div className="flex mb-6 gap-2">
-        <div className={`h-2 flex-1 rounded-full ${step >= 1 ? 'bg-red-600' : 'bg-gray-200'} transition-colors duration-300`}></div>
-        <div className={`h-2 flex-1 rounded-full ${step === 2 ? 'bg-red-600' : 'bg-gray-200'} transition-colors duration-300`}></div>
+      {/* Header & Guaranteed Badge */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pr-8">
+        <div>
+          <h3 className="text-xl sm:text-2xl font-black text-blue-900 tracking-tight flex items-center gap-2">
+            Request a Free Quote
+          </h3>
+          <p className="text-slate-500 text-xs sm:text-sm mt-0.5">
+            {step === 1 ? "Step 1 of 2: Trip route & group size" : "Step 2 of 2: Contact & dispatch confirmation"}
+          </p>
+        </div>
+        <div className="self-start sm:self-center">
+          <span className="inline-flex items-center gap-1 bg-red-50 text-red-700 text-xs font-bold px-2.5 py-1 rounded-full border border-red-200">
+            <Clock size={12} className="text-red-600 animate-pulse" /> 15-Min Response
+          </span>
+        </div>
       </div>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        
-        {/* ================= STEP 1: TRIP DETAILS ================= */}
-        <div className={step === 1 ? 'block animate-fade-in-up' : 'hidden'}>
-          <div className="flex space-x-6 py-1 mb-4">
-            <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
-              <input type="radio" name="tripType" value="return" checked={tripType === 'return'} onChange={() => setTripType('return')} className="mr-2 w-4 h-4 text-blue-800 border-gray-300" />
-              Round Trip
-            </label>
-            <label className="flex items-center text-sm font-bold text-gray-700 cursor-pointer">
-              <input type="radio" name="tripType" value="oneway" checked={tripType === 'oneway'} onChange={() => setTripType('oneway')} className="mr-2 w-4 h-4 text-blue-800 border-gray-300" />
-              One Way
-            </label>
-          </div>
 
-          <div className="space-y-4 mb-4">
+      {/* Interactive Step Navigation Tabs */}
+      <div className="grid grid-cols-2 gap-2 mb-5">
+        <button
+          type="button"
+          onClick={() => setStep(1)}
+          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition ${
+            step === 1
+              ? 'bg-blue-900 text-white shadow-sm ring-1 ring-blue-900'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black ${
+            step === 1 ? 'bg-red-600 text-white' : 'bg-slate-300 text-slate-700'
+          }`}>1</span>
+          <span>1. Trip Details</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (step === 1) handleNextStep();
+          }}
+          className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition ${
+            step === 2
+              ? 'bg-blue-900 text-white shadow-sm ring-1 ring-blue-900'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black ${
+            step === 2 ? 'bg-red-600 text-white' : 'bg-slate-300 text-slate-700'
+          }`}>2</span>
+          <span>2. Contact Info</span>
+        </button>
+      </div>
+
+      {/* SUCCESS STATE CELEBRATION */}
+      {isSuccess ? (
+        <div className="py-8 text-center animate-fade-in-up">
+          <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+            <CheckCircle size={36} />
+          </div>
+          <h4 className="text-2xl font-black text-slate-900 mb-2">Quote Request Dispatched!</h4>
+          <p className="text-slate-600 text-sm max-w-md mx-auto mb-6 leading-relaxed">
+            Thank you! Our operations dispatch team is currently reviewing your route details. A custom quote has been sent to our dispatchers for rapid turnaround.
+          </p>
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 max-w-sm mx-auto text-left text-xs space-y-1.5 text-slate-700">
+            <div className="flex justify-between font-bold text-slate-900 pb-1 border-b border-slate-200">
+              <span>Status:</span> <span className="text-green-600">Pending Review</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Departure:</span> <span>{formatDateDisplay(departDate)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Group Size:</span> <span>{passengers} Passengers</span>
+            </div>
+          </div>
+          <div className="mt-6 flex justify-center items-center text-xs text-slate-500 gap-1">
+            <Clock size={13} className="animate-spin text-blue-900" /> Redirecting to confirmation page...
+          </div>
+        </div>
+      ) : (
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          
+          {/* ================= STEP 1: TRIP DETAILS ================= */}
+          <div className={step === 1 ? 'block space-y-4 animate-fade-in-up' : 'hidden'}>
+            
+            {/* Interactive Trip Type Toggle */}
+            <div className="flex items-center justify-between bg-slate-100 p-1 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setTripType('return')}
+                className={`flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                  tripType === 'return' 
+                    ? 'bg-blue-900 text-white shadow-sm' 
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <ArrowLeftRight size={13} /> Round Trip
+              </button>
+              <button
+                type="button"
+                onClick={() => setTripType('oneway')}
+                className={`flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                  tripType === 'oneway' 
+                    ? 'bg-blue-900 text-white shadow-sm' 
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <ArrowRight size={13} /> One Way
+              </button>
+            </div>
+
+            {/* PICKUP LOCATION */}
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Pickup Location <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-              </label>
-              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide">
+                  Pickup Location <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                </label>
+                {quoteData.pickup && (
+                  <button 
+                    type="button" 
+                    onClick={() => setQuoteData({ ...quoteData, pickup: '' })}
+                    className="text-[11px] text-slate-400 hover:text-red-600 cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <div className={`relative w-full bg-white border rounded-lg focus-within:ring-2 focus-within:ring-blue-800 transition text-sm ${
+                errors.pickup ? 'border-red-500 bg-red-50/30' : 'border-gray-300 hover:border-gray-400'
+              }`}>
                 <GeoapifyGeocoderAutocomplete
-                  placeholder="Start typing an address..."
+                  placeholder="Enter city, airport, hotel, or street address..."
                   filterByCountryCode={["ca"]}
                   value={quoteData.pickup}
                   placeSelect={(place) => {
-                    if(place) setQuoteData({ ...quoteData, pickup: place.properties.formatted });
+                    if (place) {
+                      setQuoteData({ ...quoteData, pickup: place.properties.formatted });
+                      setErrors(prev => ({ ...prev, pickup: undefined }));
+                    }
                   }}
                   onUserInput={(value) => {
                     setQuoteData({ ...quoteData, pickup: value });
+                    if (value) setErrors(prev => ({ ...prev, pickup: undefined }));
                   }}
                 />
               </div>
+              {errors.pickup && (
+                <p className="text-xs text-red-600 font-semibold mt-1 flex items-center">
+                  <AlertCircle size={13} className="mr-1 flex-shrink-0" /> {errors.pickup}
+                </p>
+              )}
+
+              {/* Quick Pickup Location Chips */}
+              <div className="flex items-center flex-wrap gap-1.5 mt-2">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Popular:</span>
+                {QUICK_PICKUPS.map(city => (
+                  <button
+                    key={city}
+                    type="button"
+                    onClick={() => {
+                      setQuoteData({ ...quoteData, pickup: city });
+                      setErrors(prev => ({ ...prev, pickup: undefined }));
+                    }}
+                    className={`text-[11px] px-2 py-0.5 rounded-full border transition cursor-pointer ${
+                      quoteData.pickup === city 
+                        ? 'bg-blue-900 text-white border-blue-900 font-bold' 
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-blue-900'
+                    }`}
+                  >
+                    {city}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {/* INTERACTIVE SWAP BUTTON */}
+            <div className="flex items-center justify-center my-0.5">
+              <div className="h-px bg-slate-200 flex-1"></div>
+              <button
+                type="button"
+                onClick={handleSwapLocations}
+                className="mx-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition shadow-2xs active:scale-95 cursor-pointer"
+                title="Swap Pickup and Destination"
+              >
+                <ArrowLeftRight size={12} className="text-red-600" />
+                <span>Swap Route</span>
+              </button>
+              <div className="h-px bg-slate-200 flex-1"></div>
+            </div>
+
+            {/* DESTINATION LOCATION */}
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Destination <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-              </label>
-              <div className="relative w-full bg-white border border-gray-300 rounded focus-within:ring-2 focus-within:ring-blue-800 transition-all text-sm">
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide">
+                  Destination <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                </label>
+                {quoteData.destination && (
+                  <button 
+                    type="button" 
+                    onClick={() => setQuoteData({ ...quoteData, destination: '' })}
+                    className="text-[11px] text-slate-400 hover:text-red-600 cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <div className={`relative w-full bg-white border rounded-lg focus-within:ring-2 focus-within:ring-blue-800 transition text-sm ${
+                errors.destination ? 'border-red-500 bg-red-50/30' : 'border-gray-300 hover:border-gray-400'
+              }`}>
                 <GeoapifyGeocoderAutocomplete
-                  placeholder="Start typing an address..."
+                  placeholder="Enter destination, event venue, or landmark..."
                   filterByCountryCode={["ca"]}
                   value={quoteData.destination}
                   placeSelect={(place) => {
-                    if(place) setQuoteData({ ...quoteData, destination: place.properties.formatted });
+                    if (place) {
+                      setQuoteData({ ...quoteData, destination: place.properties.formatted });
+                      setErrors(prev => ({ ...prev, destination: undefined }));
+                    }
                   }}
                   onUserInput={(value) => {
                     setQuoteData({ ...quoteData, destination: value });
+                    if (value) setErrors(prev => ({ ...prev, destination: undefined }));
                   }}
                 />
               </div>
-            </div>
-          </div>
+              {errors.destination && (
+                <p className="text-xs text-red-600 font-semibold mt-1 flex items-center">
+                  <AlertCircle size={13} className="mr-1 flex-shrink-0" /> {errors.destination}
+                </p>
+              )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div className="w-full">
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Departure Date <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-              </label>
-              <DatePicker 
-                selected={departDate}
-                onChange={(date) => setDepartDate(date)}
-                dateFormat="dd/MM/yyyy"
-                minDate={today}
-                placeholderText="dd/mm/yyyy"
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
-              />
-            </div>
-            {tripType === 'return' && (
-              <div className="animate-fade-in-up w-full">
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Return Date <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-                </label>
-                <DatePicker 
-                  selected={returnDate}
-                  onChange={(date) => setReturnDate(date)}
-                  dateFormat="dd/MM/yyyy"
-                  minDate={departDate || today}
-                  placeholderText="dd/mm/yyyy"
-                  className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm"
-                />
+              {/* Quick Destination Location Chips */}
+              <div className="flex items-center flex-wrap gap-1.5 mt-2">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Popular:</span>
+                {QUICK_DESTINATIONS.map(city => (
+                  <button
+                    key={city}
+                    type="button"
+                    onClick={() => {
+                      setQuoteData({ ...quoteData, destination: city });
+                      setErrors(prev => ({ ...prev, destination: undefined }));
+                    }}
+                    className={`text-[11px] px-2 py-0.5 rounded-full border transition cursor-pointer ${
+                      quoteData.destination === city 
+                        ? 'bg-blue-900 text-white border-blue-900 font-bold' 
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-blue-900'
+                    }`}
+                  >
+                    {city}
+                  </button>
+                ))}
               </div>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Passengers <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-              </label>
-              <input 
-                value={passengers} 
-                onChange={(e) => setPassengers(e.target.value)} 
-                type="number" 
-                min="1" 
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" 
-                placeholder="e.g. 45" 
-              />
             </div>
+
+            {/* DATES WITH SMART SHORTCUTS */}
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Vehicle Type <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
-              </label>
-              <select 
-                name="vehicle" 
-                value={quoteData.vehicle}
-                onChange={(e) => setQuoteData({ ...quoteData, vehicle: e.target.value })}
-                className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm"
-              >
-                <option value="any">No Preference</option>
-                <option value="luxury-coach-bus-charter">Luxury Coach</option>
-                <option value="mini-coach-bus-charter">Mini Coach</option>
-                <option value="14-passenger-van-service">Passenger Van</option>
-                <option value="school-bus-charter">School Bus</option>
-              </select>
-            </div>
-          </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
+                <div className="w-full">
+                  <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1">
+                    <Calendar size={13} className="text-blue-900" /> Departure Date <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">*</span>
+                  </label>
+                  <DatePicker 
+                    selected={departDate}
+                    onChange={(date) => {
+                      setDepartDate(date);
+                      setErrors(prev => ({ ...prev, departDate: undefined }));
+                      if (tripType === 'return' && (!returnDate || returnDate < date)) {
+                        setReturnDate(date);
+                      }
+                    }}
+                    dateFormat="dd/MM/yyyy"
+                    minDate={today}
+                    placeholderText="dd/mm/yyyy"
+                    className={`w-full px-3 py-2 text-gray-900 border rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm transition ${
+                      errors.departDate ? 'border-red-500 bg-red-50/40' : 'border-gray-300 hover:border-gray-400 bg-white'
+                    }`}
+                  />
+                  {errors.departDate && (
+                    <p className="text-xs text-red-600 font-semibold mt-1 flex items-center">
+                      <AlertCircle size={13} className="mr-1 flex-shrink-0" /> {errors.departDate}
+                    </p>
+                  )}
+                </div>
+                {tripType === 'return' && (
+                  <div className="animate-fade-in-up w-full">
+                    <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1">
+                      <Calendar size={13} className="text-blue-900" /> Return Date <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">*</span>
+                    </label>
+                    <DatePicker 
+                      selected={returnDate}
+                      onChange={(date) => {
+                        setReturnDate(date);
+                        setErrors(prev => ({ ...prev, returnDate: undefined }));
+                      }}
+                      dateFormat="dd/MM/yyyy"
+                      minDate={departDate || today}
+                      placeholderText="dd/mm/yyyy"
+                      className={`w-full px-3 py-2 bg-white border rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm transition ${
+                        errors.returnDate ? 'border-red-500 bg-red-50/40' : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                    />
+                    {errors.returnDate && (
+                      <p className="text-xs text-red-600 font-semibold mt-1 flex items-center">
+                        <AlertCircle size={13} className="mr-1 flex-shrink-0" /> {errors.returnDate}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
 
-          <button 
-            type="button" 
-            onClick={handleNextStep}
-            className="w-full bg-blue-800 text-white font-bold py-3 rounded-md hover:bg-blue-900 transition shadow-lg mt-2 flex justify-center items-center"
-          >
-            Next Step <ArrowRight className="ml-2" size={18} />
-          </button>
-        </div>
-
-        {/* ================= STEP 2: CONTACT INFO ================= */}
-        <div className={step === 2 ? 'block animate-fade-in-up' : 'hidden'}>
-          
-          <div className="mb-4">
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-              Your Name <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-            </label>
-            <input required={step === 2} name="fullName" type="text" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="John Doe" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Email <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-              </label>
-              <input required={step === 2} name="email" type="email" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="john@example.com" />
+              {/* Quick Date Presets */}
+              <div className="flex items-center flex-wrap gap-1.5 pt-0.5">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Quick Date:</span>
+                <button
+                  type="button"
+                  onClick={() => handleDatePreset('tomorrow')}
+                  className="text-[11px] px-2 py-0.5 rounded-md bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition cursor-pointer"
+                >
+                  Tomorrow
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDatePreset('weekend')}
+                  className="text-[11px] px-2 py-0.5 rounded-md bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition cursor-pointer"
+                >
+                  This Saturday
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDatePreset('next-weekend')}
+                  className="text-[11px] px-2 py-0.5 rounded-md bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition cursor-pointer"
+                >
+                  Next Weekend
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDatePreset('next-month')}
+                  className="text-[11px] px-2 py-0.5 rounded-md bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition cursor-pointer"
+                >
+                  In 30 Days
+                </button>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Phone <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-              </label>
-              <input required={step === 2} name="phone" type="tel" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" placeholder="(555) 123-4567" />
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                Pick Up Time <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-              </label>
-              <input required={step === 2} name="pickupTime" type="time" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
-            </div>
-            {tripType === 'return' && (
+            {/* PASSENGERS & VEHICLE TYPE */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Interactive Passenger Stepper */}
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-                  Return Time <span className="text-red-400 normal-case tracking-normal font-normal ml-1">(Required)</span>
-                </label>
-                <input required={step === 2} name="returnTime" type="time" className="w-full px-3 py-2 bg-white border border-gray-300 text-gray-900 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide">
+                    Passengers <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                  </label>
+                  <span className="text-[11px] font-bold text-blue-900">
+                    {parseInt(passengers) > 56 ? "Multi-Coach Fleet" : parseInt(passengers) > 36 ? "Full Coach" : parseInt(passengers) > 14 ? "Mini Coach" : "Van"}
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-1.5">
+                  <button 
+                    type="button"
+                    onClick={() => adjustPassengers(-5)}
+                    className="h-10 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-300 transition active:scale-95 cursor-pointer"
+                    title="Decrease 5"
+                  >
+                    -5
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => adjustPassengers(-1)}
+                    className="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold border border-slate-300 transition active:scale-95 cursor-pointer"
+                    title="Decrease 1"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  
+                  <input 
+                    value={passengers} 
+                    onChange={(e) => {
+                      setPassengers(e.target.value);
+                      setErrors(prev => ({ ...prev, passengers: undefined }));
+                    }} 
+                    type="number" 
+                    min="1" 
+                    className={`w-full text-center font-black text-base py-2 text-gray-900 border rounded-lg focus:ring-2 focus:ring-blue-800 outline-none transition ${
+                      errors.passengers ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white'
+                    }`} 
+                    placeholder="45" 
+                  />
+
+                  <button 
+                    type="button"
+                    onClick={() => adjustPassengers(1)}
+                    className="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold border border-slate-300 transition active:scale-95 cursor-pointer"
+                    title="Increase 1"
+                  >
+                    <Plus size={14} />
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => adjustPassengers(5)}
+                    className="h-10 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-300 transition active:scale-95 cursor-pointer"
+                    title="Increase 5"
+                  >
+                    +5
+                  </button>
+                </div>
+
+                {errors.passengers && (
+                  <p className="text-xs text-red-600 font-semibold mt-1 flex items-center">
+                    <AlertCircle size={13} className="mr-1 flex-shrink-0" /> {errors.passengers}
+                  </p>
+                )}
+
+                {/* Quick Passenger Group Size Pills */}
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {PASSENGER_PRESETS.map((p) => {
+                    const isSelected = passengers === p.count;
+                    return (
+                      <button
+                        key={p.label}
+                        type="button"
+                        onClick={() => {
+                          setPassengers(p.count);
+                          setSelectedVehicle(p.vehicle);
+                          setErrors(prev => ({ ...prev, passengers: undefined }));
+                        }}
+                        className={`px-2 py-0.5 rounded text-[11px] font-semibold transition cursor-pointer ${
+                          isSelected
+                            ? 'bg-blue-900 text-white shadow-xs'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200'
+                        }`}
+                      >
+                        {p.label} pax
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            )}
-          </div>
 
-          <div className="mb-4">
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide">
-              Additional Info <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
-            </label>
-            <textarea name="info" className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded focus:ring-2 focus:ring-blue-800 outline-none text-sm" rows="2" placeholder="Any specific requirements?"></textarea>
-          </div>
+              {/* Vehicle Type Selection */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide">
+                    Vehicle Type <span className="text-slate-400 font-normal normal-case tracking-normal ml-0.5">(Optional)</span>
+                  </label>
+                  <span className="text-[11px] text-green-700 font-bold flex items-center gap-1">
+                    <Check size={11} /> Matched
+                  </span>
+                </div>
+                <select 
+                  name="vehicle" 
+                  value={selectedVehicle}
+                  onChange={(e) => setSelectedVehicle(e.target.value)}
+                  className="w-full px-3 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none bg-white text-sm font-semibold cursor-pointer"
+                >
+                  <option value="luxury-coach-bus-charter">🚌 Luxury Highway Coach (47-56 Seats)</option>
+                  <option value="mini-coach-bus-charter">🚐 Executive Mini Coach (24-36 Seats)</option>
+                  <option value="14-passenger-van-service">🚐 14-Passenger Sprinter Van (Up to 14)</option>
+                  <option value="school-bus-charter">🚍 Standard School Bus (Up to 70)</option>
+                  <option value="any">✨ Best Match (Let Dispatch Optimize Rate)</option>
+                </select>
+                <p className="text-[11px] text-slate-500 mt-1.5 leading-snug">
+                  {FLEET_TYPES.find(f => f.id === selectedVehicle)?.desc || "Full fleet available across Canada."}
+                </p>
+              </div>
+            </div>
 
-          <div className="flex gap-4 mt-4">
+            {/* CONTINUE BUTTON */}
             <button 
               type="button" 
-              onClick={() => setStep(1)}
-              className="w-1/3 bg-gray-200 text-gray-700 font-bold py-3 rounded-md hover:bg-gray-300 transition flex justify-center items-center"
+              onClick={handleNextStep}
+              className="w-full bg-blue-800 text-white font-black py-3.5 px-4 rounded-xl hover:bg-blue-900 transition shadow-lg mt-3 flex justify-center items-center gap-2 group text-sm sm:text-base cursor-pointer"
             >
-              <ChevronLeft size={18} className="mr-1" /> Back
-            </button>
-            <button 
-              disabled={isSending} 
-              type="submit" 
-              className={`w-2/3 bg-red-600 text-white font-bold py-3 rounded-md hover:bg-red-700 transition shadow-lg flex justify-center items-center ${isSending ? 'opacity-75 cursor-not-allowed' : ''}`}
-            >
-              {isSending ? 'Sending...' : <>Submit Request <CheckCircle className="ml-2" size={18} /></>}
+              <span>Next Step: Contact Details</span>
+              <ArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
             </button>
           </div>
-        </div>
 
-        <p className="text-xs text-center text-gray-500 mt-4">
-          <ShieldCheck size={12} className="inline mr-1 text-green-600" /> Your information is secure.
-        </p>
-      </form>
+          {/* ================= STEP 2: CONTACT & QUOTE DISPATCH ================= */}
+          <div className={step === 2 ? 'block space-y-4 animate-fade-in-up' : 'hidden'}>
+            
+            {/* Interactive Trip Summary Pill */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
+              <div className="space-y-1">
+                <div className="flex items-center text-xs font-black text-blue-950 uppercase tracking-wide">
+                  <span className="bg-blue-900 text-white px-2 py-0.5 rounded text-[10px] mr-2">
+                    {tripType === 'return' ? 'Round Trip' : 'One Way'}
+                  </span>
+                  <span>{quoteData.pickup || 'Pickup'} ➔ {quoteData.destination || 'Destination'}</span>
+                </div>
+                <div className="text-xs text-blue-800 flex flex-wrap gap-x-3 gap-y-1 font-semibold">
+                  <span>👥 {passengers} Pax</span>
+                  <span>🚌 {FLEET_TYPES.find(f => f.id === selectedVehicle)?.name || 'Charter Coach'}</span>
+                  <span>📅 {formatDateDisplay(departDate)}{tripType === 'return' && returnDate ? ` → ${formatDateDisplay(returnDate)}` : ''}</span>
+                </div>
+              </div>
+              <button 
+                type="button" 
+                onClick={() => setStep(1)}
+                className="text-xs font-bold text-red-600 hover:text-red-700 bg-white px-2.5 py-1 rounded-md border border-red-200 hover:border-red-300 shadow-2xs transition whitespace-nowrap self-end sm:self-center cursor-pointer"
+              >
+                ✏️ Edit Route
+              </button>
+            </div>
+
+            {/* NAME INPUT */}
+            <div>
+              <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                <Users size={13} className="text-blue-900" /> Full Name <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+              </label>
+              <input 
+                required={step === 2} 
+                name="fullName" 
+                type="text" 
+                className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                placeholder="e.g. Sarah Jenkins" 
+              />
+            </div>
+
+            {/* EMAIL & PHONE */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                  <Mail size={13} className="text-blue-900" /> Email Address <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                </label>
+                <input 
+                  required={step === 2} 
+                  name="email" 
+                  type="email" 
+                  className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                  placeholder="sarah@company.com" 
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                  <Phone size={13} className="text-blue-900" /> Phone Number <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                </label>
+                <input 
+                  required={step === 2} 
+                  name="phone" 
+                  type="tel" 
+                  className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                  placeholder="(416) 123-4567" 
+                />
+              </div>
+            </div>
+
+            {/* PICKUP & RETURN TIMES */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                  <Clock size={13} className="text-blue-900" /> Pickup Time <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                </label>
+                <input 
+                  required={step === 2} 
+                  name="pickupTime" 
+                  type="time" 
+                  value={pickupTime}
+                  onChange={(e) => setPickupTime(e.target.value)}
+                  className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white font-semibold" 
+                />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {TIME_PRESETS.map(t => (
+                    <button
+                      key={t.value}
+                      type="button"
+                      onClick={() => setPickupTime(t.value)}
+                      className={`text-[10px] px-2 py-0.5 rounded border transition cursor-pointer ${
+                        pickupTime === t.value 
+                          ? 'bg-blue-900 text-white border-blue-900 font-bold' 
+                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {tripType === 'return' && (
+                <div>
+                  <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                    <Clock size={13} className="text-blue-900" /> Return Time <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                  </label>
+                  <input 
+                    required={step === 2} 
+                    name="returnTime" 
+                    type="time" 
+                    value={returnTime}
+                    onChange={(e) => setReturnTime(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white font-semibold" 
+                  />
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    {TIME_PRESETS.map(t => (
+                      <button
+                        key={t.value}
+                        type="button"
+                        onClick={() => setReturnTime(t.value)}
+                        className={`text-[10px] px-2 py-0.5 rounded border transition cursor-pointer ${
+                          returnTime === t.value 
+                            ? 'bg-blue-900 text-white border-blue-900 font-bold' 
+                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SPECIAL REQUESTS & QUICK TAGS */}
+            <div>
+              <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide">
+                Special Requests & Itinerary Notes <span className="text-gray-400 normal-case tracking-normal font-normal ml-1">(Optional)</span>
+              </label>
+              
+              {/* Quick Tag Insert Buttons */}
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider self-center">Add:</span>
+                {QUICK_TAGS.map(tag => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => handleAddTag(tag)}
+                    className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition font-medium cursor-pointer"
+                  >
+                    + {tag}
+                  </button>
+                ))}
+              </div>
+
+              <textarea 
+                name="info" 
+                value={specialNotes}
+                onChange={(e) => setSpecialNotes(e.target.value)}
+                className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                rows="2" 
+                placeholder="Flight numbers, intermediate stops, wedding party details, or special requests..."
+              ></textarea>
+            </div>
+
+            {/* GUARANTEE & DISPATCH BADGES */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 grid grid-cols-2 gap-2 text-[11px] text-slate-600">
+              <div className="flex items-center gap-1.5">
+                <CheckCircle size={14} className="text-green-600 flex-shrink-0" />
+                <span className="font-semibold text-slate-800">5% Price Beat Guarantee</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <ShieldCheck size={14} className="text-blue-800 flex-shrink-0" />
+                <span className="font-semibold text-slate-800">CVOR & DOT Fully Certified</span>
+              </div>
+            </div>
+
+            {/* ACTION BUTTONS */}
+            <div className="flex gap-3 pt-1">
+              <button 
+                type="button" 
+                onClick={() => setStep(1)}
+                className="w-1/3 bg-slate-100 text-slate-700 font-bold py-3.5 px-3 rounded-xl hover:bg-slate-200 transition flex justify-center items-center text-sm border border-slate-200 cursor-pointer"
+              >
+                <ChevronLeft size={16} className="mr-1" /> Back
+              </button>
+              <button 
+                disabled={isSending} 
+                type="submit" 
+                className={`w-2/3 bg-red-600 text-white font-black py-3.5 px-4 rounded-xl hover:bg-red-700 transition shadow-lg flex justify-center items-center text-sm sm:text-base gap-2 cursor-pointer ${
+                  isSending ? 'opacity-80 cursor-wait' : ''
+                }`}
+              >
+                {isSending ? (
+                  <>
+                    <Clock size={16} className="animate-spin" />
+                    <span>Dispatching Quote...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Submit Free Quote</span>
+                    <Send size={16} />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="pt-2 text-center text-[11px] text-gray-500 flex items-center justify-center gap-3">
+            <span className="flex items-center">
+              <ShieldCheck size={13} className="text-green-600 mr-1" /> 256-Bit SSL Encrypted
+            </span>
+            <span>•</span>
+            <span className="flex items-center">
+              <Phone size={11} className="text-blue-900 mr-1" /> Immediate Dispatch: <a href="tel:(647)948-8424" className="font-bold text-blue-900 ml-0.5 hover:underline">(647) 948-8424</a>
+            </span>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

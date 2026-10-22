@@ -7,40 +7,14 @@ export const COMPANY_INFO = {
 
 export const NAV_LINKS = [
   { title: "Home", id: "" },
-  { title: "Tours", id: "tours" },
-  { title: "Multi-Day", id: "multi-day-tours" },
   { 
     title: "Fleet", 
     id: "fleet",
     dropdown: [
-      { title: "Luxury Coach Bus", id: "luxury-coach-bus-charter" },
-      { title: "Mini Coach Bus", id: "mini-coach-bus-charter" },
+      { title: "56 Passenger Luxury Coach", id: "luxury-coach-bus-charter" },
+      { title: "Mini Coach Bus (24-36)", id: "mini-coach-bus-charter" },
       { title: "14 Passenger Van", id: "14-passenger-van-service" },
-      { title: "School Bus", id: "school-bus-charter" }
-    ]
-  },
-  {
-    title: "Destinations",
-    id: "destinations",
-    dropdown: [
-      { title: "Toronto", id: "charter-bus-service-toronto" },
-      { title: "Scarborough", id: "charter-bus-service-scarborough" },
-      { title: "Ajax", id: "charter-bus-service-ajax" },
-      { title: "Pickering", id: "charter-bus-service-pickering" },
-      { title: "Hamilton", id: "charter-bus-service-hamilton" },
-      { title: "North York", id: "charter-bus-service-north-york" },
-      { title: "Aurora", id: "charter-bus-service-aurora" },
-      { title: "Woodbridge", id: "charter-bus-service-woodbridge" },
-      { title: "Vaughan", id: "charter-bus-service-vaughan" },
-      { title: "Brampton", id: "charter-bus-service-brampton" },
-      { title: "Milton", id: "charter-bus-service-milton" },
-      { title: "Mississauga", id: "charter-bus-service-mississauga" },
-      { title: "Oshawa", id: "charter-bus-service-oshawa" },
-      { title: "Burlington", id: "charter-bus-service-burlington" },
-      { title: "Guelph", id: "charter-bus-service-guelph" },
-      { title: "Brantford", id: "charter-bus-service-brantford" },
-      { title: "Bolton", id: "charter-bus-service-bolton" },
-      { title: "Barrie", id: "charter-bus-service-barrie" }
+      { title: "School Bus Charter", id: "school-bus-charter" }
     ]
   },
   {
@@ -48,11 +22,34 @@ export const NAV_LINKS = [
     id: "services",
     dropdown: [
       { title: "Corporate Transportation", id: "services/corporate-transportation" },
-      { title: "School Trips", id: "services/school-trip-transportation" },
       { title: "Wedding Shuttles", id: "services/wedding-shuttle" },
-      { title: "Airport Transfers", id: "services/airport-group-transfers" },
+      { title: "School Field Trips", id: "services/school-trip-transportation" },
       { title: "Sports Teams", id: "services/sports-team-transportation" },
-      { title: "Event Shuttles", id: "services/event-shuttle-services" }
+      { title: "Private Bus Tours", id: "services/private-bus-tours" },
+      { title: "Airport Transfers", id: "services/airport-group-transfers" },
+      { title: "Mega-Event Shuttles", id: "services/event-shuttle-services" }
+    ]
+  },
+  { title: "Pricing & Rates", id: "pricing" },
+  { title: "Toronto Charters", id: "charter-bus-rental-toronto" },
+  { title: "Tours", id: "tours" },
+  { title: "Multi-Day", id: "multi-day-tours" },
+  {
+    title: "Destinations",
+    id: "destinations",
+    dropdown: [
+      { title: "Toronto", id: "charter-bus-service-toronto" },
+      { title: "Scarborough", id: "charter-bus-service-scarborough" },
+      { title: "Mississauga", id: "charter-bus-service-mississauga" },
+      { title: "Brampton", id: "charter-bus-service-brampton" },
+      { title: "Vaughan", id: "charter-bus-service-vaughan" },
+      { title: "North York", id: "charter-bus-service-north-york" },
+      { title: "Pickering", id: "charter-bus-service-pickering" },
+      { title: "Ajax", id: "charter-bus-service-ajax" },
+      { title: "Hamilton", id: "charter-bus-service-hamilton" },
+      { title: "Burlington", id: "charter-bus-service-burlington" },
+      { title: "Oshawa", id: "charter-bus-service-oshawa" },
+      { title: "Barrie", id: "charter-bus-service-barrie" }
     ]
   },
   { title: "Winter", id: "winter-destinations" },
@@ -61,55 +58,118 @@ export const NAV_LINKS = [
 
 export const FLEET_DATA = {
   "luxury-coach-bus-charter": {
-    name: "Luxury Coach Bus",
+    name: "56 Passenger Luxury Coach Bus",
+    shortName: "56-Passenger Coach",
+    category: "Full Size Motorcoach",
     pax: "56 Passengers",
-    desc: "Experience ultimate comfort for long-distance group travel. Our luxury coaches are equipped with premium amenities to ensure a smooth and enjoyable ride across Canada.",
-    features: ["Reclining seats", "Climate control", "Onboard restroom", "Entertainment systems", "Ample luggage space", "Wi-Fi enabled"],
+    luggage: "56 Large Suitcases (Heated Bays) + 56 Overhead Bins",
+    rate: "From $175 / hr (CAD)",
+    dailyRate: "From $1,450 / day (CAD)",
+    searchKeywords: "56 passenger coach bus rental, luxury coach charter ontario, rent a coach bus toronto, coach bus rental canada, charter bus rental canada",
+    desc: "The gold standard for long-distance group travel across Canada and large-scale Ontario corporate movements. Our 56 passenger luxury coach bus rental fleet offers supreme highway comfort, panoramic sightseeing windows, an onboard restroom, high-speed Wi-Fi, 110V power outlets at every seat, and massive undercarriage luggage storage.",
+    features: [
+      "56 Reclining High-Back Plush Seats with Armrests",
+      "Clean, Sanitized Onboard Restroom / Lavatory",
+      "High-Speed Wi-Fi & 110V/USB Charging at Every Seat",
+      "Massive Heated Undercarriage Storage (56+ Large Suitcases)",
+      "Multi-Zone Climate Control (Optimal A/C & Heating)",
+      "Dual PA Microphone System & Flat-Screen Video Monitors",
+      "Professional, Vetted & Insured Commercial Driver Included",
+      "Ontario CVOR Certified & $10M Commercial Liability Insurance"
+    ],
+    idealFor: "Corporate conferences at MTCC, wedding guest transportation, sports tournaments, university teams, multi-day tours to Montreal, Ottawa, and Niagara Falls.",
     img: "/fleet-luxury.jpg",
     reviews: [
-      { author: "Sarah Jenkins, Corporate Events", rating: 5, text: "Absolutely pristine coach! We chartered this for a multi-day corporate tour from Toronto to Ottawa. The Wi-Fi and comfortable seats made all the difference for our team." },
-      { author: "Mark D.", rating: 5, text: "Smooth ride all the way. The onboard restroom was very clean and the driver was incredibly professional. Highly recommended for large groups." },
-      { author: "Elena R., Wedding Planner", rating: 5, text: "I regularly book these 56-passenger luxury coaches for large weddings. They always arrive spotless, on time, and the climate control is perfect for summer events." }
+      { author: "Sarah Jenkins, Corporate Events Director", rating: 5, text: "Pristine 56-passenger coach! We chartered two buses for a corporate summit from Toronto to Ottawa. The Wi-Fi, power outlets, and comfortable reclining seats allowed our executives to work in complete comfort." },
+      { author: "Coach Mike D., Varsity Athletics", rating: 5, text: "The undercarriage bays easily fit all our hockey equipment bags and sticks. The bus was right on time, spotless, and the driver handled winter highway conditions expertly." },
+      { author: "Elena R., Wedding Planner (GTA)", rating: 5, text: "I regularly book the 56-passenger luxury coaches for large weddings across Caledon and Niagara. Seamless guest shuttles, sparkling clean, and wonderful drivers." }
     ]
   },
   "mini-coach-bus-charter": {
-    name: "Mini Coach Bus",
+    name: "24 - 36 Passenger Mini Coach Bus",
+    shortName: "Mini Coach / Minibus",
+    category: "Mid-Size Executive Bus",
     pax: "24 - 36 Passengers",
-    desc: "Perfect for corporate retreats, medium-sized groups, and regional travel. The mini coach offers the amenities of a larger bus in a more compact, agile package.",
-    features: ["Comfortable seating", "Overhead storage", "Climate control", "PA System", "Reading lights"],
+    luggage: "25-30 Suitcases + Overhead Racks",
+    rate: "From $140 / hr (CAD)",
+    dailyRate: "From $1,150 / day (CAD)",
+    searchKeywords: "minibus rental toronto, coach bus vs minibus rental for events, corporate shuttle services GTA",
+    desc: "The ultimate balance of maneuverability, luxury, and capacity. Our 24 to 36 passenger mini coach bus rental is ideal for corporate offsites, wedding parties, golf trips, and regional tours throughout Toronto, the GTA, and Niagara. Enjoy full coach amenities in a nimble package.",
+    features: [
+      "24 to 36 Ergonomic Reclining Leather Seats",
+      "Dedicated Rear Luggage Bay + Overhead Racks",
+      "High-Output Dual Air Conditioning & Heating",
+      "PA Announcement System & Premium Bluetooth Sound",
+      "Individual LED Reading Lights & USB Charge Ports",
+      "Tinted Privacy Windows with Thermal UV Shield",
+      "Agile Navigation for Downtown Toronto Hotel Drop-Offs",
+      "Professional Driver with Full CVOR Certification"
+    ],
+    idealFor: "Corporate department retreats, wedding party & family shuttles, Niagara-on-the-Lake wine tours, golf outings, and airport group transfers.",
     img: "/fleet-mini.jpg",
     reviews: [
-      { author: "David T.", rating: 5, text: "The perfect size for our department's offsite meeting in Niagara. Easy to board, surprisingly spacious, and the overhead storage handled all our gear." },
-      { author: "Jessica Wong", rating: 4, text: "Great vehicle for a mid-sized group. The PA system was very helpful for our tour guide. Would definitely book the mini coach again." },
-      { author: "St. Mary's Seniors Club", rating: 5, text: "We used the mini coach for our day trip to the Royal Botanical Gardens. The driver was so patient and the ride was exceptionally comfortable." }
+      { author: "David T., Tech Offsite Coordinator", rating: 5, text: "The 32-passenger minibus was ideal for our team's offsite in Niagara. Easy to board, smooth ride, and nimble enough to navigate tight winery driveways that full coaches couldn't reach." },
+      { author: "Jessica Wong, Social Event Committee", rating: 5, text: "Booked this for our 30-person family reunion trip. The PA system was crisp for announcements and the seats were super comfortable. Unbeatable service!" },
+      { author: "St. Mary's Seniors Club", rating: 5, text: "We used the mini coach for our day trip to the Royal Botanical Gardens. The driver was so patient, courteous, and the low-entry step made boarding easy for everyone." }
     ]
   },
   "14-passenger-van-service": {
-    name: "14 Passenger Van",
+    name: "14 Passenger Chauffeured Van",
+    shortName: "14 Passenger Sprinter Van",
+    category: "Executive High-Roof Van",
     pax: "Up to 14 Passengers",
-    desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services. Easy to board and surprisingly spacious.",
-    features: ["High-roof design", "Air conditioning", "Tinted windows", "Rear luggage area", "Easy access steps"],
+    luggage: "14 Large Bags + Carry-Ons",
+    rate: "From $115 / hr (CAD)",
+    dailyRate: "From $850 / day (CAD)",
+    searchKeywords: "passenger van rental GTA, executive coach charter canada, airport shuttle toronto",
+    desc: "Premium chauffeured passenger van rental in the Greater Toronto Area. High-roof design allows passengers to stand comfortably, while dedicated rear cargo space accommodates airport luggage with ease. Perfect for VIP corporate transfers and small group outings.",
+    features: [
+      "High-Roof Walk-In Clearance (Stand Up Inside)",
+      "14 Individual Plush Seats with 3-Point Seatbelts",
+      "Generous Rear Cargo Compartment for Luggage",
+      "Front and Rear Heavy-Duty Climate Control",
+      "Tinted Dark Privacy Windows",
+      "Curbside Pearson Airport (YYZ) Express Drop-Off",
+      "Licensed Commercial Driver Included"
+    ],
+    idealFor: "Toronto Pearson Airport (YYZ) & Billy Bishop transfers, executive VIP dinners, small family gatherings, and wedding bridal party shuttles.",
     img: "/fleet-van.jpg",
     reviews: [
-      { author: "Michael C.", rating: 5, text: "Booked this van for a family airport transfer to Pearson. Plenty of room for 12 of us plus all our heavy luggage. Took away all the pre-flight stress!" },
-      { author: "Amanda L., Executive Assistant", rating: 5, text: "We use these vans for executive shuttles between our Mississauga and downtown Toronto offices. The high roof makes a big difference for comfort." }
+      { author: "Michael C., Family Travel", rating: 5, text: "Booked this high-roof van for our 12-person family trip to Pearson Airport. All 14 suitcases fit into the back easily and the driver arrived 15 minutes early." },
+      { author: "Amanda L., Executive Assistant", rating: 5, text: "We use these vans for executive shuttles between our Mississauga and downtown Toronto Financial District offices. Immaculate condition and dependable drivers." }
     ]
   },
   "school-bus-charter": {
-    name: "School Bus",
-    pax: "48-56 Children / 30-40 Adults",
-    desc: "The most cost-effective transportation solution for large groups, school field trips, and local events. Safe, reliable, and straightforward.",
-    features: ["High passenger capacity", "Economical rates", "Safety certified", "Professional drivers", "Local route specialists"],
+    name: "48 - 56 Passenger School Bus",
+    shortName: "Yellow School Bus",
+    category: "Economical Group Transport",
+    pax: "48 Adults / 56 Children",
+    luggage: "Under-seat / In-cabin space",
+    rate: "From $105 / hr (CAD)",
+    dailyRate: "From $750 / day (CAD)",
+    searchKeywords: "school bus rental toronto, affordable school field trip bus canada, sports team bus rental ontario",
+    desc: "The most budget-friendly, dependable group transportation solution across Ontario. Safe, robust, and certified for school field trips, day camps, sports leagues, and festival park-and-ride shuttles. Driven by fully screened, professional school bus drivers.",
+    features: [
+      "High Capacity: 48 Adults or 56 Children",
+      "Most Cost-Effective Rate per Passenger in Canada",
+      "Ontario Ministry of Transportation (MTO) Safety Certified",
+      "Vetted Drivers with Vulnerable Sector Screening",
+      "High-Visibility Yellow Bus with Stop Arm Safety",
+      "Dual Heating Systems for Canadian Winters"
+    ],
+    idealFor: "K-12 School field trips to the ROM, Toronto Zoo & Science Centre, youth sports tournaments, summer camps, and community festivals.",
     img: "/fleet-school.jpg",
     reviews: [
-      { author: "Principal Harding", rating: 5, text: "Tours Coach Charters is our go-to for all field trips. The drivers are great with the kids, safety is always top priority, and the buses are very clean." },
-      { author: "Tom S., Camp Director", rating: 4, text: "Very affordable and reliable. We chartered three of these school buses to transport our summer campers to Wonderland. Everything went flawlessly." },
-      { author: "Local Soccer Association", rating: 5, text: "We use these buses every weekend for away games. You can't beat the value for moving 40 players and coaches." }
+      { author: "Principal Harding, TDSB", rating: 5, text: "Tours Coach Charters is our primary choice for school excursions. The drivers are patient and punctual, safety is impeccable, and the buses are thoroughly inspected." },
+      { author: "Tom S., Camp Director", rating: 4, text: "We chartered four school buses for our 200 campers to visit Canada's Wonderland. Flawless timing, great communication, and unbeatable pricing." }
     ]
   }
 };
 
 export const SEO_DATA = {
+  "pricing": { title: "Charter Bus Rental Toronto Prices & Cost in Canada | Tours Coach Charters", desc: "How much does it cost to rent a charter bus in Canada? Transparent pricing guide for Toronto & Canada. Compare 56-passenger coach, minibus, and van rates in CAD." },
+  "charter-bus-rental-toronto": { title: "Charter Bus Rental Toronto | Coach Bus & Minibus Charters GTA", desc: "Premier charter bus rental in Toronto & the GTA. 56 passenger luxury coaches, minibus rentals, and passenger vans with professional drivers. Get an instant CAD quote." },
+  "services/private-bus-tours": { title: "Private Bus Tours Toronto & Niagara Falls Charter Bus Rental", desc: "Book private bus tours in Toronto and Niagara Falls charter bus rentals with professional drivers. Custom itineraries for private groups and corporate sightseeing." },
   "home": { title: "Charter Bus Services Canada | Tours Coach Charters", desc: "Canada's Premier Charter Bus Services. From corporate retreats to school trips, we provide reliable transportation from coast to coast." },
   "about": { title: "About Us | Tours Coach Charters", desc: "Learn about Canada Tours Coach LTD. We provide safe, reliable, and premium charter bus transportation across the country." },
   "tours": { title: "Ontario Group Tours & Day Trips | Tours Coach Charters", desc: "Private group day tours and event transportation from the GTA. Travel with your group—not the crowd." },
@@ -513,111 +573,141 @@ export const DESTINATION_DATA = {
 
 export const SERVICE_DATA = {
   "corporate-transportation": {
-    title: "Corporate Transportation & Executive Shuttles",
-    subtitle: "Premium group transit for conferences, executive retreats, and daily employee commuting.",
+    title: "Corporate Event Bus Rental Toronto & Executive Coach Charter Canada",
+    subtitle: "Executive coach charters, corporate shuttle services GTA, and seamless conference transportation for meetings, retreats, and daily employee commuting across Canada.",
     img: "/services-corporate.jpg",
     highlights: [
-      { icon: "Briefcase", title: "Executive Shuttles", desc: "Wi-Fi enabled luxury coaches" },
-      { icon: "Building2", title: "Conference Transit", desc: "MTCC & Enercare Centre logistics" },
-      { icon: "Users", title: "Employee Commuting", desc: "Daily Last-Mile TTC connections" }
+      { icon: "Briefcase", title: "Executive Coach Charter Canada", desc: "Wi-Fi, 110V outlets & mobile productivity" },
+      { icon: "Building2", title: "Corporate Event Bus Rental Toronto", desc: "Direct shuttles to MTCC, Enercare & Financial District" },
+      { icon: "Users", title: "Corporate Shuttle Services GTA", desc: "Employee commute loops & transit station connections" }
     ],
     content: [
-      "Tours Coach Charters provides sophisticated, reliable corporate transportation across the Greater Toronto Area and beyond. Whether you are moving executives from Pearson (YYZ) to the Financial District or transporting hundreds of attendees to a summit at the Metro Toronto Convention Centre, our logistics team ensures flawless execution.",
-      "Our modern luxury motorcoaches act as mobile offices. Equipped with fast Wi-Fi, individual power outlets, and climate control, your team can prepare for meetings or relax in transit. We also offer contract-based daily employee shuttles to bridge the gap between transit hubs (like Vaughan Metropolitan Centre) and corporate business parks."
+      "Tours Coach Charters is Canada's premier partner for corporate event bus rental in Toronto and executive coach charters across Canada. Whether you are transferring 500 convention delegates from Toronto Pearson (YYZ) to the Metro Toronto Convention Centre (MTCC) or coordinating executive transportation to a strategic retreat in Muskoka or Niagara, our modern fleet delivers punctuality, discretion, and executive luxury.",
+      "Our corporate shuttle services in the GTA bridge the critical last-mile gap between major transit stations (such as Vaughan Metropolitan Centre, Union Station, and Kipling) and corporate headquarters throughout Mississauga, Markham, and Pickering. Equipped with fast Wi-Fi, individual 110V power outlets, USB ports, and ergonomic reclining seats, our 56-passenger coaches and executive minibuses keep your team connected and productive while on the move.",
+      "We provide customized billing, dedicated corporate account managers, GPS-monitored fleet tracking, and flexible long-term corporate shuttle contracts tailored to Canadian business schedules."
     ],
     faqs: [
-      { q: "Can we set up a recurring contract for daily employee shuttles?", a: "Yes, we specialize in long-term corporate shuttle contracts, offering dedicated account managers and priority dispatch." },
-      { q: "Do the buses have Wi-Fi for working on the go?", a: "Absolutely. Our luxury fleet is fully equipped with reliable Wi-Fi and power outlets at every seat." }
-    ]
-  },
-  "school-trip-transportation": {
-    title: "School Trip & University Transportation",
-    subtitle: "Safe, cost-effective, and reliable bus charters for educational field trips and campus events.",
-    img: "/services-school.jpg",
-    highlights: [
-      { icon: "Landmark", title: "Educational Trips", desc: "ROM, Science Centre & Toronto Zoo" },
-      { icon: "ShieldCheck", title: "Safety First", desc: "Fully vetted, certified drivers" },
-      { icon: "Users", title: "Campus Shuttles", desc: "UofT, York, and McMaster transit" }
-    ],
-    content: [
-      "Safety is our absolute priority when transporting students. We are the trusted transportation partner for school boards and universities across Ontario, providing reliable transit for everything from primary school visits to the Royal Ontario Museum to massive university campus tours.",
-      "We offer highly affordable, high-capacity school bus charters for local excursions, as well as premium motorcoaches for out-of-town university athletic travel or overnight educational retreats."
-    ],
-    faqs: [
-      { q: "Are your drivers certified for school transport?", a: "Yes, all drivers undergo rigorous background checks, vulnerable sector screening, and extensive safety training." },
-      { q: "Can you accommodate multi-bus movements for entire grade levels?", a: "We frequently coordinate multi-bus logistics to safely transport hundreds of students simultaneously to destinations like Canada's Wonderland." }
+      { q: "Do you offer corporate event bus rental in Toronto with multiple pickup locations?", a: "Yes. Our dispatch team coordinates multi-point pickups across the GTA, including downtown Toronto hotels, Pearson Airport, and suburban corporate campuses." },
+      { q: "What amenities are included on your executive coach charter in Canada?", a: "Our executive coaches include high-speed Wi-Fi, power outlets at every seat, reclining leather seats, climate control, an onboard clean lavatory, and flat-screen presentation monitors." },
+      { q: "Can we set up ongoing corporate shuttle services in the GTA for employee commutes?", a: "Yes, we specialize in recurring daily and weekly corporate commuter shuttles with priority dispatch, backup fleet coverage, and monthly corporate invoicing." },
+      { q: "Are your drivers trained for executive VIP protocol?", a: "Every driver is professionally suited, thoroughly vetted, CVOR certified, and trained in discreet, punctual executive hospitality." }
     ]
   },
   "wedding-shuttle": {
-    title: "Wedding Shuttle Services",
-    subtitle: "Elegant, seamless group transportation for your guests, bridal party, and family.",
+    title: "Wedding Shuttle Bus Rental Toronto & Ontario Transportation",
+    subtitle: "Guest shuttle for wedding GTA, luxury wedding transportation rentals Ontario, and seamless hotel-to-venue loops across Caledon, Vaughan, Niagara, and Prince Edward County.",
     img: "/services-wedding.jpg",
     highlights: [
-      { icon: "Users", title: "Guest Shuttles", desc: "Continuous hotel-to-venue loops" },
-      { icon: "Map", title: "Rustic Venues", desc: "Navigating Caledon & York Region" },
-      { icon: "Award", title: "Bridal Party", desc: "Premium 14-passenger luxury vans" }
+      { icon: "Users", title: "Guest Shuttle for Wedding GTA", desc: "Safe, continuous loops between hotels and venues" },
+      { icon: "Map", title: "Wedding Transportation Rentals Ontario", desc: "Expert navigation for rustic estates, wineries & barns" },
+      { icon: "Award", title: "Bridal Party Shuttles", desc: "Executive 14-passenger vans & luxury minibuses" }
     ],
     content: [
-      "Your wedding day should be stress-free. Our dedicated wedding shuttle services ensure that your guests arrive on time and get back to their hotels safely at the end of the night. From sprawling banquet halls in Woodbridge to rustic barn venues in Caledon, our drivers know exactly how to navigate the routes.",
-      "We work directly with your wedding planner to map out continuous shuttle loops, late-night return trips, and private luxury transport for the bridal party. Ensure your guests can celebrate responsibly without worrying about parking or navigation."
+      "Your wedding day should be celebratory and stress-free. With Tours Coach Charters' wedding shuttle bus rental in Toronto and premier wedding transportation rentals across Ontario, your loved ones travel in complete comfort and safety. From grand banquet halls in Woodbridge to scenic vineyard weddings in Niagara-on-the-Lake and rustic estate barns in Caledon, our experienced drivers know every route.",
+      "We specialize in guest shuttle service for weddings throughout the GTA. We coordinate custom continuous loops from host hotels to ceremony and reception sites, followed by safe late-night return trips so every guest can celebrate without worrying about designated drivers, parking shortages, or late-night ride-shares.",
+      "From high-roof 14-passenger Sprinter vans for the bridal party to 56-passenger luxury motorcoaches for out-of-town guests, we provide clean, climate-controlled, beautifully presented vehicles that match the elegance of your wedding."
     ],
     faqs: [
-      { q: "Do you offer late-night return shuttles?", a: "Yes, we run continuous late-night loops to ensure every guest gets back to their accommodation safely." },
-      { q: "Can we book a smaller vehicle for just the bridal party?", a: "Certainly. Our high-roof 14-passenger transit vans are perfect for transporting the bridal party comfortably." }
+      { q: "How does a guest shuttle for a wedding in the GTA work?", a: "We establish a scheduled loop between your host hotel(s) and the venue. Before the ceremony, we run 2-3 departures to get all guests seated on time. During the evening and reception end, we run continuous or hourly return shuttles." },
+      { q: "Can your buses navigate rustic barn or vineyard venues outside Toronto?", a: "Yes! Our drivers are experienced with rural Ontario roads, winding country lanes in Caledon, Prince Edward County, and Niagara wineries. We verify site access and turning radius beforehand." },
+      { q: "Can we play our own music on the wedding bus?", a: "Absolutely! Our mini coaches and luxury buses feature Bluetooth audio systems so you can play your custom wedding playlist." },
+      { q: "When should we reserve wedding transportation rentals in Ontario?", a: "Ontario wedding dates (especially May through October) fill up fast. We recommend booking 4 to 8 months in advance to ensure preferred vehicle availability." }
     ]
   },
-  "airport-group-transfers": {
-    title: "Airport Group Transfers",
-    subtitle: "Punctual, stress-free group shuttles to Pearson (YYZ), Billy Bishop (YTZ), and Hamilton (YHM).",
-    img: "/services-airport.jpg",
+  "school-trip-transportation": {
+    title: "School Bus Rental Toronto & Field Trip Transportation Canada",
+    subtitle: "Affordable school field trip bus Canada, certified school bus rental Toronto, and safe, compliant group travel for Ontario school boards and universities.",
+    img: "/services-school.jpg",
     highlights: [
-      { icon: "Plane", title: "Pearson (YYZ)", desc: "Curbside at Terminals 1 & 3" },
-      { icon: "Briefcase", title: "Corporate VIP", desc: "Meet and greet services available" },
-      { icon: "ShieldCheck", title: "Flight Tracking", desc: "We adjust for delays automatically" }
+      { icon: "ShieldCheck", title: "Safety First & MTO Certified", desc: "Rigorous background checks & CVOR compliant" },
+      { icon: "Landmark", title: "School Bus Rental Toronto", desc: "Field trips to ROM, Science Centre & Toronto Zoo" },
+      { icon: "Users", title: "Affordable School Field Trip Bus Canada", desc: "Budget-friendly per-student group rates" }
     ],
     content: [
-      "Navigating airport logistics with a large group is challenging. We eliminate the stress with coordinated, high-capacity airport transfers. Whether you are greeting an international tour group at Toronto Pearson (YYZ) or moving a corporate team to Billy Bishop (YTZ), we guarantee absolute punctuality.",
-      "Our logistics team actively monitors your flight status, ensuring our luxury coaches or executive vans are staged and ready the moment your group collects their luggage. Enjoy ample undercarriage storage for heavy bags and a comfortable ride directly to your destination."
+      "Safety, punctuality, and affordability are the foundations of our school bus rental services in Toronto and across Canada. We are the trusted transportation partner for school boards (including TDSB, TCDSB, PDSB, and DDSB), private academies, and universities across Ontario.",
+      "Looking for an affordable school field trip bus in Canada? We offer economical 48-to-56 passenger yellow school buses for local educational day trips to the Royal Ontario Museum (ROM), Ontario Science Centre, Toronto Zoo, Ripley's Aquarium, and Pioneer Village. For longer journeys, university band tours, or sports excursions, our 56-passenger luxury motorcoaches provide onboard restrooms and climate-controlled comfort.",
+      "All drivers undergo comprehensive vulnerable sector screening, criminal background checks, and annual defensive driving audits. Every vehicle in our fleet exceeds strict Ontario Ministry of Transportation (MTO) commercial safety standards."
     ],
     faqs: [
-      { q: "What happens if our flight is delayed?", a: "Our dispatch team tracks all inbound flights in real-time. We will adjust your pickup time automatically at no extra cost." },
-      { q: "Where do we meet the bus at Pearson Airport?", a: "We coordinate pickups at the designated commercial charter bus zones at both Terminal 1 and Terminal 3." }
+      { q: "Are your drivers screened for school transportation in Ontario?", a: "Yes, 100% of our drivers have completed vulnerable sector screening, clear background checks, and valid Ontario commercial licenses." },
+      { q: "What makes your school bus rental in Toronto affordable for field trips?", a: "With up to 56 passenger capacity per bus and competitive local charter rates, our cost per student is significantly lower than alternative transportation methods." },
+      { q: "Can you accommodate multi-bus charters for entire grade levels?", a: "Yes, we regularly deploy synchronized fleets of 5 to 15 buses for massive school outings to Canada's Wonderland, conservation parks, and athletic competitions." }
     ]
   },
   "sports-team-transportation": {
-    title: "Sports Team Transportation",
-    subtitle: "High-capacity motorcoaches designed for athletes, minor hockey tournaments, and away games.",
+    title: "Sports Team Bus Rental Ontario & Tournament Charters",
+    subtitle: "High-capacity 56-passenger coach buses with massive hockey bag storage for sports teams in Toronto, Ontario, and nationwide competitions.",
     img: "/services-sports.jpg",
     highlights: [
-      { icon: "Trophy", title: "Tournament Travel", desc: "Transit to CAA Centre & local arenas" },
-      { icon: "Users", title: "Maximum Comfort", desc: "Extra legroom for taller athletes" },
-      { icon: "Briefcase", title: "Massive Storage", desc: "Undercarriage bays for all gear" }
+      { icon: "Trophy", title: "Sports Team Bus Rental Ontario", desc: "Tournaments at CAA Centre, Gretzky Centre & arenas" },
+      { icon: "Briefcase", title: "Massive Hockey Bag Storage", desc: "Spacious undercarriage luggage bays for all gear" },
+      { icon: "Users", title: "Athlete Comfort & Legroom", desc: "High-back reclining seats & climate control" }
     ],
     content: [
-      "Athletes need to arrive rested and focused. Tours Coach Charters is the premier provider for sports team transportation across Canada. From minor hockey leagues traveling to the Wayne Gretzky Sports Centre to professional rosters heading to BMO Field, our fleet is built for sports transit.",
-      "Our 56-passenger luxury motorcoaches feature massive undercarriage storage bays, perfectly accommodating hockey bags, lacrosse sticks, and training equipment. With climate control and spacious reclining seats, your team will enjoy maximum comfort on the road."
+      "Athletes perform best when they arrive rested, hydrated, and focused. Tours Coach Charters is the premier choice for sports team bus rental in Ontario and across Canada. From minor hockey associations traveling to the Silver Stick tournament to university varsity rosters heading to OUA championships, our fleet is built for athletic travel.",
+      "Our 56-passenger luxury coach buses feature oversized undercarriage luggage bays that effortlessly fit dozens of goalie bags, hockey sticks, training equipment, and coolers. Inside, players enjoy ample legroom, reclining high-back seats, Wi-Fi to review game film, and power outlets at every seat.",
+      "We provide door-to-door transit to major sports complexes across Ontario, including the CAA Centre in Brampton, Wayne Gretzky Sports Centre in Brantford, Paramount Fine Foods Centre in Mississauga, and Scotiabank Arena in downtown Toronto."
     ],
     faqs: [
-      { q: "Is there enough room for all our hockey bags?", a: "Yes! Our luxury coaches feature massive undercarriage bays specifically designed to handle heavy sports equipment." },
-      { q: "Do you offer seasonal contracts for sports leagues?", a: "We offer heavily discounted, contract-based pricing for athletic directors booking entire season schedules." }
+      { q: "Can your sports team bus rental in Ontario fit all our hockey equipment?", a: "Yes. Our 56-passenger coaches feature massive underfloor luggage compartments specifically engineered to fit 50+ hockey bags, sticks, and team equipment without taking up passenger seats." },
+      { q: "Do you offer tournament shuttle packages spanning a whole weekend?", a: "Yes, we provide full weekend tournament packages including hotel-to-arena shuttles, team dinner transit, and return travel." },
+      { q: "Can parents and coaches ride together on the same bus?", a: "Definitely. Our 56-seat coaches provide plenty of space for players, coaching staff, and chaperones to travel as one united group." }
+    ]
+  },
+  "private-bus-tours": {
+    title: "Private Bus Tours Toronto & Niagara Falls Charter Bus Rental",
+    subtitle: "Private bus tours Toronto, Niagara Falls charter bus rental, and luxury sightseeing coach bus Toronto with custom itineraries across Canada.",
+    img: "/service-tours.jpg",
+    highlights: [
+      { icon: "Navigation", title: "Private Bus Tours Toronto", desc: "Customized city sightseeing & architectural tours" },
+      { icon: "Map", title: "Niagara Falls Charter Bus Rental", desc: "Day trips, wine tastings & Hornblower cruises" },
+      { icon: "BusFront", title: "Sightseeing Coach Bus Toronto", desc: "Panoramic windows, PA audio & climate control" }
+    ],
+    content: [
+      "Discover the best of Ontario on your own terms with Tours Coach Charters' private bus tours in Toronto and luxury Niagara Falls charter bus rentals. Unlike rigid public tours, our private charter buses let your group set the schedule, choose your photo stops, and travel in exclusive comfort.",
+      "Our sightseeing coach bus in Toronto takes you to iconic landmarks including the CN Tower, Casa Loma, Distillery District, Royal Ontario Museum, and Harbourfront. For excursions outside the city, our private Niagara Falls charter bus rental includes scenic stops along the Niagara Parkway, Whirlpool Rapids, floral clock, and wine tastings in charming Niagara-on-the-Lake.",
+      "Whether you are hosting international corporate guests, extended families, or community associations, our knowledgeable drivers and comfortable motorcoaches deliver an unforgettable sightseeing experience."
+    ],
+    faqs: [
+      { q: "Can we customize our itinerary for private bus tours in Toronto?", a: "Yes, 100%! You decide the pickup time, pickup locations, attraction stops, meal breaks, and tour duration. We drive your schedule." },
+      { q: "What is included with a Niagara Falls charter bus rental?", a: "We provide private round-trip transportation from anywhere in the GTA to Niagara Falls and Niagara-on-the-Lake, with driver staging and scenic stops along the way." },
+      { q: "Can our guide use the onboard PA audio system?", a: "Yes, all our luxury coaches and mini coaches come equipped with crystal-clear PA microphone systems for your step-on tour guide." }
+    ]
+  },
+  "airport-group-transfers": {
+    title: "Toronto Airport Group Transfers & Pearson (YYZ) Shuttles",
+    subtitle: "Punctual, stress-free group shuttles to Pearson (YYZ), Billy Bishop (YTZ), and Hamilton (YHM).",
+    img: "/services-airport.jpg",
+    highlights: [
+      { icon: "Plane", title: "Pearson (YYZ) Curbside", desc: "Designated commercial charter bays at Terminals 1 & 3" },
+      { icon: "ShieldCheck", title: "Live Flight Tracking", desc: "Automatic schedule adjustments for flight delays" },
+      { icon: "Briefcase", title: "Massive Luggage Capacity", desc: "Dedicated cargo space for all passenger bags" }
+    ],
+    content: [
+      "Navigating airport logistics with a large group is challenging. Tours Coach Charters eliminates the stress with coordinated, high-capacity airport transfers. Whether greeting an international delegation at Toronto Pearson (YYZ) or moving a corporate team to Billy Bishop (YTZ), we guarantee absolute punctuality.",
+      "Our logistics team actively monitors your flight status in real time, ensuring our luxury coaches or executive vans are staged and ready the moment your group collects their luggage."
+    ],
+    faqs: [
+      { q: "What happens if our inbound flight to Pearson is delayed?", a: "Our dispatchers monitor live flight tracking data. We adjust your bus staging time automatically with zero hassle." },
+      { q: "Where do we meet our charter bus at Toronto Pearson (YYZ)?", a: "We coordinate pickups at the designated commercial bus bays at both Terminal 1 and Terminal 3." }
     ]
   },
   "event-shuttle-services": {
-    title: "Mega-Event Shuttle Services",
-    subtitle: "Complex logistics and multi-bus fleet coordination for festivals, trade shows, and concerts.",
+    title: "Mega-Event Shuttle Services & Festival Fleet Coordination",
+    subtitle: "Complex logistics and multi-bus fleet coordination for festivals, trade shows, FIFA 2026, and concerts.",
     img: "/services-event.jpg",
     highlights: [
-      { icon: "Map", title: "Park & Ride", desc: "Continuous off-site shuttle loops" },
-      { icon: "Building2", title: "Trade Shows", desc: "International Centre & Enercare transit" },
-      { icon: "Users", title: "Festival Transit", desc: "Downsview Park & waterfront events" }
+      { icon: "Map", title: "Park & Ride Loops", desc: "Continuous off-site parking shuttle coordination" },
+      { icon: "Building2", title: "Trade Shows & Conventions", desc: "Direct transit to International Centre & MTCC" },
+      { icon: "Users", title: "FIFA 2026 & Stadium Transit", desc: "High-capacity crowd movement to BMO Field" }
     ],
     content: [
-      "When you are hosting an event for thousands of people, parking and traffic congestion are your biggest liabilities. We specialize in mega-event logistics, deploying synchronized fleets of motorcoaches and school buses to move massive crowds efficiently.",
-      "From park-and-ride shuttle loops for summer music festivals at Downsview Park to VIP transport for international trade shows, our dedicated dispatchers ensure smooth traffic flow, minimizing wait times and maximizing attendee satisfaction."
+      "When hosting events with thousands of attendees, parking and traffic congestion are your biggest liabilities. We specialize in mega-event logistics, deploying synchronized fleets of motorcoaches and mini buses to move massive crowds safely and efficiently.",
+      "From park-and-ride loops for summer music festivals to VIP transport for international conventions, our dedicated on-site dispatchers keep schedules tight and attendee satisfaction high."
     ],
     faqs: [
-      { q: "Can you provide a dedicated on-site dispatcher?", a: "Yes, for large-scale events utilizing multiple buses, we provide on-site coordinators to manage the loading zones and keep schedules tight." },
-      { q: "Do you offer wrapped buses for event branding?", a: "We can coordinate custom vinyl wrapping or signage on our coaches to promote your event while in transit." }
+      { q: "Can you provide dedicated on-site dispatch coordinators?", a: "Yes, for multi-bus event operations, we assign experienced on-site managers to supervise loading zones and dispatch." },
+      { q: "Are you providing shuttle services for FIFA 2026 matches in Toronto?", a: "Yes, we are actively reserving group charter fleets for Toronto Stadium (BMO Field) matches and fan festivals." }
     ]
   }
 };
@@ -997,3 +1087,99 @@ export const FLORIDA_TOURS = [
     category: "Florida"
   }
 ];
+
+export const PRICING_GUIDE_DATA = {
+  title: "Charter Bus Rental Toronto Prices & Cost in Canada",
+  subtitle: "Everything you need to know about charter bus costs, pricing factors, vehicle comparisons, and seating capacities in Canadian Dollars (CAD).",
+  averageRates: [
+    {
+      vehicle: "56 Passenger Luxury Coach Bus",
+      hourly: "$165 - $225 / hr",
+      minHours: "4 - 5 hrs minimum",
+      daily: "$1,350 - $1,850 / day",
+      perKm: "$3.50 - $4.50 / km",
+      ideal: "Large corporate groups, conventions, weddings, athletic teams, multi-day tours",
+      luggage: "56 Large Bags (Undercarriage) + 56 Overhead Bins",
+      restroom: "Yes (Clean Onboard Lavatory)"
+    },
+    {
+      vehicle: "24 - 36 Passenger Mini Coach Bus",
+      hourly: "$135 - $175 / hr",
+      minHours: "4 hrs minimum",
+      daily: "$1,050 - $1,450 / day",
+      perKm: "$2.90 - $3.75 / km",
+      ideal: "Medium corporate offsites, wedding guest shuttles, Niagara wine tours",
+      luggage: "25 - 30 Bags (Dedicated Rear Cargo)",
+      restroom: "No (Stops on request)"
+    },
+    {
+      vehicle: "14 Passenger High-Roof Van",
+      hourly: "$110 - $145 / hr",
+      minHours: "3 - 4 hrs minimum",
+      daily: "$750 - $1,050 / day",
+      perKm: "$2.20 - $2.80 / km",
+      ideal: "Pearson Airport YYZ transfers, executive VIP dinners, small family groups",
+      luggage: "14 Large Suitcases",
+      restroom: "No"
+    },
+    {
+      vehicle: "48 - 56 Passenger School Bus",
+      hourly: "$95 - $135 / hr",
+      minHours: "3 - 4 hrs minimum",
+      daily: "$650 - $950 / day",
+      perKm: "$2.40 - $3.00 / km",
+      ideal: "K-12 Field trips, summer camps, budget youth sports tournaments",
+      luggage: "Cabin / In-seat storage",
+      restroom: "No"
+    }
+  ],
+  costFactors: [
+    {
+      factor: "Trip Duration & Distance",
+      desc: "Local trips within Toronto and the GTA are usually billed by the hour (with a standard 4 to 5 hour minimum). Long-distance or multi-day charters (e.g. Toronto to Montreal, Ottawa, or Algonquin) are billed by total mileage/kilometres or a fixed flat daily rate."
+    },
+    {
+      factor: "Vehicle Type & Luxury Amenities",
+      desc: "A full-sized 56-passenger luxury motorcoach with an onboard restroom, Wi-Fi, and underfloor luggage carries a higher hourly rate than a 32-passenger minibus or standard yellow school bus. However, on a per-seat basis, the 56-passenger coach often offers the lowest cost per person."
+    },
+    {
+      factor: "Seasonality & Time of Year",
+      desc: "Peak demand in Ontario runs from May through October (wedding season, school field trips, and summer tourism). Booking 2 to 6 months in advance locks in preferred rates and guarantees vehicle availability."
+    },
+    {
+      factor: "Driver Regulations (Hours of Service)",
+      desc: "Under Canadian Federal and Ontario Ministry of Transportation (MTO) regulations, a commercial coach driver can drive a maximum of 13 hours per day (14 hours on duty) followed by 8 consecutive hours of mandatory rest. Trips requiring longer travel days require a relief driver or scheduled overnight stop."
+    },
+    {
+      factor: "Driver Accommodations & Meals",
+      desc: "For overnight charters (e.g. multi-day trips to Quebec, New York, or Florida), the chartering group is responsible for providing the driver with a private hotel room and a standard daily meal per diem."
+    },
+    {
+      factor: "Tolls, Parking & 13% Ontario HST",
+      desc: "Highway 407 ETR toll charges, municipal parking permits at venues (such as downtown Toronto or Niagara Parks), and 13% Ontario Harmonized Sales Tax (HST) are detailed clearly on our quotes so there are never hidden surprises."
+    }
+  ],
+  comparisonCoachVsMini: [
+    { feature: "Passenger Seating", coach: "Up to 56 adult passengers", mini: "24 to 36 passengers" },
+    { feature: "Onboard Restroom", coach: "Standard (Fully equipped lavatory)", mini: "Not available on most minibuses" },
+    { feature: "Luggage Space", coach: "Massive underfloor cargo bays (56+ large suitcases)", mini: "Rear cargo area (25-30 bags)" },
+    { feature: "Maneuverability", coach: "Best for highways & designated bus zones", mini: "Highly agile for downtown Toronto hotel loops & wineries" },
+    { feature: "Wi-Fi & 110V Outlets", coach: "Standard at every seat row", mini: "Available upon request" },
+    { feature: "Ideal Trip Type", coach: "Long distance, interstate, conventions, athletics", mini: "Local GTA transfers, weddings, department retreats" }
+  ],
+  capacityGuide: [
+    { type: "56 Passenger Coach Bus", adultCap: 56, childCap: 56, bags: 56, bestUse: "Conferences, weddings, sports teams, interstate tours" },
+    { type: "36 Passenger Midicoach", adultCap: 36, childCap: 36, bags: 30, bestUse: "Corporate department offsites, Niagara day tours" },
+    { type: "24 Passenger Minibus", adultCap: 24, childCap: 24, bags: 20, bestUse: "Wedding party shuttles, golf trips, private celebrations" },
+    { type: "14 Passenger Sprinter Van", adultCap: 14, childCap: 14, bags: 14, bestUse: "Pearson Airport VIP shuttles, executive dinners" },
+    { type: "School Bus", adultCap: 48, childCap: 56, bags: "Cabin only", bestUse: "School field trips, day camps, local tournament shuttles" }
+  ],
+  checklistCompanies: [
+    { title: "Valid Ontario CVOR Safety Rating", desc: "Ensure the operator has an active Commercial Vehicle Operator's Registration (CVOR) with a Satisfactory or Excellent safety rating from the Ontario Ministry of Transportation." },
+    { title: "$10M+ Commercial Passenger Liability Insurance", desc: "Legitimate Canadian coach companies carry a minimum of $10,000,000 in commercial passenger liability insurance. Always request a Certificate of Insurance (COI)." },
+    { title: "Direct Fleet Operator vs Unvetted Broker", desc: "Booking directly with an operator like Tours Coach Charters gives you direct communication with dispatch, transparent pricing, and guaranteed vehicle assignment without third-party markups." },
+    { title: "24/7 Live Canadian Dispatch", desc: "Flight delays and traffic changes happen. A reputable company maintains 24/7 live dispatch support to adjust pickups and support your group in real time." },
+    { title: "Modern, Well-Maintained Vehicles", desc: "Ask about the age and amenities of the fleet. Premium operators run late-model coaches equipped with functional A/C, heating, clean restrooms, and Wi-Fi." },
+    { title: "Transparent, All-Inclusive Written Quotes", desc: "Look for comprehensive quotes that itemize the driver, fuel, mileage, and taxes so you avoid surprise fees at the end of your trip." }
+  ]
+};

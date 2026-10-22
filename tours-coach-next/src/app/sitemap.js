@@ -1,59 +1,70 @@
-import { FLEET_DATA, NAV_LINKS } from '../lib/data'; // Adjust path if needed
+import { FLEET_DATA, NAV_LINKS, SERVICE_DATA, DESTINATION_DATA } from '../lib/data';
 
 export default function sitemap() {
   const baseUrl = "https://www.tourscoachcharter.com";
 
-  // 1. Add your Homepage and any hidden "standalone" pages here
-  // (e.g., if the FIFA page isn't in your top menu, add "/fifa-2026-charter-bus" here)
-  const allRoutes = [
-    "", 
-    "/request-a-quote" // <-- Added your new lead campaign page here
+  // High-priority core landing routes
+  const coreRoutes = [
+    { route: "", priority: 1.0, changeFrequency: "daily" },
+    { route: "/charter-bus-rental-toronto", priority: 0.95, changeFrequency: "weekly" },
+    { route: "/pricing", priority: 0.95, changeFrequency: "weekly" },
+    { route: "/request-a-quote", priority: 0.9, changeFrequency: "weekly" },
+    { route: "/tours", priority: 0.85, changeFrequency: "weekly" },
+    { route: "/multi-day-tours", priority: 0.85, changeFrequency: "weekly" },
+    { route: "/winter-destinations", priority: 0.8, changeFrequency: "monthly" },
+    { route: "/events", priority: 0.8, changeFrequency: "weekly" },
+    { route: "/about", priority: 0.7, changeFrequency: "monthly" },
+    { route: "/contact", priority: 0.7, changeFrequency: "monthly" }
   ];
 
-  // 2. Automatically loop through your entire Navigation Menu (NAV_LINKS)
-  if (NAV_LINKS) {
-    NAV_LINKS.forEach((link) => {
-      // If the nav item is a direct link (like About or Contact)
-      if (!link.dropdown) {
-        allRoutes.push(`/${link.id}`);
-      }
-      
-      // If the nav item has a dropdown (like Services or Destinations), grab ALL sub-pages
-      if (link.dropdown) {
-        link.dropdown.forEach((drop) => {
-           allRoutes.push(`/${drop.id}`);
-        });
-      }
-    });
-  }
-
-  // Remove any accidental duplicates just to be safe
-  const uniqueRoutes = [...new Set(allRoutes)];
-
-  // Map the routes into the XML format Google requires
-  const corePages = uniqueRoutes.map((route) => ({
-    url: `${baseUrl}${route}`,
+  const allUrls = coreRoutes.map((item) => ({
+    url: `${baseUrl}${item.route}`,
     lastModified: new Date(),
-    changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1.0 : 0.8,
+    changeFrequency: item.changeFrequency,
+    priority: item.priority,
   }));
 
-  // 3. Dynamically pull all your fleet vehicles
-  const fleetPages = [];
+  // Add all fleet vehicles
   if (FLEET_DATA) {
-    Object.keys(FLEET_DATA).forEach((vehicleId) => {
-      // Check to make sure we didn't already add it from the NAV_LINKS loop
-      if (!uniqueRoutes.includes(`/${vehicleId}`)) {
-        fleetPages.push({
-          url: `${baseUrl}/${vehicleId}`,
-          lastModified: new Date(),
-          changeFrequency: "monthly",
-          priority: 0.9,
-        });
-      }
+    Object.keys(FLEET_DATA).forEach((key) => {
+      allUrls.push({
+        url: `${baseUrl}/${key}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.9,
+      });
     });
   }
 
-  // 4. Combine everything into the final sitemap
-  return [...corePages, ...fleetPages];
+  // Add all services
+  if (SERVICE_DATA) {
+    Object.keys(SERVICE_DATA).forEach((key) => {
+      allUrls.push({
+        url: `${baseUrl}/services/${key}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.9,
+      });
+    });
+  }
+
+  // Add all destination hubs
+  if (DESTINATION_DATA) {
+    Object.keys(DESTINATION_DATA).forEach((key) => {
+      allUrls.push({
+        url: `${baseUrl}/${key}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      });
+    });
+  }
+
+  // Deduplicate
+  const seen = new Set();
+  return allUrls.filter((item) => {
+    if (seen.has(item.url)) return false;
+    seen.add(item.url);
+    return true;
+  });
 }

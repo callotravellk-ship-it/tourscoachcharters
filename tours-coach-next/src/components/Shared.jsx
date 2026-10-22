@@ -641,52 +641,91 @@ export const Header = () => {
 };
 
 export const Footer = () => (
-  <footer className="bg-gray-900 text-gray-300 py-12 border-t-4 border-red-600">
-    <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+  <footer className="bg-slate-950 text-slate-300 py-16 border-t-4 border-red-600">
+    <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
       
-      <div>
+      {/* Col 1: Brand & Credentials */}
+      <div className="lg:col-span-2">
         <Link href="/" className="mb-6 bg-white inline-block p-2 rounded-lg cursor-pointer block w-max">
           <img src="/logo.png" alt="Tours Coach Charters Logo" className="h-10 w-auto object-contain" />
         </Link>
-        <p className="text-sm mb-6">Canada's Premier Charter Bus Service. From corporate retreats to school trips, we provide reliable transportation from coast to coast.</p>
+        <p className="text-sm text-slate-400 mb-6 max-w-sm leading-relaxed">
+          Canada's Premier Charter Bus Company. Operating 56-passenger luxury coaches, executive minibuses, and passenger vans across Toronto, Ontario, and nationwide.
+        </p>
         
-        <div className="text-xs text-gray-400 bg-gray-800/40 p-3.5 rounded-lg border border-gray-800 inline-block">
-          <p className="mb-1.5">A subsidiary of <strong className="text-gray-300 font-bold">CANADA TOURS COACH LTD.</strong></p>
-          <p className="font-mono">BN: 833253503 <span className="mx-1.5 text-gray-600">|</span> ID: 2315881</p>
+        <div className="text-xs text-slate-400 bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1.5 max-w-sm">
+          <p><strong className="text-white font-bold">CANADA TOURS COACH LTD.</strong></p>
+          <p className="text-slate-400">{COMPANY_INFO.address}</p>
+          <p className="text-slate-300 font-mono text-[11px] pt-1 border-t border-slate-800">
+            BN: 833253503 | Ontario CVOR Certified | $10M Insured
+          </p>
+        </div>
+
+        <div className="mt-4 flex items-center gap-4 text-sm text-slate-300">
+          <a href={`tel:${COMPANY_INFO.phone}`} className="flex items-center gap-1.5 hover:text-red-400 font-bold">
+            <Phone size={16} className="text-red-500" /> {COMPANY_INFO.phone}
+          </a>
+          <a href={`mailto:${COMPANY_INFO.email}`} className="flex items-center gap-1.5 hover:text-red-400">
+            <Mail size={16} className="text-red-500" /> {COMPANY_INFO.email}
+          </a>
         </div>
       </div>
       
+      {/* Col 2: Fleet Charters */}
       <div>
-        <h4 className="text-white font-bold text-lg mb-4">Contact Info</h4>
-        <ul className="space-y-3 text-sm">
-          <li className="flex items-start"><Map size={18} className="mr-2 text-red-400 mt-1 flex-shrink-0" /> {COMPANY_INFO.address}</li>
-          <li className="flex items-center"><Phone size={18} className="mr-2 text-red-400" /> <a href={`tel:${COMPANY_INFO.phone}`} className="hover:text-white transition">{COMPANY_INFO.phone}</a></li>
-          <li className="flex items-center"><Mail size={18} className="mr-2 text-red-400" /> <a href={`mailto:${COMPANY_INFO.email}`} className="hover:text-white transition">{COMPANY_INFO.email}</a></li>
+        <h4 className="text-white font-black text-sm uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">
+          Charter Fleet
+        </h4>
+        <ul className="space-y-2.5 text-xs">
+          <li><Link href="/luxury-coach-bus-charter" className="hover:text-red-400 transition">56 Passenger Luxury Coach</Link></li>
+          <li><Link href="/mini-coach-bus-charter" className="hover:text-red-400 transition">24 - 36 Passenger Minibus</Link></li>
+          <li><Link href="/14-passenger-van-service" className="hover:text-red-400 transition">14 Passenger Sprinter Van</Link></li>
+          <li><Link href="/school-bus-charter" className="hover:text-red-400 transition">48 - 56 Passenger School Bus</Link></li>
+          <li><Link href="/pricing" className="hover:text-red-400 transition font-bold text-red-400">Charter Bus Rates & Pricing →</Link></li>
         </ul>
       </div>
 
+      {/* Col 3: Specialized Services */}
       <div>
-        <h4 className="text-white font-bold text-lg mb-4">Quick Links</h4>
-        <ul className="space-y-2 text-sm flex flex-col items-start">
-          <li><Link href="/about" className="hover:text-red-500 transition">About Us</Link></li>
-          <li><Link href="/contact" className="hover:text-red-500 transition">Contact Us</Link></li>
-          <li><Link href="/luxury-coach-bus-charter" className="hover:text-red-500 transition">Our Fleet</Link></li>
-          <li><Link href="/charter-bus-service-toronto" className="hover:text-red-500 transition">Destinations</Link></li>
+        <h4 className="text-white font-black text-sm uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">
+          Charter Services
+        </h4>
+        <ul className="space-y-2.5 text-xs">
+          <li><Link href="/services/corporate-transportation" className="hover:text-red-400 transition">Corporate Event Bus Rental</Link></li>
+          <li><Link href="/services/wedding-shuttle" className="hover:text-red-400 transition">Wedding Shuttle Rentals</Link></li>
+          <li><Link href="/services/school-trip-transportation" className="hover:text-red-400 transition">School Field Trip Buses</Link></li>
+          <li><Link href="/services/sports-team-transportation" className="hover:text-red-400 transition">Sports Team Bus Rentals</Link></li>
+          <li><Link href="/services/private-bus-tours" className="hover:text-red-400 transition">Private Bus Tours & Niagara</Link></li>
+          <li><Link href="/services/airport-group-transfers" className="hover:text-red-400 transition">Pearson YYZ Airport Transfers</Link></li>
         </ul>
       </div>
 
+      {/* Col 4: Top Destinations & Contact */}
       <div>
-        <h4 className="text-white font-bold text-lg mb-4">Newsletter</h4>
-        <p className="text-sm mb-4">Get the latest news and travel tips straight to your inbox.</p>
-        <form className="flex flex-col space-y-2" onSubmit={(e) => e.preventDefault()}>
-          <input type="email" placeholder="Your Email Address" className="px-4 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-red-600 text-white" />
-          <button className="bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 transition">Subscribe</button>
-        </form>
+        <h4 className="text-white font-black text-sm uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">
+          Destinations & Guides
+        </h4>
+        <ul className="space-y-2.5 text-xs">
+          <li><Link href="/charter-bus-rental-toronto" className="hover:text-red-400 transition font-semibold text-white">Charter Bus Rental Toronto</Link></li>
+          <li><Link href="/pricing" className="hover:text-red-400 transition">Cost to Rent a Bus in Canada</Link></li>
+          <li><Link href="/tours" className="hover:text-red-400 transition">Ontario Group Day Tours</Link></li>
+          <li><Link href="/charter-bus-service-mississauga" className="hover:text-red-400 transition">Mississauga Charter Bus</Link></li>
+          <li><Link href="/charter-bus-service-brampton" className="hover:text-red-400 transition">Brampton Coach Bus</Link></li>
+          <li><Link href="/about" className="hover:text-red-400 transition">About Canada Tours Coach</Link></li>
+          <li><Link href="/contact" className="hover:text-red-400 transition">Contact & 24/7 Dispatch</Link></li>
+        </ul>
       </div>
+
     </div>
     
-    <div className="container mx-auto px-4 mt-8 pt-8 border-t border-gray-800 text-sm text-center text-gray-500">
-      &copy; {new Date().getFullYear()} Tours Coach Charters. All rights reserved.
+    <div className="container mx-auto px-4 mt-12 pt-8 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>
+        &copy; {new Date().getFullYear()} Tours Coach Charters (Canada Tours Coach LTD). All rights reserved.
+      </div>
+      <div className="flex gap-4">
+        <Link href="/pricing" className="hover:text-slate-300">Pricing Guide</Link>
+        <Link href="/sitemap.xml" className="hover:text-slate-300">Sitemap</Link>
+      </div>
     </div>
   </footer>
 );

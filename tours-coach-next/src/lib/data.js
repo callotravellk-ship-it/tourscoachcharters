@@ -166,6 +166,13 @@ export const FLEET_DATA = {
   }
 };
 
+
+// Aliases for legacy/alternate routes
+FLEET_DATA["luxury-coach-bus-rental"] = FLEET_DATA["luxury-coach-bus-charter"];
+FLEET_DATA["mini-coach-bus-rental"] = FLEET_DATA["mini-coach-bus-charter"];
+FLEET_DATA["14-passenger-van-rental"] = FLEET_DATA["14-passenger-van-service"];
+FLEET_DATA["school-bus-rental"] = FLEET_DATA["school-bus-charter"];
+
 export const SEO_DATA = {
   "pricing": { title: "Charter Bus Rental Toronto Prices & Cost in Canada | Tours Coach Charters", desc: "How much does it cost to rent a charter bus in Canada? Transparent pricing guide for Toronto & Canada. Compare 56-passenger coach, minibus, and van rates in CAD." },
   "charter-bus-rental-toronto": { title: "Charter Bus Rental Toronto | Coach Bus & Minibus Charters GTA", desc: "Premier charter bus rental in Toronto & the GTA. 56 passenger luxury coaches, minibus rentals, and passenger vans with professional drivers. Get an instant CAD quote." },
@@ -175,10 +182,14 @@ export const SEO_DATA = {
   "tours": { title: "Ontario Group Tours & Day Trips | Tours Coach Charters", desc: "Private group day tours and event transportation from the GTA. Travel with your group—not the crowd." },
   "contact": { title: "Contact Us | Tours Coach Charters", desc: "Get in touch with Canada Tours Coach LTD for quotes, questions, and group transportation logistics." },
   "events": { title: "Canadian Event & Festival Charter Bus Transportation | Tours Coach Charters", desc: "Private group bus hire, mini coach charters, and executive Sprinter van shuttles for major festivals and events across Canada." },
-  "luxury-coach-bus-charter": { title: "Luxury Coach Bus Charter in Canada | Tours Coach Charters", desc: "Experience ultimate comfort for long-distance group travel with our 56 passenger luxury coaches." },
-  "mini-coach-bus-charter": { title: "Mini Coach Bus Charter in Canada | Tours Coach Charters", desc: "Perfect for corporate retreats and medium-sized groups. Book a 24-36 passenger mini coach." },
-  "14-passenger-van-service": { title: "14 Passenger Chauffeured Van Service | Tours Coach Charters", desc: "High-roof transit vans ideal for airport transfers, small family groups, or executive shuttle services." },
-  "school-bus-charter": { title: "School Bus Charter in Canada | Tours Coach Charters", desc: "Cost-effective transportation solution for large groups and school field trips. 48-56 passengers." },
+  "luxury-coach-bus-charter": { title: "56 Passenger Luxury Coach Bus Rental Toronto & Canada | Tours Coach", desc: "Rent a 56 passenger luxury coach bus in Toronto, Ontario & Canada. Features reclining seats, onboard restroom, high-speed Wi-Fi, 110V power outlets, and massive luggage bays." },
+  "mini-coach-bus-charter": { title: "24-36 Passenger Mini Coach Bus Rental Toronto & GTA | Tours Coach", desc: "Executive 24 to 36 passenger mini coach bus rental in Toronto & Ontario. Perfect for corporate retreats, wedding guest shuttles, and airport group transfers." },
+  "14-passenger-van-service": { title: "14 Passenger Chauffeured Van Rental Toronto & GTA | Tours Coach", desc: "High-roof 14 passenger van rental with professional chauffeur. High walk-in clearance, dedicated airport luggage cargo, and plush seating for Pearson airport & VIP transfers." },
+  "school-bus-charter": { title: "School Bus Rental Toronto & Ontario (48-56 Pax) | Tours Coach", desc: "Affordable, MTO-certified 48 to 56 passenger school bus rental in Toronto & Ontario. Safe, dependable transportation for school field trips, sports teams, and day camps." },
+  "luxury-coach-bus-rental": { title: "56 Passenger Luxury Coach Bus Rental Toronto & Canada | Tours Coach", desc: "Rent a 56 passenger luxury coach bus in Toronto, Ontario & Canada. Features reclining seats, onboard restroom, high-speed Wi-Fi, 110V power outlets, and massive luggage bays." },
+  "mini-coach-bus-rental": { title: "24-36 Passenger Mini Coach Bus Rental Toronto & GTA | Tours Coach", desc: "Executive 24 to 36 passenger mini coach bus rental in Toronto & Ontario. Perfect for corporate retreats, wedding guest shuttles, and airport group transfers." },
+  "14-passenger-van-rental": { title: "14 Passenger Chauffeured Van Rental Toronto & GTA | Tours Coach", desc: "High-roof 14 passenger van rental with professional chauffeur. High walk-in clearance, dedicated airport luggage cargo, and plush seating for Pearson airport & VIP transfers." },
+  "school-bus-rental": { title: "School Bus Rental Toronto & Ontario (48-56 Pax) | Tours Coach", desc: "Affordable, MTO-certified 48 to 56 passenger school bus rental in Toronto & Ontario. Safe, dependable transportation for school field trips, sports teams, and day camps." },
   "charter-bus-service-toronto": { title: "Toronto Coach Charters & Bus Services | Tours Coach Charters", desc: "Book premium group transportation in Toronto. Executive shuttles to Pearson (YYZ), corporate travel to the Metro Convention Centre, and FIFA 2026 logistics." },
   "charter-bus-service-scarborough": { title: "Scarborough Charter Bus Services | Tours Coach Charters", desc: "Dependable group travel throughout Scarborough. Shuttles to UTSC, Centennial College, and the Toronto Zoo." },
   "charter-bus-service-ajax": { title: "Ajax Coach & Minibus Charters | Tours Coach Charters", desc: "Group transportation and charter bus services serving the Ajax and Durham Region business sectors." },

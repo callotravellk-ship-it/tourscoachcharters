@@ -38,10 +38,10 @@ const NAV_LINKS = [
     title: "Our Fleet", 
     id: "fleet",
     dropdown: [
-      { title: "Luxury Coach Bus", id: "luxury-coach-bus-rental" },
-      { title: "Mini Coach Bus", id: "mini-coach-bus-rental" },
-      { title: "14 Passenger Van", id: "14-passenger-van-rental" },
-      { title: "School Bus", id: "school-bus-rental" }
+      { title: "56 Passenger Luxury Coach", id: "luxury-coach-bus-charter" },
+      { title: "24-36 Mini Coach Bus", id: "mini-coach-bus-charter" },
+      { title: "14 Passenger Van", id: "14-passenger-van-service" },
+      { title: "School Bus Charter", id: "school-bus-charter" }
     ]
   },
   {

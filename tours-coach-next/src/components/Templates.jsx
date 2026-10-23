@@ -6,6 +6,7 @@ import { COMPANY_INFO } from '../lib/data';
 import { TrustStatsBanner } from './Shared';
 import { CheckCircle, Route, ShieldCheck, Star, Map, Phone, Mail, ArrowRight, ChevronDown, Users, Trophy, CalendarCheck, Send } from 'lucide-react';
 import * as Icons from 'lucide-react';
+import FleetDetailClient from './FleetDetailClient';
 
 export const AboutUs = () => {
   const { setIsQuoteModalOpen } = useQuote();
@@ -242,75 +243,8 @@ export const FifaPage = () => {
   );
 };
 
-export const FleetTemplate = ({ data }) => {
-  const { setIsQuoteModalOpen } = useQuote();
-  return (
-    <div className="pt-32 pb-24 w-full bg-slate-50 min-h-screen">
-      <div className="container mx-auto px-4">
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden flex flex-col lg:flex-row mb-16 border border-slate-100 transform transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] relative">
-          <div className="lg:w-1/2 relative min-h-[400px] lg:min-h-[500px] group overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent z-10 opacity-60"></div>
-            <img src={data.img} alt={data.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            <div className="absolute top-6 left-6 z-20">
-              <span className="bg-white/90 backdrop-blur-md text-blue-900 px-5 py-2.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-2 border border-white/20">
-                <Users size={18} className="text-red-600" /> {data.pax}
-              </span>
-            </div>
-          </div>
-          <div className="lg:w-1/2 p-8 lg:p-14 flex flex-col justify-center relative bg-white">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-50"></div>
-            <h1 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">{data.name}</h1>
-            <p className="text-lg text-slate-600 mb-10 leading-relaxed">{data.desc}</p>
-            <div className="mb-12">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Premium Features</h3>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {data.features.map((feat, i) => (
-                  <li key={i} className="flex items-center bg-slate-50 border border-slate-100 p-3.5 rounded-xl hover:bg-blue-50 hover:border-blue-200 transition-colors group cursor-default">
-                    <div className="bg-white p-1.5 rounded-full shadow-sm mr-3 group-hover:scale-110 transition-transform"><CheckCircle size={16} className="text-green-500" /></div>
-                    <span className="text-slate-700 font-medium text-sm">{feat}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="mt-auto flex flex-col sm:flex-row gap-4">
-              <button onClick={() => setIsQuoteModalOpen(true)} className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 text-white font-bold py-4 px-8 rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] hover:-translate-y-0.5 text-lg flex justify-center items-center gap-2">
-                Request a Quote <ArrowRight size={20} />
-              </button>
-              <a href="tel:(416) 269-9555" className="w-full sm:w-auto bg-white text-slate-700 font-bold py-4 px-8 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all flex justify-center items-center gap-2 text-lg">
-                <Phone size={20} className="text-blue-800" /> (416) 269-9555
-              </a>
-            </div>
-
-          </div>
-        </div>
-        <div className="mb-20"><TrustStatsBanner /></div>
-        {data.reviews && data.reviews.length > 0 && (
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-black text-blue-900 mb-4 tracking-tight">Client Experiences</h2>
-              <p className="text-slate-600 text-lg">Hear directly from groups who have traveled aboard the {data.name}.</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.reviews.map((review, i) => (
-                <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-800 to-blue-600"></div>
-                  <div className="flex text-yellow-400 mb-6">
-                    {[...Array(review.rating)].map((_, j) => (<Star key={j} size={18} className="fill-current" />))}
-                  </div>
-                  <p className="text-slate-700 mb-8 flex-grow leading-relaxed font-medium">"{review.text}"</p>
-                  <div className="flex items-center pt-4 border-t border-slate-100 mt-auto">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold mr-3">{review.author.charAt(0)}</div>
-                    <p className="font-bold text-sm text-slate-900">{review.author}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+export const FleetTemplate = ({ data, slug }) => {
+  return <FleetDetailClient data={data} slug={slug} />;
 };
 
 export const GenericPage = ({ title, subtitle, bgImage }) => {

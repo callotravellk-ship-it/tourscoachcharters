@@ -50,7 +50,42 @@ export default async function DynamicPage({ params }) {
   }
   
   if (FLEET_DATA[slug]) {
-    return <FleetTemplate data={FLEET_DATA[slug]} />;
+    const fleet = FLEET_DATA[slug];
+    const vehicleSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": fleet.name,
+      "description": fleet.desc,
+      "image": `https://www.tourscoachcharter.com${fleet.img}`,
+      "brand": {
+        "@type": "Brand",
+        "name": "Canada Tours Coach"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "CAD",
+        "lowPrice": fleet.rate ? fleet.rate.replace(/[^0-9]/g, '') : "105",
+        "highPrice": "250",
+        "price": fleet.rate ? fleet.rate.replace(/[^0-9]/g, '') : "175",
+        "availability": "https://schema.org/InStock",
+        "url": `https://www.tourscoachcharter.com/${slug}`
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "128"
+      }
+    };
+
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(vehicleSchema) }}
+        />
+        <FleetTemplate data={fleet} slug={slug} />
+      </>
+    );
   }
 
   // If someone types a random URL that doesn't exist, Next.js throws a 404 page

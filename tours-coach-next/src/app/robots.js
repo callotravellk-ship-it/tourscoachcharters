@@ -3,7 +3,7 @@ export default function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/crm/'],
+      disallow: ['/api/', '/crm/', '/thank-you'],
     },
     sitemap: 'https://www.tourscoachcharter.com/sitemap.xml',
   };

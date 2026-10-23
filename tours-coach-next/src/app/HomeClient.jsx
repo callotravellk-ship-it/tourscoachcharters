@@ -603,7 +603,7 @@ export default function HomeClient() {
       </section>
 
       {/* 6. TRUST & STATS BANNER */}
-      <section className="py-16 bg-slate-900 text-white">
+      <section className="py-12 sm:py-16 bg-slate-950 text-white px-4">
         <TrustStatsBanner />
       </section>
 

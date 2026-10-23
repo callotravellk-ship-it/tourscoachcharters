@@ -182,9 +182,9 @@ export default function FleetDetailClient({ data, slug }) {
   return (
     <div className="w-full bg-slate-50 min-h-screen pt-28 pb-20 font-sans">
       
-      {/* 1. BREADCRUMB & CANADIAN FLEET BADGE */}
+      {/* 1. BREADCRUMB & TOP HEADER BAR */}
       <div className="container mx-auto px-4 max-w-6xl mb-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs mb-4">
           <nav className="flex items-center space-x-2 text-slate-500 font-medium">
             <Link href="/" className="hover:text-blue-900 transition">Home</Link>
             <ChevronRight size={13} className="text-slate-400" />
@@ -194,136 +194,211 @@ export default function FleetDetailClient({ data, slug }) {
           </nav>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-red-700 font-bold border border-red-200">
             <span>🍁</span>
-            <span>CVOR & DOT Fully Certified Fleet</span>
+            <span>Ontario CVOR & USDOT Safety Certified</span>
+          </div>
+        </div>
+
+        {/* Executive Headline & Trust Line */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-2">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-900 text-xs font-black uppercase tracking-wider mb-2.5 border border-blue-100">
+              <Sparkles size={12} className="text-red-600" />
+              <span>{data.category}</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              {data.name}
+            </h1>
+            <p className="text-slate-600 text-sm sm:text-base mt-2.5 max-w-3xl leading-relaxed font-normal">
+              {data.desc}
+            </p>
+          </div>
+          <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-2 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-200 flex-shrink-0">
+            <div className="flex items-center gap-1.5 text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={16} className="fill-current" />
+              ))}
+              <span className="text-slate-900 font-black text-sm ml-1">4.9 / 5.0</span>
+            </div>
+            <span className="text-xs text-slate-500 font-semibold">Over 500+ Verified Group Charters</span>
           </div>
         </div>
       </div>
 
-      {/* 2. HERO SHOWCASE CARD */}
-      <section className="container mx-auto px-4 max-w-6xl mb-12">
-        <div className="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden flex flex-col lg:flex-row">
+      {/* 2. MODERN ASYMMETRIC FLEET SHOWCASE */}
+      <section className="container mx-auto px-4 max-w-6xl mb-14">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Left Column: Visual Showcase */}
-          <div className="lg:w-1/2 relative min-h-[420px] lg:min-h-[520px] group overflow-hidden bg-slate-900">
-            <img 
-              src={data.img} 
-              alt={data.name} 
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30 pointer-events-none"></div>
+          {/* Left Column: Widescreen Vehicle Showcase & Spec Matrix (7 Cols) */}
+          <div className="lg:col-span-7 space-y-4">
             
-            {/* Overlay Top Badges */}
-            <div className="absolute top-6 left-6 right-6 flex items-center justify-between gap-2 z-20">
-              <span className="bg-white/95 backdrop-blur-md text-blue-950 px-4 py-2 rounded-full text-xs font-black shadow-lg flex items-center gap-2 border border-white/40">
-                <Users size={15} className="text-red-600" /> {data.pax}
+            {/* Widescreen Vehicle Photography */}
+            <div className="relative aspect-[16/10] w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 group bg-slate-950">
+              <img 
+                src={data.img} 
+                alt={data.name} 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none"></div>
+
+              {/* Floating Capacity Badge */}
+              <div className="absolute top-5 left-5 z-20">
+                <span className="bg-white/95 backdrop-blur-md text-blue-950 px-4 py-2 rounded-full text-xs font-black shadow-lg flex items-center gap-2 border border-white/40">
+                  <Users size={15} className="text-red-600" /> {data.pax}
+                </span>
+              </div>
+
+              {/* Highway Fleet Spec Badge */}
+              <div className="absolute bottom-5 right-5 z-20">
+                <span className="bg-slate-950/80 backdrop-blur-md text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-white/20">
+                  Ontario Highway Fleet Spec
+                </span>
+              </div>
+            </div>
+
+            {/* Clean Amenity Specification Ribbon */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+                <div className="flex items-center gap-2 text-slate-400 mb-1">
+                  <Users size={15} className="text-blue-900" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Seating</span>
+                </div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 truncate">
+                  {data.pax}
+                </div>
+              </div>
+
+              <div className="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+                <div className="flex items-center gap-2 text-slate-400 mb-1">
+                  <Luggage size={15} className="text-amber-600" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Luggage</span>
+                </div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 truncate">
+                  {data.luggage?.split('(')[0] || "Ample Space"}
+                </div>
+              </div>
+
+              <div className="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+                <div className="flex items-center gap-2 text-slate-400 mb-1">
+                  <Sparkles size={15} className="text-red-600" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Restroom</span>
+                </div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 truncate">
+                  {data.name.includes("56") ? "Yes (Lavatory)" : data.name.includes("Mini") ? "Select Models" : "Rest Stops"}
+                </div>
+              </div>
+
+              <div className="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+                <div className="flex items-center gap-2 text-slate-400 mb-1">
+                  <Zap size={15} className="text-emerald-600" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Tech</span>
+                </div>
+                <div className="text-xs sm:text-sm font-black text-slate-900 truncate">
+                  {data.name.includes("56") ? "110V & 5G Wi-Fi" : "USB & Wi-Fi"}
+                </div>
+              </div>
+            </div>
+
+            {/* Executive Highlights Row */}
+            <div className="flex flex-wrap gap-2 pt-1 text-xs text-slate-600 font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80">
+                <CheckCircle size={13} className="text-green-600" /> Reclining plush seating
               </span>
-              <span className="bg-blue-900/90 backdrop-blur-md text-white px-3.5 py-1.5 rounded-full text-xs font-bold shadow-md">
-                {data.category}
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80">
+                <CheckCircle size={13} className="text-green-600" /> Multi-zone climate control
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80">
+                <CheckCircle size={13} className="text-green-600" /> Professional driver included
               </span>
             </div>
 
-            {/* Overlay Bottom Badges */}
-            <div className="absolute bottom-6 left-6 right-6 z-20 flex flex-wrap gap-2 text-xs text-white">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md border border-white/20">
-                <Luggage size={14} className="text-amber-400" /> {data.luggage?.split('(')[0] || "Generous Luggage Space"}
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md border border-white/20">
-                <Star size={14} className="text-yellow-400 fill-yellow-400" /> 4.9/5 Rating
-              </span>
-            </div>
           </div>
 
-          {/* Right Column: Specifications & Direct Booking */}
-          <div className="lg:w-1/2 p-6 sm:p-10 lg:p-12 flex flex-col justify-between bg-white relative">
-            <div>
-              <div className="inline-block text-xs font-black text-red-600 tracking-wider uppercase bg-red-50 px-3 py-1 rounded-full mb-3 border border-red-100">
-                {data.category}
-              </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 mb-3 tracking-tight leading-tight">
-                {data.name}
-              </h1>
-              
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-6">
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={14} className="fill-current" />
-                  ))}
-                </div>
-                <span>4.9 / 5.0 (Over 500+ Verified Group Charters)</span>
-              </div>
+          {/* Right Column: Executive Rate & Reservation Card (5 Cols) */}
+          <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-blue-900 to-red-600"></div>
 
-              {/* Transparent Pricing Callout Box */}
-              <div className="bg-gradient-to-r from-blue-50 to-slate-50 border border-blue-100 rounded-2xl p-4 sm:p-5 mb-6">
-                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-blue-100/80 pb-3 mb-3">
-                  <div>
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Estimated Charter Rate</span>
-                    <span className="text-2xl sm:text-3xl font-black text-blue-900 tracking-tight">{data.rate}</span>
-                  </div>
-                  <div className="sm:text-right">
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Full Day Flat Rate</span>
-                    <span className="text-lg font-black text-slate-800">{data.dailyRate || "From $1,450 / day"}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-xs text-slate-600">
-                  <span className="flex items-center gap-1 font-semibold text-green-700">
-                    <CheckCircle size={14} /> Professional Driver, Fuel & Insurance Included
+            {/* Pricing Header */}
+            <div className="mb-6 pb-6 border-b border-slate-100">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">
+                Charter Rate Breakdown
+              </span>
+              <div className="flex items-baseline justify-between gap-2">
+                <div>
+                  <span className="text-3xl sm:text-4xl font-black text-blue-950 tracking-tight">
+                    {data.rate}
                   </span>
-                  <span className="font-bold text-red-600">Price Beat Guarantee</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[11px] text-slate-400 font-semibold block">Full Day Flat Rate</span>
+                  <span className="text-base sm:text-lg font-black text-slate-800">
+                    {data.dailyRate || "From $1,450 / day"}
+                  </span>
                 </div>
               </div>
-
-              {/* Description */}
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-6 font-normal">
-                {data.desc}
-              </p>
-
-              {/* Key Specs Matrix */}
-              <div className="grid grid-cols-2 gap-3 mb-8">
-                <div className="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Capacity</span>
-                  <span className="text-sm font-black text-slate-900 flex items-center gap-1.5 mt-0.5">
-                    <Users size={14} className="text-blue-900" /> {data.pax}
-                  </span>
-                </div>
-                <div className="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Restroom</span>
-                  <span className="text-sm font-black text-slate-900 flex items-center gap-1.5 mt-0.5">
-                    <Sparkles size={14} className="text-blue-900" /> {data.name.includes("56") ? "Yes (Onboard Lavatory)" : data.name.includes("Mini") ? "Select Models / Scheduled" : "Rest Stops Scheduled"}
-                  </span>
-                </div>
-                <div className="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Power & Wi-Fi</span>
-                  <span className="text-sm font-black text-slate-900 flex items-center gap-1.5 mt-0.5">
-                    <Zap size={14} className="text-blue-900" /> {data.name.includes("56") ? "110V + USB + 5G Wi-Fi" : "USB Ports + Wi-Fi"}
-                  </span>
-                </div>
-                <div className="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">Safety Class</span>
-                  <span className="text-sm font-black text-slate-900 flex items-center gap-1.5 mt-0.5">
-                    <ShieldCheck size={14} className="text-green-600" /> CVOR / DOT Certified
-                  </span>
-                </div>
+              <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-50 text-red-700 text-xs font-bold border border-red-100">
+                <Award size={13} className="text-red-600 flex-shrink-0" />
+                <span>Price Beat Guarantee: 5% Below Any Competitor</span>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            {/* Transparent Inclusions */}
+            <div className="space-y-3 mb-6">
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wide block">
+                Standard Inclusions:
+              </span>
+              <ul className="space-y-2 text-xs sm:text-sm text-slate-600">
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={15} className="text-green-600 flex-shrink-0" />
+                  <span>Licensed Commercial Driver Included</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={15} className="text-green-600 flex-shrink-0" />
+                  <span>Standard Fuel & GTA Mileage Included</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={15} className="text-green-600 flex-shrink-0" />
+                  <span>$10,000,000 Commercial Liability Coverage</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={15} className="text-green-600 flex-shrink-0" />
+                  <span>Routine Ministry (MTO) Safety Inspection</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={15} className="text-green-600 flex-shrink-0" />
+                  <span>Flexible Date Changes & Free Quote Inquiry</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Direct Booking Actions */}
+            <div className="space-y-3 pt-2">
               <button 
                 onClick={handleOpenQuote}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-black py-4 px-6 rounded-xl transition shadow-lg flex justify-center items-center gap-2 text-sm sm:text-base cursor-pointer hover:shadow-red-600/30 active:scale-98"
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 px-6 rounded-2xl transition shadow-lg flex justify-center items-center gap-2 text-base cursor-pointer hover:shadow-red-600/30 active:scale-98"
               >
                 <span>Request Free Quote for This Bus</span>
                 <ArrowRight size={18} />
               </button>
               <a 
                 href="tel:(647)948-8424" 
-                className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-4 px-5 rounded-xl border border-slate-200 transition flex justify-center items-center gap-2 text-sm cursor-pointer whitespace-nowrap"
+                className="w-full bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold py-3.5 px-5 rounded-2xl border border-slate-200 transition flex justify-center items-center gap-2 text-sm cursor-pointer"
               >
-                <Phone size={17} className="text-blue-900" /> (647) 948-8424
+                <Phone size={16} className="text-blue-900" />
+                <span>Call 24/7 Dispatch: (647) 948-8424</span>
               </a>
             </div>
 
+            {/* Live Availability Status */}
+            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <span className="flex items-center gap-1.5 font-semibold text-slate-700">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Available for Ontario Dispatch
+              </span>
+              <span className="font-medium text-slate-400">15-Min Response</span>
+            </div>
+
           </div>
+
         </div>
       </section>
 

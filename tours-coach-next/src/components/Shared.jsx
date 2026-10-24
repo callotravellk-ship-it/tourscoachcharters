@@ -12,9 +12,8 @@ import {
   ArrowLeftRight, Clock, Sparkles, AlertCircle, Check, Calendar, Minus, Plus
 } from 'lucide-react';
 
-// --- GEOAPIFY IMPORTS ---
-import { GeoapifyGeocoderAutocomplete } from '@geoapify/react-geocoder-autocomplete';
-import '@geoapify/geocoder-autocomplete/styles/minimal.css';
+// --- GOOGLE PLACES AUTOCOMPLETE ---
+import GooglePlacesInput from './GooglePlacesInput';
 
 // --- FIREBASE IMPORTS ---
 import { db } from '../lib/firebase';
@@ -1020,41 +1019,6 @@ export const QuoteForm = ({ onClose }) => {
     <div className="bg-white p-5 sm:p-7 md:p-8 rounded-2xl shadow-2xl relative z-10 border-t-4 border-red-600 max-h-[92vh] overflow-y-auto">
       
       <style>{`
-        .geoapify-autocomplete-input { 
-          width: 100%; 
-          padding: 0.65rem 0.85rem; 
-          font-size: 0.875rem; 
-          border: none; 
-          outline: none; 
-          background: transparent; 
-          color: #111827;
-        }
-        .geoapify-autocomplete-items { 
-          position: absolute; 
-          z-index: 9999; 
-          width: 100%; 
-          background: white; 
-          border: 1px solid #e2e8f0; 
-          border-radius: 0.5rem; 
-          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15); 
-          margin-top: 4px; 
-          max-height: 220px;
-          overflow-y: auto;
-        }
-        .geoapify-autocomplete-item { 
-          padding: 0.6rem 0.85rem; 
-          cursor: pointer; 
-          font-size: 0.875rem; 
-          color: #334155; 
-          line-height: 1.4; 
-          border-bottom: 1px solid #f8fafc;
-        }
-        .geoapify-autocomplete-item:hover { 
-          background-color: #f1f5f9; 
-          color: #1e3a8a; 
-          font-weight: 600; 
-        }
-        .geoapify-close-button { display: none; }
         .react-datepicker-wrapper { width: 100%; }
       `}</style>
 
@@ -1196,20 +1160,14 @@ export const QuoteForm = ({ onClose }) => {
               <div className={`relative w-full bg-white border rounded-lg focus-within:ring-2 focus-within:ring-blue-800 transition text-sm ${
                 errors.pickup ? 'border-red-500 bg-red-50/30' : 'border-gray-300 hover:border-gray-400'
               }`}>
-                <GeoapifyGeocoderAutocomplete
+                <GooglePlacesInput
                   placeholder="Enter city, airport, hotel, or street address..."
-                  filterByCountryCode={["ca"]}
                   value={quoteData.pickup}
-                  placeSelect={(place) => {
-                    if (place) {
-                      setQuoteData({ ...quoteData, pickup: place.properties.formatted });
-                      setErrors(prev => ({ ...prev, pickup: undefined }));
-                    }
+                  onChange={(val) => {
+                    setQuoteData(prev => ({ ...prev, pickup: val }));
+                    if (val) setErrors(prev => ({ ...prev, pickup: undefined }));
                   }}
-                  onUserInput={(value) => {
-                    setQuoteData({ ...quoteData, pickup: value });
-                    if (value) setErrors(prev => ({ ...prev, pickup: undefined }));
-                  }}
+                  className="w-full px-3.5 py-2.5 text-sm outline-none bg-transparent text-gray-900 rounded-lg placeholder-slate-400"
                 />
               </div>
               {errors.pickup && (
@@ -1275,20 +1233,14 @@ export const QuoteForm = ({ onClose }) => {
               <div className={`relative w-full bg-white border rounded-lg focus-within:ring-2 focus-within:ring-blue-800 transition text-sm ${
                 errors.destination ? 'border-red-500 bg-red-50/30' : 'border-gray-300 hover:border-gray-400'
               }`}>
-                <GeoapifyGeocoderAutocomplete
+                <GooglePlacesInput
                   placeholder="Enter destination, event venue, or landmark..."
-                  filterByCountryCode={["ca"]}
                   value={quoteData.destination}
-                  placeSelect={(place) => {
-                    if (place) {
-                      setQuoteData({ ...quoteData, destination: place.properties.formatted });
-                      setErrors(prev => ({ ...prev, destination: undefined }));
-                    }
+                  onChange={(val) => {
+                    setQuoteData(prev => ({ ...prev, destination: val }));
+                    if (val) setErrors(prev => ({ ...prev, destination: undefined }));
                   }}
-                  onUserInput={(value) => {
-                    setQuoteData({ ...quoteData, destination: value });
-                    if (value) setErrors(prev => ({ ...prev, destination: undefined }));
-                  }}
+                  className="w-full px-3.5 py-2.5 text-sm outline-none bg-transparent text-gray-900 rounded-lg placeholder-slate-400"
                 />
               </div>
               {errors.destination && (

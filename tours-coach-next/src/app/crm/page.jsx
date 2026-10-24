@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import GooglePlacesInput from '../../components/GooglePlacesInput';
 
 export default function CRMDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -249,6 +249,13 @@ export default function RootLayout({ children }) {
             `
           }}
         />
+
+        {/* Google Maps JavaScript API with Places Library */}
+        <Script 
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJ0nthZfylJV4cO3hWgxVnKiOHQkzERM8&libraries=places" 
+          strategy="afterInteractive" 
+          data-gmaps-places="true"
+        />
       </head>
       <body>
         <noscript>

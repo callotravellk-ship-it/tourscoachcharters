@@ -2,6 +2,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Send, MapPin, Calendar, Users } from 'lucide-react';
+import GooglePlacesInput from '../../components/GooglePlacesInput';
 
 function TourQuoteFormContent() {
   const searchParams = useSearchParams();
@@ -89,7 +90,12 @@ function TourQuoteFormContent() {
           </div>
           <div>
             <label className="block text-sm font-bold text-slate-700 mb-2 flex items-center"><MapPin size={16} className="mr-1 text-red-600"/> Pickup City</label>
-            <input type="text" name="pickupLocation" placeholder="e.g. Toronto" onChange={handleChange} className="w-full border border-slate-200 rounded-lg px-4 py-3 outline-none focus:border-blue-900" />
+            <GooglePlacesInput 
+              value={formData.pickupLocation} 
+              onChange={(val) => setFormData(prev => ({ ...prev, pickupLocation: val }))}
+              placeholder="e.g. Toronto, ON" 
+              className="w-full border border-slate-200 rounded-lg px-4 py-3 outline-none focus:border-blue-900 text-sm" 
+            />
           </div>
         </div>
 

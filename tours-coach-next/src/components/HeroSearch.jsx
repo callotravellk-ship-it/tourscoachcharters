@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MapPin, Navigation, Bus, Search } from 'lucide-react';
+import GooglePlacesInput from './GooglePlacesInput';
 
 export const HeroSearch = () => {
   const router = useRouter();
@@ -32,14 +33,13 @@ export const HeroSearch = () => {
         <div className="w-full md:w-1/3">
           <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Pickup Location</label>
           <div className="relative">
-            <MapPin className="absolute left-3 top-3.5 text-red-600" size={20} />
-            <input 
-              type="text" 
+            <MapPin className="absolute left-3 top-3.5 text-red-600 z-10 pointer-events-none" size={20} />
+            <GooglePlacesInput 
               required
               value={pickup}
-              onChange={(e) => setPickup(e.target.value)}
+              onChange={(val) => setPickup(val)}
               placeholder="e.g. Toronto, ON" 
-              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 outline-none transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 outline-none transition-all text-slate-900 text-sm"
             />
           </div>
         </div>
@@ -48,14 +48,13 @@ export const HeroSearch = () => {
         <div className="w-full md:w-1/3">
           <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Destination</label>
           <div className="relative">
-            <Navigation className="absolute left-3 top-3.5 text-blue-800" size={20} />
-            <input 
-              type="text" 
+            <Navigation className="absolute left-3 top-3.5 text-blue-800 z-10 pointer-events-none" size={20} />
+            <GooglePlacesInput 
               required
               value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              placeholder="e.g. Niagara Falls" 
-              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 outline-none transition-all"
+              onChange={(val) => setDestination(val)}
+              placeholder="e.g. Niagara Falls, ON" 
+              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 outline-none transition-all text-slate-900 text-sm"
             />
           </div>
         </div>
@@ -64,11 +63,11 @@ export const HeroSearch = () => {
         <div className="w-full md:w-1/4">
           <label className="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Vehicle Type</label>
           <div className="relative">
-            <Bus className="absolute left-3 top-3.5 text-slate-500" size={20} />
+            <Bus className="absolute left-3 top-3.5 text-slate-500 z-10 pointer-events-none" size={20} />
             <select 
               value={vehicle}
               onChange={(e) => setVehicle(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 outline-none transition-all appearance-none cursor-pointer"
+              className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-800 outline-none transition-all appearance-none cursor-pointer text-slate-900 text-sm"
             >
               <option value="luxury-coach-bus-rental">Luxury Coach (56 Pax)</option>
               <option value="mini-coach-bus-rental">Mini Coach (24-36 Pax)</option>
@@ -80,7 +79,7 @@ export const HeroSearch = () => {
 
         {/* Submit Button */}
         <div className="w-full md:w-auto">
-          <button type="submit" className="w-full md:w-auto bg-red-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-red-700 transition shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] flex justify-center items-center gap-2 h-[50px]">
+          <button type="submit" className="w-full md:w-auto bg-red-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-red-700 transition shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] flex justify-center items-center gap-2 h-[50px] cursor-pointer">
             <Search size={18} /> Search
           </button>
         </div>

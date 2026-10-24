@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { TrustStatsBanner, ClientLogos } from '../components/Shared';
 import { COMPANY_INFO, FLEET_DATA, PRICING_GUIDE_DATA } from '../lib/data';
+import GooglePlacesInput from '../components/GooglePlacesInput';
 
 export default function HomeClient() {
   const { quoteData, setQuoteData, setIsQuoteModalOpen } = useQuote();
@@ -251,20 +252,18 @@ export default function HomeClient() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
                     <div>
                       <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">Pickup Location</label>
-                      <input 
-                        type="text" 
+                      <GooglePlacesInput 
                         value={pickupCity}
-                        onChange={(e) => setPickupCity(e.target.value)}
+                        onChange={(val) => setPickupCity(val)}
                         placeholder="e.g. Toronto, Mississauga, GTA" 
                         className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-blue-600 outline-none"
                       />
                     </div>
                     <div>
                       <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">Destination</label>
-                      <input 
-                        type="text" 
+                      <GooglePlacesInput 
                         value={destCity}
-                        onChange={(e) => setDestCity(e.target.value)}
+                        onChange={(val) => setDestCity(val)}
                         placeholder="e.g. Niagara, Montreal, Pearson" 
                         className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-blue-600 outline-none"
                       />

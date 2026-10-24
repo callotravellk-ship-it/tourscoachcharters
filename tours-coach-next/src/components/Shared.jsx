@@ -1912,29 +1912,7 @@ export const ClientLogos = () => (
   </section>
 );
 
-export const ChatWidget = () => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  useEffect(() => {
-    const handleMessage = (event) => {
-      if (event.data && event.data.type === 'CHAT_WIDGET_STATE') setIsChatOpen(event.data.isOpen);
-    };
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
-
-  return (
-    <iframe 
-      src="https://multi-agent-chat-rho.vercel.app/?mode=embed&site=Coach+Charter" 
-      title="Live Support"
-      allowtransparency="true"
-      style={{
-        position: 'fixed', bottom: '0', right: '0', 
-        width: isChatOpen ? '400px' : '150px', height: isChatOpen ? '600px' : '150px', 
-        border: 'none', zIndex: 999999, background: 'transparent', pointerEvents: 'auto', transition: 'all 0.3s ease-in-out'
-      }}
-    />
-  );
-};
+export const ChatWidget = () => null;
 
 export const TourImage = ({ src, alt, className = "", isHero = false }) => {
   const [currentSrc, setCurrentSrc] = useState(src || "/service-tours.jpg");
@@ -2831,8 +2809,6 @@ export default function App() {
       </main>
       
       <Footer setPage={setCurrentPage} />
-      
-      <ChatWidget />
 
       {isQuoteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6 overflow-y-auto">

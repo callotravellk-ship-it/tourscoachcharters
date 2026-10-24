@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from 'react';
 import { QuoteProvider, useQuote } from '../context/QuoteContext';
-import { Header, Footer, ChatWidget, QuoteForm } from './Shared';
+import { Header, Footer, QuoteForm } from './Shared';
 
 function AppContent({ children }) {
   const { isQuoteModalOpen, setIsQuoteModalOpen } = useQuote();
@@ -32,7 +32,6 @@ function AppContent({ children }) {
       </main>
       
       <Footer />
-      <ChatWidget />
       
       {/* Quote Form Modal */}
       {isQuoteModalOpen && (

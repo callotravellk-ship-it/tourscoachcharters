@@ -46,7 +46,59 @@ export default async function DynamicPage({ params }) {
   if (slug === 'contact') return <ContactUs />;
   
   if (DESTINATION_DATA[slug]) {
-    return <DestinationTemplate data={DESTINATION_DATA[slug]} />;
+    const dest = DESTINATION_DATA[slug];
+    const destinationSchema = {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": `Charter Coach Bus Service in ${dest.city}`,
+      "serviceType": "Charter Bus Rental & Group Transportation",
+      "provider": {
+        "@type": "TravelAgency",
+        "name": "Canada Tours Coach LTD",
+        "telephone": "(647) 948-8424",
+        "url": "https://www.tourscoachcharter.com"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": dest.city
+      },
+      "description": dest.subtitle || `Professional charter bus rental in ${dest.city}, Ontario.`,
+      "url": `https://www.tourscoachcharter.com/${slug}`,
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "145"
+      }
+    };
+
+    const faqSchema = dest.faqs && dest.faqs.length > 0 ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": dest.faqs.map(f => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a
+        }
+      }))
+    } : null;
+
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(destinationSchema) }}
+        />
+        {faqSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          />
+        )}
+        <DestinationTemplate data={dest} slug={slug} />
+      </>
+    );
   }
   
   if (FLEET_DATA[slug]) {

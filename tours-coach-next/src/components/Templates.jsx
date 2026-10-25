@@ -7,6 +7,7 @@ import { TrustStatsBanner } from './Shared';
 import { CheckCircle, Route, ShieldCheck, Star, Map, Phone, Mail, ArrowRight, ChevronDown, Users, Trophy, CalendarCheck, Send } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import FleetDetailClient from './FleetDetailClient';
+import DestinationDetailClient from './DestinationDetailClient';
 
 export const AboutUs = () => {
   const { setIsQuoteModalOpen } = useQuote();
@@ -287,77 +288,8 @@ export const GenericPage = ({ title, subtitle, bgImage }) => {
   );
 };
 
-export const DestinationTemplate = ({ data }) => {
-  const { setIsQuoteModalOpen } = useQuote();
-  const [openFaq, setOpenFaq] = useState(null);
-
-  return (
-    <div className="w-full bg-gray-50 flex flex-col font-sans">
-      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-blue-800 text-center">
-         <div className="absolute inset-0 bg-black/60 z-10"></div>
-          <img src={data.img} alt={`${data.city} Banner`} className="absolute inset-0 w-full h-full object-cover" />
-          <div className="relative z-20 container mx-auto px-4">
-            <div className="inline-block bg-red-600 text-white font-bold px-3 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">PREMIER {data.city} SERVICE</div>
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-4">{data.title}</h1>
-            <p className="text-xl text-gray-200 max-w-2xl mx-auto">{data.subtitle}</p>
-          </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-16 flex-grow">
-        <div className="flex flex-col lg:flex-row gap-12 max-w-6xl mx-auto">
-          <div className="lg:w-2/3">
-            <h2 className="text-3xl font-black text-blue-800 mb-6">Compact Luxury & Maximum Comfort in {data.city}</h2>
-            {data.content.map((p, i) => (<p key={i} className="text-gray-700 mb-5 leading-relaxed text-lg">{p}</p>))}
-
-            <div className="mt-16">
-              <h3 className="text-2xl font-bold text-blue-800 mb-6">Frequently Asked Questions</h3>
-              <div className="space-y-4">
-                {data.faqs.map((faq, i) => (
-                  <div key={i} className="border border-gray-200 rounded-lg bg-white overflow-hidden shadow-sm">
-                    <button className="w-full px-6 py-4 text-left font-bold text-gray-800 flex justify-between items-center hover:bg-gray-50 transition" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                      {faq.q}
-                      <ChevronDown size={20} className={`transform transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openFaq === i && (<div className="px-6 pb-4 pt-2 text-gray-600 bg-gray-50 border-t border-gray-100">{faq.a}</div>)}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:w-1/3">
-            <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-8 sticky top-32 border-t-4 border-red-600">
-              <h3 className="text-xl font-bold text-gray-900 mb-6 border-b pb-4">Specialized {data.city} Services</h3>
-              <div className="space-y-6">
-                {data.highlights.map((item, i) => {
-                  const IconComp = Icons[item.icon];
-                  return (
-                  <div key={i} className="flex items-start">
-                    <div className="bg-blue-100 text-blue-800 p-3 rounded-lg mr-4 flex-shrink-0">
-                      {IconComp ? <IconComp size={24} /> : <Map size={24} />}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-800 mb-1">{item.title}</h4>
-                      <p className="text-sm text-gray-600 leading-snug">{item.desc}</p>
-                    </div>
-                  </div>
-                )})}
-              </div>
-              <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col gap-3">
-                <p className="text-sm text-gray-600 mb-2 text-center">Ready to arrange your {data.city} transportation?</p>
-                <button onClick={() => setIsQuoteModalOpen(true)} className="w-full bg-blue-800 text-white font-bold py-4 rounded-lg hover:bg-blue-900 transition shadow-lg flex justify-center items-center">
-                  Request a Quote <ArrowRight size={18} className="ml-2" />
-                </button>
-                <a href="tel:(416) 269-9555" className="w-full bg-white text-blue-800 font-bold py-3.5 rounded-lg hover:bg-gray-50 transition border border-gray-200 shadow-sm flex justify-center items-center gap-2">
-                  <Phone size={18} /> Call (416) 269-9555
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export const DestinationTemplate = ({ data, slug }) => {
+  return <DestinationDetailClient data={data} slug={slug} />;
 };
 
 export const ServiceTemplate = ({ data }) => {

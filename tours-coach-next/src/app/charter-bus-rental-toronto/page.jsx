@@ -68,7 +68,9 @@ export default function TorontoPage() {
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
-      "reviewCount": "480"
+      "reviewCount": "480",
+      "bestRating": "5",
+      "worstRating": "1"
     }
   };
 

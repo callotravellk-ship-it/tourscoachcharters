@@ -49,25 +49,47 @@ export default async function DynamicPage({ params }) {
     const dest = DESTINATION_DATA[slug];
     const destinationSchema = {
       "@context": "https://schema.org",
-      "@type": "Service",
-      "name": `Charter Coach Bus Service in ${dest.city}`,
-      "serviceType": "Charter Bus Rental & Group Transportation",
-      "provider": {
-        "@type": "TravelAgency",
-        "name": "Canada Tours Coach LTD",
-        "telephone": "(647) 948-8424",
-        "url": "https://www.tourscoachcharter.com"
+      "@type": ["LocalBusiness", "TravelAgency"],
+      "name": `Tours Coach Charters ${dest.city}`,
+      "alternateName": `Charter Coach Bus Service in ${dest.city}`,
+      "description": dest.subtitle || `Professional charter bus rental in ${dest.city}, Ontario.`,
+      "url": `https://www.tourscoachcharter.com/${slug}`,
+      "telephone": "(647) 948-8424",
+      "email": "info@tourscoachcharter.com",
+      "priceRange": "$",
+      "image": `https://www.tourscoachcharter.com${dest.img || '/toronto-banner.jpg'}`,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1315 Pickering Parkway, Suite 300",
+        "addressLocality": "Pickering",
+        "addressRegion": "ON",
+        "postalCode": "L1V 7G5",
+        "addressCountry": "CA"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 43.8354,
+        "longitude": -79.0890
       },
       "areaServed": {
         "@type": "City",
         "name": dest.city
       },
-      "description": dest.subtitle || `Professional charter bus rental in ${dest.city}, Ontario.`,
-      "url": `https://www.tourscoachcharter.com/${slug}`,
+      "makesOffer": {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": `Charter Bus Rental & Minibus Service in ${dest.city}`,
+          "serviceType": "Charter Bus Rental & Group Transportation",
+          "description": dest.subtitle || `Professional charter bus rental in ${dest.city}, Ontario.`
+        }
+      },
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
-        "reviewCount": "145"
+        "reviewCount": "145",
+        "bestRating": "5",
+        "worstRating": "1"
       }
     };
 
@@ -125,7 +147,9 @@ export default async function DynamicPage({ params }) {
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
-        "reviewCount": "128"
+        "reviewCount": "128",
+        "bestRating": "5",
+        "worstRating": "1"
       }
     };
 

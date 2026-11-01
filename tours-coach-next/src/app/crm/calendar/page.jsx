@@ -69,7 +69,7 @@ export default function DispatchCalendar() {
 
           calendarEvents.push({
             id: doc.id,
-            title: `${lead.firstName} ${lead.lastName} | ${lead.assignedVehicle}`,
+            title: `${lead.fullName || `${lead.firstName || ''} ${lead.lastName || ''}`.trim() || 'Customer'} | ${lead.assignedVehicle}`,
             start: startDate,
             end: endDate,
             resource: lead
@@ -252,7 +252,7 @@ export default function DispatchCalendar() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Users size={14} className="mr-2"/> Customer</h3>
-                  <p className="text-sm font-bold text-slate-800">{selectedLead.firstName} {selectedLead.lastName}</p>
+                  <p className="text-sm font-bold text-slate-800">{selectedLead.fullName || `${selectedLead.firstName || ''} ${selectedLead.lastName || ''}`.trim() || 'Customer'}</p>
                   <p className="text-sm truncate"><a href={`mailto:${selectedLead.email}`} className="text-blue-600 hover:underline">{selectedLead.email}</a></p>
                   <p className="text-sm"><a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a></p>
                 </div>

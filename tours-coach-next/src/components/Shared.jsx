@@ -960,6 +960,23 @@ export const QuoteForm = ({ onClose }) => {
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
+    // Normalize firstName, lastName, and fullName so both exist
+    let firstName = (payload.firstName || '').trim();
+    let lastName = (payload.lastName || '').trim();
+    let fullName = (payload.fullName || '').trim();
+
+    if (!firstName && !lastName && fullName) {
+      const parts = fullName.split(/\s+/);
+      firstName = parts[0] || '';
+      lastName = parts.slice(1).join(' ') || '';
+    } else if (!fullName && (firstName || lastName)) {
+      fullName = `${firstName} ${lastName}`.trim();
+    }
+
+    payload.firstName = firstName;
+    payload.lastName = lastName;
+    payload.fullName = fullName;
+
     payload.pickup = quoteData.pickup;
     payload.destination = quoteData.destination;
     payload.tripType = tripType;
@@ -1523,18 +1540,32 @@ export const QuoteForm = ({ onClose }) => {
               </button>
             </div>
 
-            {/* NAME INPUT */}
-            <div>
-              <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
-                <Users size={13} className="text-blue-900" /> Full Name <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
-              </label>
-              <input 
-                required={step === 2} 
-                name="fullName" 
-                type="text" 
-                className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
-                placeholder="e.g. Sarah Jenkins" 
-              />
+            {/* NAME INPUTS (FIRST & LAST) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                  <Users size={13} className="text-blue-900" /> First Name <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                </label>
+                <input 
+                  required={step === 2} 
+                  name="firstName" 
+                  type="text" 
+                  className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                  placeholder="e.g. Sarah" 
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-800 mb-1 uppercase tracking-wide flex items-center gap-1.5">
+                  <Users size={13} className="text-blue-900" /> Last Name <span className="text-red-500 font-semibold normal-case tracking-normal ml-0.5">(Required)</span>
+                </label>
+                <input 
+                  required={step === 2} 
+                  name="lastName" 
+                  type="text" 
+                  className="w-full px-3.5 py-2.5 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-sm bg-white" 
+                  placeholder="e.g. Jenkins" 
+                />
+              </div>
             </div>
 
             {/* EMAIL & PHONE */}

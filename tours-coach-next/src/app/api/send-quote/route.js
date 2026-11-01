@@ -6,12 +6,20 @@ const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_for_build');
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { 
-      firstName, lastName, email, phone, 
+    let { 
+      firstName, lastName, fullName, email, phone, 
       pickup, destination, departDate, returnDate, 
       pickupTime, returnTime, 
       passengers, vehicle, info, tripType 
     } = body;
+
+    if ((!firstName || !lastName) && fullName) {
+      const parts = fullName.trim().split(/\s+/);
+      if (!firstName) firstName = parts[0] || '';
+      if (!lastName) lastName = parts.slice(1).join(' ') || '';
+    }
+    const customerDisplayName = (fullName || `${firstName || ''} ${lastName || ''}`.trim()) || 'Valued Customer';
+    const greetingName = firstName || 'there';
 
     // 1. EMAIL SENT TO YOUR TEAM
     const adminEmail = resend.emails.send({
@@ -20,10 +28,10 @@ export async function POST(req) {
       cc: ['info@tourscoachcharter.com'],
       bcc: ['acmrickaaz@gmail.com'],
       reply_to: email, // This stays as the customer's email so you can reply to them
-      subject: `New Quote Request from ${firstName} ${lastName}`,
+      subject: `New Quote Request from ${customerDisplayName}`,
       html: `
         <h2>New Charter Quote Request</h2>
-        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+        <p><strong>Name:</strong> ${customerDisplayName}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Trip Type:</strong> ${tripType === 'return' ? 'Round Trip' : 'One Way'}</p>
@@ -47,7 +55,7 @@ export async function POST(req) {
       subject: 'We received your quote request!',
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
-          <p style="font-size: 16px;">Hi ${firstName},</p>
+          <p style="font-size: 16px;">Hi ${greetingName},</p>
           <p style="font-size: 16px;">Thank you for reaching out to us!</p>
           <p style="font-size: 16px;">We’ve received your request and we are reviewing the details to provide you with the most accurate and competitive options.</p>
           <p style="font-size: 16px;">Please allow us some time to work on this, we’ll get back to you with a detailed quote as soon as possible.</p>

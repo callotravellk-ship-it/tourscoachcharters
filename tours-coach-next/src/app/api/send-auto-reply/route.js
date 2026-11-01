@@ -6,7 +6,11 @@ const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_for_build');
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { email, firstName, pickup, destination } = body;
+    let { email, firstName, lastName, fullName, pickup, destination } = body;
+    if (!firstName && fullName) {
+      firstName = fullName.trim().split(/\s+/)[0] || '';
+    }
+    const greetingName = firstName || 'there';
 
     const { data, error } = await resend.emails.send({
       from: 'Tours Coach Charters <quotes@tourscoachcharter.com>',
@@ -20,7 +24,7 @@ export async function POST(req) {
           </div>
           
           <div style="padding: 32px;">
-            <p style="font-size: 16px;">Hi ${firstName},</p>
+            <p style="font-size: 16px;">Hi ${greetingName},</p>
             <p style="font-size: 16px;">Thank you for requesting a charter quote with Tours Coach Charters! We have successfully received your itinerary details for your trip from <strong>${pickup}</strong> to <strong>${destination}</strong>.</p>
             
             <p style="font-size: 16px;">Our logistics team is currently reviewing your route and checking vehicle availability. An agent will email you an official pricing quote shortly.</p>

@@ -52,10 +52,28 @@ export default function CRMDashboard() {
     try {
       const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      const leadsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      const leadsData = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        let firstName = data.firstName;
+        let lastName = data.lastName;
+        let fullName = data.fullName;
+
+        if ((!firstName || !lastName) && fullName) {
+          const parts = fullName.trim().split(/\s+/);
+          if (!firstName) firstName = parts[0] || '';
+          if (!lastName) lastName = parts.slice(1).join(' ') || '';
+        } else if (!fullName && (firstName || lastName)) {
+          fullName = `${firstName || ''} ${lastName || ''}`.trim();
+        }
+
+        return {
+          id: doc.id,
+          ...data,
+          firstName: firstName || '',
+          lastName: lastName || '',
+          fullName: fullName || `${firstName || ''} ${lastName || ''}`.trim() || 'Valued Customer'
+        };
+      });
       setLeads(leadsData);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -74,6 +92,17 @@ export default function CRMDashboard() {
       alert("Please enter the agent's email address.");
       return;
     }
+
+    let firstName = lead.firstName;
+    let lastName = lead.lastName;
+    let fullName = lead.fullName;
+    if ((!firstName || !lastName) && fullName) {
+      const parts = fullName.trim().split(/\s+/);
+      if (!firstName) firstName = parts[0] || '';
+      if (!lastName) lastName = parts.slice(1).join(' ') || '';
+    } else if (!fullName && (firstName || lastName)) {
+      fullName = `${firstName || ''} ${lastName || ''}`.trim();
+    }
     
     setIsSendingAgent(true);
     try {
@@ -81,7 +110,13 @@ export default function CRMDashboard() {
       const response = await fetch('/api/send-agent-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...lead, agentEmail }),
+        body: JSON.stringify({ 
+          ...lead, 
+          firstName: firstName || '',
+          lastName: lastName || '',
+          fullName: fullName || `${firstName || ''} ${lastName || ''}`.trim() || 'Valued Customer',
+          agentEmail 
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to send email to agent');
@@ -267,7 +302,7 @@ export default function CRMDashboard() {
 
       await fetchLeads();
       setSelectedLead(null);
-      alert(`Quote of $${quotePrice} successfully sent to ${selectedLead.firstName}!`);
+      alert(`Quote of ${quotePrice} successfully sent to ${selectedLead.firstName || selectedLead.fullName || 'the customer'}!`);
 
     } catch (error) {
       console.error(error);
@@ -376,7 +411,8 @@ export default function CRMDashboard() {
       doc.setTextColor(15, 23, 42);
       doc.text("Billed To:", 14, 48);
       doc.setFontSize(10);
-      doc.text(`${selectedLead.firstName} ${selectedLead.lastName}`, 14, 55);
+      const invoiceCustName = selectedLead.fullName || `${selectedLead.firstName || ''} ${selectedLead.lastName || ''}`.trim() || 'Valued Customer';
+      doc.text(invoiceCustName, 14, 55);
       doc.text(selectedLead.email, 14, 61);
       doc.text(selectedLead.phone, 14, 67);
 
@@ -414,7 +450,7 @@ export default function CRMDashboard() {
       doc.text("Thank you for traveling with Tours Coach Charters.", 14, doc.lastAutoTable.finalY + 20);
       doc.text("tourscoachcharter.com | (416) 269-9555", 14, doc.lastAutoTable.finalY + 26);
 
-      doc.save(`Invoice_${selectedLead.firstName}_${selectedLead.lastName}.pdf`);
+      doc.save(`Invoice_${(selectedLead.firstName || selectedLead.fullName || 'Customer').replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("There was an error generating the PDF. Please try again.");
@@ -592,7 +628,7 @@ export default function CRMDashboard() {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-bold text-slate-900">{lead.firstName} {lead.lastName}</div>
+                        <div className="text-sm font-bold text-slate-900">{lead.fullName || `${lead.firstName || ''} ${lead.lastName || ''}`.trim() || 'Valued Customer'}</div>
                         <div className="text-sm text-slate-500">{lead.email}</div>
                       </td>
                       <td className="px-6 py-4">
@@ -771,7 +807,7 @@ export default function CRMDashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
                   <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center"><Users size={14} className="mr-2"/> Customer</h3>
-                  <p className="text-sm font-bold text-slate-800">{selectedLead.firstName} {selectedLead.lastName}</p>
+                  <p className="text-sm font-bold text-slate-800">{selectedLead.fullName || `${selectedLead.firstName || ''} ${selectedLead.lastName || ''}`.trim() || 'Valued Customer'}</p>
                   <p className="text-sm truncate"><a href={`mailto:${selectedLead.email}`} className="text-blue-600 hover:underline">{selectedLead.email}</a></p>
                   <p className="text-sm"><a href={`tel:${selectedLead.phone}`} className="text-blue-600 hover:underline">{selectedLead.phone}</a></p>
                 </div>

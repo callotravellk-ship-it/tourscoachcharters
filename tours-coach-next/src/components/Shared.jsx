@@ -17,7 +17,7 @@ import GooglePlacesInput from './GooglePlacesInput';
 
 // --- FIREBASE IMPORTS ---
 import { db } from '../lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 
 // --- DATEPICKER IMPORTS ---
 import DatePicker from 'react-datepicker';
@@ -747,6 +747,23 @@ export const QuoteForm = ({ onClose }) => {
   const [specialNotes, setSpecialNotes] = useState('');
   const [errors, setErrors] = useState({});
 
+  // Pre-warm Firebase Firestore connection early so client handshake is already done when user submits
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY && db) {
+      try {
+        getDoc(doc(db, 'leads', '_prewarm')).catch(() => {});
+      } catch (_) {}
+    }
+  }, []);
+
+  useEffect(() => {
+    if (step === 2 && process.env.NEXT_PUBLIC_FIREBASE_API_KEY && db) {
+      try {
+        getDoc(doc(db, 'leads', '_prewarm')).catch(() => {});
+      } catch (_) {}
+    }
+  }, [step]);
+
   const today = new Date();
 
   // Quick preset data
@@ -995,22 +1012,27 @@ export const QuoteForm = ({ onClose }) => {
     }
 
     try {
-      if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-        await addDoc(collection(db, "leads"), {
-          ...payload,
-          status: "New",
-          createdAt: serverTimestamp(),
-          quotedPrice: null,
-          assignedVehicle: selectedVehicle,
-        });
-      }
+      // 1. Save directly to CRM (Firebase) in parallel
+      const savePromise = (process.env.NEXT_PUBLIC_FIREBASE_API_KEY && db)
+        ? addDoc(collection(db, "leads"), {
+            ...payload,
+            status: "New",
+            createdAt: serverTimestamp(),
+            quotedPrice: null,
+            assignedVehicle: selectedVehicle || 'luxury-coach-bus-charter',
+          }).catch(err => {
+            console.error("Firebase background save error:", err);
+          })
+        : Promise.resolve();
 
+      // 2. Dispatch automated customer confirmation email immediately
       fetch('/api/send-auto-reply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       }).catch(err => console.error("Auto-reply failed to send:", err));
 
+      // 3. Track conversion event in Meta Pixel
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'Lead', {
           content_name: 'Charter Bus Quote Request',
@@ -1018,15 +1040,23 @@ export const QuoteForm = ({ onClose }) => {
         });
       }
 
+      // 4. Wait at most 800ms for database response so submit button NEVER hangs
+      await Promise.race([
+        savePromise,
+        new Promise((resolve) => setTimeout(resolve, 800))
+      ]);
+
+      // 5. Show immediate success confirmation celebration
       setIsSuccess(true);
 
+      // 6. Smooth redirect to thank-you page
       setTimeout(() => {
         if (onClose) onClose();
         router.push('/thank-you');
-      }, 2000);
+      }, 1500);
 
     } catch (error) {
-      console.error("Error saving lead to CRM:", error);
+      console.error("Error submitting quote request:", error);
       alert("Error submitting request. Please try again or call dispatch at (647) 948-8424.");
       setIsSending(false); 
     }
